@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 
 import { MONGO_URL } from '../utils/loadEnv.js';
 
+// mongod --dbpath "G:/user tools/mongoDB/data"
+
 const DB_URL = MONGO_URL + '/allbirds';
 
 mongoose.connection.once('open', () => {

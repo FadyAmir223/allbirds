@@ -276,7 +276,7 @@ class BridSpider(scrapy.Spider):
             reviews = {
                 "count": reviews_pagination["per_page"],
                 "rating": round(reviews_bottomline["average_score"], 1),
-                "reviews": [],
+                "review": [],
             }
 
             for review in reviews_list:

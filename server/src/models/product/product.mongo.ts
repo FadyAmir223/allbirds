@@ -10,7 +10,7 @@ const productSchema = new mongoose.Schema({
   silhouette: String,
   bestFor: [String],
   sizes: [String],
-  free_shipping: Boolean,
+  freeShipping: Boolean,
   highlights: [String],
   dropdown: [
     {
@@ -24,7 +24,7 @@ const productSchema = new mongoose.Schema({
       image: String,
     },
   ],
-  material_features: [
+  materialFeatures: [
     {
       image: String,
       text: {
@@ -62,7 +62,7 @@ const productSchema = new mongoose.Schema({
         username: String,
         verifiedBuyer: Boolean,
         createdAt: String,
-        custom_fields: [
+        customFields: [
           {
             title: String,
             value: String,
