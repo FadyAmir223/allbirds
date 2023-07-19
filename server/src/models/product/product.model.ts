@@ -16,38 +16,6 @@ async function saveProducts() {
   }
 }
 
-async function getCollection(collectionName, skip, limit) {
-  const products = await Product.find(
-    {
-      $or: [{ gender: collectionName }, { type: collectionName }],
-    },
-    '-_id name handle price material silhouette bestFor sizes editions.edition editions.products'
-  )
-    .skip(skip)
-    .limit(limit);
-
-  console.log({ skip, limit });
-
-  const count = await Product.countDocuments({
-    $or: [{ gender: collectionName }, { type: collectionName }],
-  });
-
-  for (const product_ of products)
-    for (const edition of product_.editions)
-      for (const product of edition.products) {
-        const productImages = product.images.filter((img) =>
-          ['left', 'profile', 'lat'].some((keyword) =>
-            img.toLowerCase().includes(keyword)
-          )
-        );
-
-        if (productImages.length === 0) productImages[0] = product.images[0];
-        product.images = productImages;
-      }
-
-  return { products, count };
-}
-
 async function getProduct(productName) {
   return await Product.findOne(
     { handle: productName },
@@ -67,4 +35,122 @@ async function getReviews(productName, skip, limit) {
   );
 }
 
-export { saveProducts, getCollection, getProduct, getReviews };
+async function getCollection(collectionName, skip, limit) {
+  const [{ products, total }] = await Product.aggregate([
+    {
+      $match: {
+        $or: [{ gender: collectionName }, { type: collectionName }],
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        name: 1,
+        handle: 1,
+        price: 1,
+        editions: {
+          $map: {
+            input: '$editions',
+            as: 'edition',
+            in: {
+              edition: '$$edition.edition',
+              products: {
+                $map: {
+                  input: '$$edition.products',
+                  as: 'product',
+                  in: {
+                    _id: '$$product._id',
+                    handle: '$$product.handle',
+                    name: '$$product.name',
+                    price: '$$product.price',
+                    images: {
+                      $filter: {
+                        input: '$$product.images',
+                        as: 'img',
+                        cond: {
+                          $or: [
+                            {
+                              $regexMatch: {
+                                input: '$$img',
+                                regex: 'left|profile|lat|1-min|^((?!closeup).)*pink-1',
+                                options: 'i',
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      $facet: {
+        products: [{ $skip: skip }, { $limit: limit }],
+        total: [{ $count: 'count' }],
+      },
+    },
+    {
+      $unwind: '$total',
+    },
+    {
+      $project: {
+        products: 1,
+        total: '$total.count',
+      },
+    },
+  ]);
+
+  return { products, total };
+}
+
+async function getCollectionSale(collectionName, skip, limit) {
+  const [{ products, total }] = await Product.aggregate([
+    {
+      $match: {
+        $or: [{ gender: collectionName }, { type: collectionName }],
+        'editions.edition': 'sale',
+      },
+    },
+    {
+      $project: {
+        list: {
+          $filter: {
+            input: '$editions',
+            as: 'edition',
+            cond: { $eq: ['$$edition.edition', 'sale'] },
+          },
+        },
+      },
+    },
+    {
+      $facet: {
+        products: [{ $skip: skip }, { $limit: limit }],
+        total: [{ $count: 'count' }],
+      },
+    },
+    {
+      $unwind: '$total',
+    },
+    {
+      $project: {
+        products: 1,
+        total: '$total.count',
+      },
+    },
+  ]);
+
+  return { products, total };
+}
+
+export {
+  saveProducts,
+  getProduct,
+  getReviews,
+  getCollection,
+  getCollectionSale,
+};

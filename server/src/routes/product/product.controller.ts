@@ -2,7 +2,7 @@ import { getProduct, getReviews } from '../../models/product/product.model.js';
 import { getPagination } from '../../utils/query.js';
 
 async function httpsGetProduct(req, res) {
-  res.json(await getProduct(req.params.product));
+  return res.json({ product: await getProduct(req.params.product) });
 }
 
 async function httpsGetreviews(req, res) {
@@ -22,7 +22,7 @@ async function httpsGetreviews(req, res) {
     perPage: reviews.length,
   };
 
-  res.json({ pagination, rating, reviews });
+  return res.json({ pagination, rating, reviews });
 }
 
 export { httpsGetProduct, httpsGetreviews };
