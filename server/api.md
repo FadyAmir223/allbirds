@@ -9,6 +9,8 @@
         /sale
           pages=1&limit=2
 
+        /filters
+
   /products
     GET /:product <mens-tree-runners|...>
 

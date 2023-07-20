@@ -48,6 +48,7 @@ async function getCollection(collectionName, skip, limit) {
         name: 1,
         handle: 1,
         price: 1,
+        sizes: 1,
         editions: {
           $map: {
             input: '$editions',
@@ -59,10 +60,12 @@ async function getCollection(collectionName, skip, limit) {
                   input: '$$edition.products',
                   as: 'product',
                   in: {
-                    _id: '$$product._id',
                     handle: '$$product.handle',
-                    name: '$$product.name',
-                    price: '$$product.price',
+                    colorName: '$$product.colorName',
+                    colors: '$$product.colors',
+                    hues: '$$product.hues',
+                    salePrice: '$$product.salePrice',
+                    sizesSoldOut: '$$product.sizesSoldOut',
                     images: {
                       $filter: {
                         input: '$$product.images',
@@ -72,7 +75,98 @@ async function getCollection(collectionName, skip, limit) {
                             {
                               $regexMatch: {
                                 input: '$$img',
-                                regex: 'left|profile|lat|1-min|^((?!closeup).)*pink-1',
+                                regex:
+                                  'left|profile|lat|1-min|^((?!closeup).)*pink-1',
+                                options: 'i',
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      $facet: {
+        products: [{ $skip: skip }, { $limit: limit }],
+        total: [{ $count: 'count' }],
+      },
+    },
+    {
+      $project: {
+        products: 1,
+        total: { $arrayElemAt: ['$total.count', 0] },
+      },
+    },
+  ]);
+
+  return { products, total };
+}
+
+async function getCollectionSale(collectionName, skip, limit) {
+  const [{ products, total }] = await Product.aggregate([
+    {
+      $match: {
+        gender: collectionName,
+        'editions.edition': 'sale',
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        handle: 1,
+        name: 1,
+        price: 1,
+        sizes: 1,
+        editions: {
+          $filter: {
+            input: '$editions',
+            as: 'edition',
+            cond: { $eq: ['$$edition.edition', 'sale'] },
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        handle: 1,
+        name: 1,
+        price: 1,
+        sizes: 1,
+        editions: {
+          $map: {
+            input: '$editions',
+            as: 'edition',
+            in: {
+              edition: '$$edition.edition',
+              products: {
+                $map: {
+                  input: '$$edition.products',
+                  as: 'product',
+                  in: {
+                    handle: '$$product.handle',
+                    colorName: '$$product.colorName',
+                    colors: '$$product.colors',
+                    hues: '$$product.hues',
+                    salePrice: '$$product.salePrice',
+                    sizesSoldOut: '$$product.sizesSoldOut',
+                    images: {
+                      $filter: {
+                        input: '$$product.images',
+                        as: 'img',
+                        cond: {
+                          $or: [
+                            {
+                              $regexMatch: {
+                                input: '$$img',
+                                regex:
+                                  'left|profile|lat|1-min|^((?!closeup).)*pink-1',
                                 options: 'i',
                               },
                             },
@@ -108,43 +202,72 @@ async function getCollection(collectionName, skip, limit) {
   return { products, total };
 }
 
-async function getCollectionSale(collectionName, skip, limit) {
-  const [{ products, total }] = await Product.aggregate([
+async function getCollectionFilters(collectionName) {
+  const [{ sizes, bestFor, material, hues }] = await Product.aggregate([
+    { $match: { $or: [{ type: collectionName }, { gender: collectionName }] } },
     {
-      $match: {
-        $or: [{ gender: collectionName }, { type: collectionName }],
-        'editions.edition': 'sale',
+      $group: {
+        _id: null,
+        sizes: { $addToSet: '$sizes' },
+        bestFor: { $addToSet: '$bestFor' },
+        material: { $addToSet: '$material' },
+        hues: { $addToSet: '$editions.products.hues' },
+      },
+    },
+    { $unwind: '$sizes' },
+    { $unwind: '$sizes' },
+    { $unwind: '$bestFor' },
+    { $unwind: '$bestFor' },
+    { $unwind: '$material' },
+    { $unwind: '$hues' },
+    { $unwind: '$hues' },
+    { $unwind: '$hues' },
+    { $unwind: '$hues' },
+    {
+      $group: {
+        _id: null,
+        sizes: { $addToSet: '$sizes' },
+        bestFor: { $addToSet: '$bestFor' },
+        material: { $addToSet: '$material' },
+        hues: { $addToSet: '$hues' },
       },
     },
     {
       $project: {
-        list: {
-          $filter: {
-            input: '$editions',
-            as: 'edition',
-            cond: { $eq: ['$$edition.edition', 'sale'] },
-          },
-        },
-      },
-    },
-    {
-      $facet: {
-        products: [{ $skip: skip }, { $limit: limit }],
-        total: [{ $count: 'count' }],
-      },
-    },
-    {
-      $unwind: '$total',
-    },
-    {
-      $project: {
-        products: 1,
-        total: '$total.count',
+        _id: 0,
+        sizes: 1,
+        bestFor: 1,
+        material: 1,
+        hues: 1,
       },
     },
   ]);
 
-  return { products, total };
+  bestFor.sort();
+  material.sort();
+  hues.sort();
+
+  const extractNumber = (str) => +str.match(/[-+]?\d+(\.\d+)?/)[0];
+  const isNumber = (str) => !isNaN(parseFloat(str));
+  const startWithW = (str) => str.startsWith('w');
+
+  sizes.sort((a, b) => {
+    const aIsNumber = isNumber(a);
+    const bIsNumber = isNumber(b);
+
+    switch (true) {
+      case (aIsNumber && bIsNumber) || (!aIsNumber && !bIsNumber):
+        return extractNumber(a) - extractNumber(b);
+      case startWithW(a) && !startWithW(b):
+        return -1;
+      case !startWithW(a) && startWithW(b):
+        return 1;
+      default:
+        return a.localeCompare(b);
+    }
+  });
+
+  return { sizes, bestFor, material, hues };
 }
 
 export {
@@ -153,4 +276,5 @@ export {
   getReviews,
   getCollection,
   getCollectionSale,
+  getCollectionFilters,
 };

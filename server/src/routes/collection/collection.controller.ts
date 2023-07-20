@@ -1,6 +1,7 @@
 import {
   getCollection,
   getCollectionSale,
+  getCollectionFilters,
 } from '../../models/product/product.model.js';
 import { getPagination } from '../../utils/query.js';
 
@@ -25,4 +26,14 @@ async function getACollection(req, res, isSale = false) {
   return res.json({ products, pagination });
 }
 
-export { httpsGetCollection, httpsGetCollectionSale };
+async function httpsGetCollectionFilters(req, res) {
+  const { collection } = req.params;
+  const filters = await getCollectionFilters(collection);
+  res.json({ filters });
+}
+
+export {
+  httpsGetCollection,
+  httpsGetCollectionSale,
+  httpsGetCollectionFilters,
+};

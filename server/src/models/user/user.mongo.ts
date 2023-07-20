@@ -1,15 +1,17 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  name: {
+    first: String,
+    last: String,
+    required: true,
+  },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  address: [
+  location: [
     {
       company: String,
-      address_1: String,
-      address_2: String,
+      address: String,
       city: String,
       country: String,
       state: String,
@@ -20,7 +22,6 @@ const userSchema = new mongoose.Schema({
   cart: [
     {
       id: Number,
-      handle: String,
       name: String,
       colorName: String,
       size: Number,
@@ -29,6 +30,7 @@ const userSchema = new mongoose.Schema({
       freeShipping: Boolean,
       image: String,
       amount: Number,
+      ordered: Boolean,
     },
   ],
 });
