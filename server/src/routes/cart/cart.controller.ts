@@ -1,22 +1,50 @@
-import { addCartItem, getCart } from '../../models/cart/cart.model.js';
+import {
+  getCart,
+  addCartItem,
+  removeCartItem,
+  // deleteCartItem,
+} from '../../models/cart/cart.model.js';
 
 async function httpsGetCart(req, res) {
-  let response;
-  response = { cart: await getCart(req.params.id) };
-  if (!response.cart) response = { message: "user doesn't exist" };
-  return res.json(response);
+  const { id } = req.params;
+  const cart = await getCart(id);
+  return res.json({ cart });
 }
 
 async function httpsAddCartItem(req, res) {
   const { id: userId } = req.params;
-  const { productId, editionId } = req.body;
-  await addCartItem(userId, productId, editionId);
-  return res.json({ success: true });
+  const { productId, editionId, size } = req.body;
+  const { status, cart, message } = await addCartItem(
+    userId,
+    productId,
+    editionId,
+    size
+  );
+  return res.status(status).json({ cart, message });
 }
 
-async function httpsRemoveCartItem(req, res) {}
+async function httpsRemoveCartItem(req, res) {
+  const { id: userId } = req.params;
+  const { editionId, size } = req.body;
+  const { status, cart, message } = await removeCartItem(
+    userId,
+    editionId,
+    size
+  );
+  return res.status(status).json({ cart, message });
+}
 
-async function httpsDeleteCartItem(req, res) {}
+async function httpsDeleteCartItem(req, res) {
+  const { id: userId } = req.params;
+  const { editionId, size } = req.body;
+  const { status, cart, message } = await removeCartItem(
+    userId,
+    editionId,
+    size,
+    true
+  );
+  return res.status(status).json({ cart, message });
+}
 
 export {
   httpsGetCart,

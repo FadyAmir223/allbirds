@@ -47,7 +47,7 @@ async function getCollection(type, gender, skip, limit) {
     },
     {
       $project: {
-        _id: 0,
+        _id: 1,
         name: 1,
         handle: 1,
         price: 1,
@@ -63,29 +63,36 @@ async function getCollection(type, gender, skip, limit) {
                   input: '$$edition.products',
                   as: 'product',
                   in: {
-                    handle: '$$product.handle',
+                    id: '$$product.id',
+                    handle: '$$product.handle ',
                     colorName: '$$product.colorName',
                     colors: '$$product.colors',
                     hues: '$$product.hues',
                     salePrice: '$$product.salePrice',
                     sizesSoldOut: '$$product.sizesSoldOut',
-                    images: {
-                      $filter: {
-                        input: '$$product.images',
-                        as: 'img',
-                        cond: {
-                          $or: [
-                            {
-                              $regexMatch: {
-                                input: '$$img',
-                                regex:
-                                  'left|profile|lat|1-min|^((?!closeup).)*pink-1',
-                                options: 'i',
-                              },
+
+                    image: {
+                      $arrayElemAt: [
+                        {
+                          $filter: {
+                            input: '$$product.images',
+                            as: 'img',
+                            cond: {
+                              $or: [
+                                {
+                                  $regexMatch: {
+                                    input: '$$img',
+                                    regex:
+                                      'left|profile|lat|1-min|^((?!closeup).)*pink-1',
+                                    options: 'i',
+                                  },
+                                },
+                              ],
                             },
-                          ],
+                          },
                         },
-                      },
+                        0,
+                      ],
                     },
                   },
                 },
@@ -124,7 +131,7 @@ async function getCollectionSale(type, gender, skip, limit) {
     },
     {
       $project: {
-        _id: 0,
+        _id: 1,
         handle: 1,
         name: 1,
         price: 1,
@@ -155,29 +162,35 @@ async function getCollectionSale(type, gender, skip, limit) {
                   input: '$$edition.products',
                   as: 'product',
                   in: {
+                    id: '$$product.id',
                     handle: '$$product.handle',
                     colorName: '$$product.colorName',
                     colors: '$$product.colors',
                     hues: '$$product.hues',
                     salePrice: '$$product.salePrice',
                     sizesSoldOut: '$$product.sizesSoldOut',
-                    images: {
-                      $filter: {
-                        input: '$$product.images',
-                        as: 'img',
-                        cond: {
-                          $or: [
-                            {
-                              $regexMatch: {
-                                input: '$$img',
-                                regex:
-                                  'left|profile|lat|1-min|^((?!closeup).)*pink-1',
-                                options: 'i',
-                              },
+                    image: {
+                      $arrayElemAt: [
+                        {
+                          $filter: {
+                            input: '$$product.images',
+                            as: 'img',
+                            cond: {
+                              $or: [
+                                {
+                                  $regexMatch: {
+                                    input: '$$img',
+                                    regex:
+                                      'left|profile|lat|1-min|^((?!closeup).)*pink-1',
+                                    options: 'i',
+                                  },
+                                },
+                              ],
                             },
-                          ],
+                          },
                         },
-                      },
+                        0,
+                      ],
                     },
                   },
                 },
