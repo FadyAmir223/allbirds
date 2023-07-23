@@ -12,6 +12,23 @@ const productSchema = new mongoose.Schema({
   sizes: [String],
   freeShipping: Boolean,
   highlights: [String],
+  editions: [
+    {
+      edition: String,
+      products: [
+        {
+          id: Number,
+          handle: String,
+          colorName: String,
+          colors: [String],
+          hues: [String],
+          images: [String],
+          salePrice: Number,
+          sizesSoldOut: [String],
+        },
+      ],
+    },
+  ],
   dropdown: [
     {
       title: String,
@@ -32,23 +49,6 @@ const productSchema = new mongoose.Schema({
         h2: String,
         p: String,
       },
-    },
-  ],
-  editions: [
-    {
-      edition: String,
-      products: [
-        {
-          id: Number,
-          handle: String,
-          colorName: String,
-          colors: [String],
-          hues: [String],
-          images: [String],
-          salePrice: Number,
-          sizesSoldOut: [String],
-        },
-      ],
     },
   ],
   reviews: {

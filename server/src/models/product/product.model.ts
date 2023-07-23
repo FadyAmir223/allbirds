@@ -19,7 +19,7 @@ async function saveProducts() {
 async function getProduct(productName) {
   return await Product.findOne(
     { handle: productName },
-    '-_id -__v -recommendations._id -material_features._id -dropdown._id -editions._id -editions.products._id -reviews'
+    '-__v -recommendations._id -material_features._id -dropdown._id -editions._id -reviews'
   );
 }
 
@@ -35,11 +35,14 @@ async function getReviews(productName, skip, limit) {
   );
 }
 
-async function getCollection(collectionName, skip, limit) {
+async function getCollection(type, gender, skip, limit) {
   const [{ products, total }] = await Product.aggregate([
     {
       $match: {
-        $or: [{ gender: collectionName }, { type: collectionName }],
+        $or: [
+          { type: type, gender: gender },
+          { type: type, gender: 'unisex' },
+        ],
       },
     },
     {
@@ -109,12 +112,14 @@ async function getCollection(collectionName, skip, limit) {
   return { products, total };
 }
 
-async function getCollectionSale(collectionName, skip, limit) {
+async function getCollectionSale(type, gender, skip, limit) {
   const [{ products, total }] = await Product.aggregate([
     {
       $match: {
-        gender: collectionName,
-        'editions.edition': 'sale',
+        $or: [
+          { type: type, gender: gender },
+          { type: type, gender: 'unisex' },
+        ],
       },
     },
     {
@@ -202,9 +207,16 @@ async function getCollectionSale(collectionName, skip, limit) {
   return { products, total };
 }
 
-async function getCollectionFilters(collectionName) {
+async function getCollectionFilters(type, gender) {
   const [{ sizes, bestFor, material, hues }] = await Product.aggregate([
-    { $match: { $or: [{ type: collectionName }, { gender: collectionName }] } },
+    {
+      $match: {
+        $or: [
+          { type: type, gender: gender },
+          { type: type, gender: 'unisex' },
+        ],
+      },
+    },
     {
       $group: {
         _id: null,

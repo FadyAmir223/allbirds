@@ -8,10 +8,10 @@ import {
 
 const collectionRoute = express.Router();
 
-collectionRoute.get('/:collection', httpsGetCollection);
+collectionRoute.get('/', httpsGetCollection);
 
-collectionRoute.get('/:collection/sale', httpsGetCollectionSale);
+collectionRoute.get('/sale', httpsGetCollectionSale);
 
-collectionRoute.get('/:collection/filters', httpsGetCollectionFilters);
+collectionRoute.get('/filters', httpsGetCollectionFilters);
 
 export default collectionRoute;
