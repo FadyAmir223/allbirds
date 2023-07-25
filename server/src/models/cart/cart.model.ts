@@ -1,95 +1,86 @@
-import Cart from './cart.mongo.js';
+import mongoose from 'mongoose';
 
-async function getCart(userId) {
-  return await Cart.aggregate([
-    { $match: { userId: userId } },
-    { $unwind: '$items' },
-    {
-      $lookup: {
-        from: 'products',
-        localField: 'items.productId',
-        foreignField: '_id',
-        as: 'items.product',
-      },
-    },
-    {
-      $group: {
-        _id: null,
-        items: { $push: '$items' },
-      },
-    },
-    { $unwind: '$items' },
-    { $unwind: '$items.product' },
-    { $unwind: '$items.product.editions' },
-    { $unwind: '$items.product.editions.products' },
-    {
-      $match: {
-        $expr: {
-          $eq: ['$items.product.editions.products.id', '$items.editionId'],
-        },
-      },
-    },
-    {
-      $project: {
-        _id: 0,
-        amount: '$items.amount',
-        size: '$items.size',
-        editionId: '$items.editionId',
-        productId: '$items.productId',
-        handle: '$items.product.handle',
-        name: '$items.product.name',
-        price: '$items.product.price',
-        salePrice: '$items.product.editions.products.salePrice',
-        colorName: '$items.product.editions.products.colorName',
-        soldOut: {
-          $setIsSubset: [
-            ['$items.size'],
-            '$items.product.editions.products.sizesSoldOut',
-          ],
-        },
-        image: {
-          $arrayElemAt: [
-            {
-              $filter: {
-                input: '$items.product.editions.products.images',
-                as: 'img',
-                cond: {
-                  $or: [
-                    {
-                      $regexMatch: {
-                        input: '$$img',
-                        regex: '_45_|_angle_|1-min|^((?!closeup).)*pink-1',
-                        options: 'i',
+import Product from '../product/product.mongo.js';
+
+async function getCart(items) {
+  if (!items) return { status: 404, message: "cart doesn't exist" };
+  try {
+    const cart = (
+      await Promise.all(
+        items.map(
+          async ({ productId, editionId, size, amount }) =>
+            await Product.aggregate([
+              { $match: { _id: new mongoose.Types.ObjectId(productId) } },
+              { $unwind: '$editions' },
+              { $unwind: '$editions.products' },
+              { $match: { 'editions.products.id': editionId } },
+              { $addFields: { amount, productId, editionId } },
+              {
+                $project: {
+                  _id: 0,
+                  amount,
+                  productId,
+                  editionId,
+                  size,
+                  handle: '$handle',
+                  name: '$name',
+                  price: '$price',
+                  salePrice: '$editions.products.salePrice',
+                  colorName: '$editions.products.colorName',
+                  soldOut: {
+                    $setIsSubset: [[size], '$editions.products.sizesSoldOut'],
+                  },
+                  image: {
+                    $arrayElemAt: [
+                      {
+                        $filter: {
+                          input: '$editions.products.images',
+                          as: 'img',
+                          cond: {
+                            $regexMatch: {
+                              input: '$$img',
+                              regex:
+                                '_45_|_angle_|1-min|^((?!closeup).)*pink-1',
+                              options: 'i',
+                            },
+                          },
+                        },
                       },
-                    },
-                  ],
+                      0,
+                    ],
+                  },
                 },
               },
-            },
-            0,
-          ],
-        },
-      },
-    },
-  ]);
+            ])
+        )
+      )
+    ).flat();
+    return { status: 200, cart };
+  } catch {
+    return { status: 500, message: 'unable to get the cart' };
+  }
 }
 
-async function addCartItem(userId, productId, editionId, size) {
+async function addCartItem(items, { productId, editionId, size }) {
   try {
-    let cart = await Cart.findOne({ userId }, '-__v');
-    if (!cart) cart = new Cart({ userId, items: [] });
+    if (!items) items = [];
 
-    const existingItem = cart.items.find(
+    const existingItem = items.find(
       (item) => item.editionId === editionId && item.size === size
     );
 
     existingItem
       ? existingItem.amount++
-      : cart.items.push({ productId, editionId, size, amount: 1 });
+      : items.push({ productId, editionId, size, amount: 1 });
 
-    await cart.save();
+    const { status, cart, message } = await getCart(items);
 
-    return { status: 201, cart: cart.items };
+    return {
+      status: status === 200 ? 201 : status,
+      newItems: items,
+      cart,
+      message,
+    };
   } catch {
     return {
       status: 500,
@@ -98,35 +89,34 @@ async function addCartItem(userId, productId, editionId, size) {
   }
 }
 
-async function removeCartItem(userId, editionId, size, _delete = false) {
+async function removeCartItem(items, { editionId, size }, _delete = false) {
   try {
-    const cart = await Cart.findOne({ userId });
-
-    if (!cart || cart.items.length === 0)
+    if (items?.length === 0)
       return { status: 404, message: 'no items in cart' };
 
-    const matchedItem = cart.items.find(
-      (item) => item.editionId === editionId && item.size === size
-    );
+    let matchedItem, matchedIdx;
+
+    for (let idx = 0; idx < items.length; idx++) {
+      const item = items[idx];
+      if (item.editionId === editionId && item.size === size) {
+        matchedItem = item;
+        matchedIdx = idx;
+        break;
+      }
+    }
 
     if (!matchedItem) return { status: 404, message: 'item not found in cart' };
 
-    const newCart =
-      _delete || matchedItem.amount === 1
-        ? await Cart.findOneAndUpdate(
-            { userId },
-            { $pull: { items: { editionId: editionId, size: size } } },
-            { new: true, projection: '-items._id' }
-          )
-        : await Cart.findOneAndUpdate(
-            { userId, 'items.editionId': editionId, 'items.size': size },
-            { $inc: { 'items.$.amount': -1 } },
-            { new: true, projection: '-items._id' }
-          );
+    if (_delete || matchedItem.amount === 1)
+      items = items.filter(
+        (item) => !(item.editionId === editionId && item.size === size)
+      );
+    else items[matchedIdx].amount--;
 
-    return { status: 200, cart: newCart.items };
+    const { status, cart, message } = await getCart(items);
+
+    return { status, newItems: items, cart, message };
   } catch (error) {
-    console.error('Error while removing cart item:', error);
     return {
       status: 500,
       message: 'unable to remove item from cart',

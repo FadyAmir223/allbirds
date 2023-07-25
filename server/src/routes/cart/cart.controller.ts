@@ -2,47 +2,40 @@ import {
   getCart,
   addCartItem,
   removeCartItem,
-  // deleteCartItem,
 } from '../../models/cart/cart.model.js';
 
 async function httpsGetCart(req, res) {
-  const { id } = req.params;
-  const cart = await getCart(id);
-  return res.json({ cart });
+  const { items } = req.session;
+  const { status, cart, message } = await getCart(items);
+  return res.status(status).json({ cart, message });
 }
 
 async function httpsAddCartItem(req, res) {
-  const { id: userId } = req.params;
-  const { productId, editionId, size } = req.body;
-  const { status, cart, message } = await addCartItem(
-    userId,
-    productId,
-    editionId,
-    size
+  const { items } = req.session;
+  const { status, newItems, cart, message } = await addCartItem(
+    items,
+    req.body
   );
+  if (newItems) req.session.items = newItems;
   return res.status(status).json({ cart, message });
 }
 
 async function httpsRemoveCartItem(req, res) {
-  const { id: userId } = req.params;
-  const { editionId, size } = req.body;
-  const { status, cart, message } = await removeCartItem(
-    userId,
-    editionId,
-    size
-  );
-  return res.status(status).json({ cart, message });
+  return await httpsDecrementCartItem(req, res);
 }
 
 async function httpsDeleteCartItem(req, res) {
-  const { id: userId } = req.params;
-  const { editionId, size } = req.body;
-  const { status, cart, message } = await removeCartItem(
-    userId,
-    editionId,
-    size,
-    true
+  return await httpsDecrementCartItem(req, res, true);
+}
+
+async function httpsDecrementCartItem(req, res, _delete?) {
+  const { items } = req.session;
+  const { status, newItems, cart, message } = await removeCartItem(
+    items,
+    req.body,
+    _delete
   );
+  if (newItems) req.session.items = newItems;
   return res.status(status).json({ cart, message });
 }
 

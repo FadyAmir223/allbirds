@@ -5,17 +5,16 @@ import morgan from 'morgan';
 import path from 'path';
 import url from 'url';
 
-import { CLIENT_URL, CLIENT_PORT } from './utils/loadEnv.js';
+import { CLIENT_URL } from './utils/loadEnv.js';
 import api from './routes/api.js';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
-const clientUrl = `${CLIENT_URL}:${CLIENT_PORT}`;
 
 const app = express();
 
 app.use(
   cors({
-    origin: clientUrl,
+    origin: CLIENT_URL,
     credentials: true,
     methods: 'GET,POST,DELETE,PUT',
   })

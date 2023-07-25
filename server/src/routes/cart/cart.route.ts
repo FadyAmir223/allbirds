@@ -6,15 +6,18 @@ import {
   httpsRemoveCartItem,
   httpsDeleteCartItem,
 } from './cart.controller.js';
+import cartSession from './cart.session.js';
 
 const cartRoute = express.Router();
 
-cartRoute.get('/:id', httpsGetCart);
+cartRoute.use(cartSession);
 
-cartRoute.post('/:id/add', httpsAddCartItem);
+cartRoute.get('/', httpsGetCart);
 
-cartRoute.delete('/:id/remove', httpsRemoveCartItem);
+cartRoute.post('/add', httpsAddCartItem);
 
-cartRoute.delete('/:id/delete', httpsDeleteCartItem);
+cartRoute.delete('/remove', httpsRemoveCartItem);
+
+cartRoute.delete('/delete', httpsDeleteCartItem);
 
 export default cartRoute;

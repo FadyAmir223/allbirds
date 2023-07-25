@@ -4,7 +4,8 @@ import { MONGO_URL } from '../utils/loadEnv.js';
 
 // mongod --dbpath "G:/user tools/mongoDB/data"
 
-const DB_URL = MONGO_URL + '/allbirds';
+const dbName = 'allbirds';
+const DB_URL = `${MONGO_URL}/${dbName}`;
 
 mongoose.connection.once('open', () => {
   console.log('mongoDB connection ready');
@@ -22,4 +23,4 @@ const mongoDisconnect = async () => {
   await mongoose.disconnect();
 };
 
-export { DB_URL, mongoConnect, mongoDisconnect };
+export { DB_URL, dbName, mongoConnect, mongoDisconnect };
