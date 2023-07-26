@@ -1,4 +1,4 @@
-import session from 'express-session';
+import serverSession from 'express-session';
 import mongoStore from 'connect-mongo';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,8 +7,8 @@ import {
   SESSION_KEY_1,
   SESSION_KEY_2,
   IS_PRODUCTION,
-} from '../../utils/loadEnv.js';
-import { dbName } from '../../services/mongo.js';
+} from '../utils/loadEnv.js';
+import { dbName } from '../services/mongo.js';
 
 const store = mongoStore.create({
   mongoUrl: MONGO_URL,
@@ -16,9 +16,9 @@ const store = mongoStore.create({
   collectionName: 'carts',
 });
 
-const cartSession = session({
+const cartSession = serverSession({
   genid: () => uuidv4(),
-  name: 'userId',
+  name: 'cart',
   secret: [SESSION_KEY_1, SESSION_KEY_2],
   resave: true,
   rolling: true,

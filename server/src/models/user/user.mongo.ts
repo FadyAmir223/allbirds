@@ -4,10 +4,10 @@ const userSchema = new mongoose.Schema({
   name: {
     first: String,
     last: String,
-    required: true,
   },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  verified: { type: Boolean, default: false },
   location: [
     {
       company: String,
@@ -17,20 +17,6 @@ const userSchema = new mongoose.Schema({
       state: String,
       zipCode: Number,
       phone: String,
-    },
-  ],
-  cart: [
-    {
-      id: Number,
-      name: String,
-      colorName: String,
-      size: Number,
-      price: Number,
-      salePrice: Number,
-      freeShipping: Boolean,
-      image: String,
-      amount: Number,
-      ordered: Boolean,
     },
   ],
 });

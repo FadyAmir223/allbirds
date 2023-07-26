@@ -6,7 +6,7 @@ import {
   httpsRemoveCartItem,
   httpsDeleteCartItem,
 } from './cart.controller.js';
-import cartSession from './cart.session.js';
+import cartSession from '../../config/cart.session.js';
 
 const cartRoute = express.Router();
 
