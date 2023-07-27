@@ -1,7 +1,8 @@
+// https://console.cloud.google.com/apis/credentials
+
 import express from 'express';
 import passport from 'passport';
-import { Strategy } from 'passport-google-oauth20';
-// import refresh from 'passport-oauth2-refresh';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
 import {
   CLIENT_URL,
@@ -9,7 +10,7 @@ import {
   GOOGLE_CLIENT_SECRET,
   SERVER_URL,
 } from '../../../utils/loadEnv.js';
-import { createSocialUser } from '../../../models/user/user.model.js';
+import verifyCallback from './_verifyCallback.js';
 
 const AUTH_OPTIONS = {
   clientID: GOOGLE_CLIENT_ID,
@@ -17,26 +18,9 @@ const AUTH_OPTIONS = {
   callbackURL: SERVER_URL + '/api/auth/google/callback',
 };
 
-async function verifyCallback(accessToken, refreshToken, profile, done) {
-  const { displayName, provider } = profile;
-  const email = profile.emails[0].value;
-
-  const user = await createSocialUser(
-    displayName,
-    email,
-    provider,
-    accessToken,
-    refreshToken
-  );
-
-  return done(null, user);
-}
-
-const googleStrategy = new Strategy(AUTH_OPTIONS, verifyCallback);
+const googleStrategy = new GoogleStrategy(AUTH_OPTIONS, verifyCallback);
 
 passport.use(googleStrategy);
-
-// refresh.use(googleStrategy);
 
 const googleRoute = express.Router();
 

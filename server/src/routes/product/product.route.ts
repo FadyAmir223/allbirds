@@ -4,8 +4,8 @@ import { httpsGetProduct, httpsGetreviews } from './product.controller.js';
 
 const productRoute = express.Router();
 
-productRoute.get('/:product', httpsGetProduct);
+productRoute.get('/:id', httpsGetProduct);
 
-productRoute.get('/:product/:reviews', httpsGetreviews);
+productRoute.get('/:id/:reviews', httpsGetreviews);
 
 export default productRoute;

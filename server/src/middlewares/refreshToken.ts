@@ -3,6 +3,9 @@ import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '../utils/loadEnv.js';
 import { updateAccessToken } from '../models/user/user.model.js';
 
 async function refreshTokenMiddleware(req, res, next) {
+  const provider = req?.user?.social.provider;
+  if (provider !== 'google') return next();
+
   const expireUrl =
     'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=';
   const { accessToken } = req.user.social;
@@ -26,7 +29,7 @@ async function refreshTokenMiddleware(req, res, next) {
   });
 
   const user = await updateAccessToken(_id, access_token);
-  if (!user) return res.json({ message: 'unable to save user' });
+  if (!user) return res.status(500).json({ message: 'unable to update user' });
 
   next();
 }

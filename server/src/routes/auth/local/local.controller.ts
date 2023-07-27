@@ -4,8 +4,7 @@ import bcrypt from 'bcrypt';
 
 import {
   createLocalUser,
-  getEmail,
-  getUser,
+  getLocalUser,
 } from '../../../models/user/user.model.js';
 
 async function httpsSignup(req, res) {
@@ -17,8 +16,9 @@ async function httpsSignup(req, res) {
   if (password !== confirmPassword)
     return res.status(400).json({ message: 'unmatched passwords' });
 
-  const emailExist = await getEmail(email);
-  if (emailExist) return res.status(409).json({ message: 'email aleady used' });
+  const user = await getLocalUser(email);
+  if (user?.email)
+    return res.status(409).json({ message: 'email aleady used' });
 
   const username = `${firstName} ${lastName}`;
   const hashPassword = await bcrypt.hash(password, 10);
@@ -42,7 +42,9 @@ async function httpsLogin(req, res) {
 passport.use(
   new Strategy(async (email, password, done) => {
     try {
-      const user = await getUser(email);
+      console.log({ email, password });
+
+      const user = await getLocalUser(email);
 
       if (!user) return done(null, false);
       if (email !== user?.email) return done(null, false);

@@ -16,83 +16,89 @@ async function saveProducts() {
   }
 }
 
-async function getProduct(productName) {
-  return await Product.findOne(
-    { handle: productName },
-    '-__v -recommendations._id -material_features._id -dropdown._id -editions._id -reviews'
-  );
+async function getProduct(id) {
+  try {
+    return await Product.findById(
+      id,
+      '-__v -recommendations._id -material_features._id -dropdown._id -editions._id -reviews'
+    );
+  } catch {}
 }
 
 async function getReviews(productName, skip, limit) {
-  return await Product.findOne(
-    { handle: productName },
-    {
-      _id: 0,
-      'reviews.count': 1,
-      'reviews.rating': 1,
-      'reviews.reviews': { $slice: [skip, limit] },
-    }
-  );
+  try {
+    return await Product.findOne(
+      { handle: productName },
+      {
+        _id: 0,
+        'reviews.count': 1,
+        'reviews.rating': 1,
+        'reviews.reviews': { $slice: [skip, limit] },
+      }
+    );
+  } catch {}
 }
 
 async function getCollection(type, gender, skip, limit) {
-  const [{ products, total }] = await Product.aggregate([
-    {
-      $match: {
-        $or: [
-          { type: type, gender: gender },
-          { type: type, gender: 'unisex' },
-        ],
+  try {
+    const [{ products, total }] = await Product.aggregate([
+      {
+        $match: {
+          $or: [
+            { type: type, gender: gender },
+            { type: type, gender: 'unisex' },
+          ],
+        },
       },
-    },
-    {
-      $project: {
-        _id: 1,
-        name: 1,
-        handle: 1,
-        price: 1,
-        sizes: 1,
-        editions: {
-          $map: {
-            input: '$editions',
-            as: 'edition',
-            in: {
-              edition: '$$edition.edition',
-              products: {
-                $map: {
-                  input: '$$edition.products',
-                  as: 'product',
-                  in: {
-                    id: '$$product.id',
-                    handle: '$$product.handle ',
-                    colorName: '$$product.colorName',
-                    colors: '$$product.colors',
-                    hues: '$$product.hues',
-                    salePrice: '$$product.salePrice',
-                    sizesSoldOut: '$$product.sizesSoldOut',
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          handle: 1,
+          price: 1,
+          sizes: 1,
+          editions: {
+            $map: {
+              input: '$editions',
+              as: 'edition',
+              in: {
+                edition: '$$edition.edition',
+                products: {
+                  $map: {
+                    input: '$$edition.products',
+                    as: 'product',
+                    in: {
+                      id: '$$product.id',
+                      handle: '$$product.handle ',
+                      colorName: '$$product.colorName',
+                      colors: '$$product.colors',
+                      hues: '$$product.hues',
+                      salePrice: '$$product.salePrice',
+                      sizesSoldOut: '$$product.sizesSoldOut',
 
-                    image: {
-                      $arrayElemAt: [
-                        {
-                          $filter: {
-                            input: '$$product.images',
-                            as: 'img',
-                            cond: {
-                              $or: [
-                                {
-                                  $regexMatch: {
-                                    input: '$$img',
-                                    regex:
-                                      'left|profile|lat|1-min|^((?!closeup).)*pink-1',
-                                    options: 'i',
+                      image: {
+                        $arrayElemAt: [
+                          {
+                            $filter: {
+                              input: '$$product.images',
+                              as: 'img',
+                              cond: {
+                                $or: [
+                                  {
+                                    $regexMatch: {
+                                      input: '$$img',
+                                      regex:
+                                        'left|profile|lat|1-min|^((?!closeup).)*pink-1',
+                                      options: 'i',
+                                    },
                                   },
-                                },
-                              ],
+                                ],
+                              },
                             },
                           },
-                        },
-                        0,
-                      ],
+                          0,
+                        ],
+                      },
                     },
                   },
                 },
@@ -101,22 +107,22 @@ async function getCollection(type, gender, skip, limit) {
           },
         },
       },
-    },
-    {
-      $facet: {
-        products: [{ $skip: skip }, { $limit: limit }],
-        total: [{ $count: 'count' }],
+      {
+        $facet: {
+          products: [{ $skip: skip }, { $limit: limit }],
+          total: [{ $count: 'count' }],
+        },
       },
-    },
-    {
-      $project: {
-        products: 1,
-        total: { $arrayElemAt: ['$total.count', 0] },
+      {
+        $project: {
+          products: 1,
+          total: { $arrayElemAt: ['$total.count', 0] },
+        },
       },
-    },
-  ]);
+    ]);
 
-  return { products, total };
+    return { products, total };
+  } catch {}
 }
 
 async function getCollectionSale(type, gender, skip, limit) {
@@ -221,78 +227,80 @@ async function getCollectionSale(type, gender, skip, limit) {
 }
 
 async function getCollectionFilters(type, gender) {
-  const [{ sizes, bestFor, material, hues }] = await Product.aggregate([
-    {
-      $match: {
-        $or: [
-          { type: type, gender: gender },
-          { type: type, gender: 'unisex' },
-        ],
+  try {
+    const [{ sizes, bestFor, material, hues }] = await Product.aggregate([
+      {
+        $match: {
+          $or: [
+            { type: type, gender: gender },
+            { type: type, gender: 'unisex' },
+          ],
+        },
       },
-    },
-    {
-      $group: {
-        _id: null,
-        sizes: { $addToSet: '$sizes' },
-        bestFor: { $addToSet: '$bestFor' },
-        material: { $addToSet: '$material' },
-        hues: { $addToSet: '$editions.products.hues' },
+      {
+        $group: {
+          _id: null,
+          sizes: { $addToSet: '$sizes' },
+          bestFor: { $addToSet: '$bestFor' },
+          material: { $addToSet: '$material' },
+          hues: { $addToSet: '$editions.products.hues' },
+        },
       },
-    },
-    { $unwind: '$sizes' },
-    { $unwind: '$sizes' },
-    { $unwind: '$bestFor' },
-    { $unwind: '$bestFor' },
-    { $unwind: '$material' },
-    { $unwind: '$hues' },
-    { $unwind: '$hues' },
-    { $unwind: '$hues' },
-    { $unwind: '$hues' },
-    {
-      $group: {
-        _id: null,
-        sizes: { $addToSet: '$sizes' },
-        bestFor: { $addToSet: '$bestFor' },
-        material: { $addToSet: '$material' },
-        hues: { $addToSet: '$hues' },
+      { $unwind: '$sizes' },
+      { $unwind: '$sizes' },
+      { $unwind: '$bestFor' },
+      { $unwind: '$bestFor' },
+      { $unwind: '$material' },
+      { $unwind: '$hues' },
+      { $unwind: '$hues' },
+      { $unwind: '$hues' },
+      { $unwind: '$hues' },
+      {
+        $group: {
+          _id: null,
+          sizes: { $addToSet: '$sizes' },
+          bestFor: { $addToSet: '$bestFor' },
+          material: { $addToSet: '$material' },
+          hues: { $addToSet: '$hues' },
+        },
       },
-    },
-    {
-      $project: {
-        _id: 0,
-        sizes: 1,
-        bestFor: 1,
-        material: 1,
-        hues: 1,
+      {
+        $project: {
+          _id: 0,
+          sizes: 1,
+          bestFor: 1,
+          material: 1,
+          hues: 1,
+        },
       },
-    },
-  ]);
+    ]);
 
-  bestFor.sort();
-  material.sort();
-  hues.sort();
+    bestFor.sort();
+    material.sort();
+    hues.sort();
 
-  const extractNumber = (str) => +str.match(/[-+]?\d+(\.\d+)?/)[0];
-  const isNumber = (str) => !isNaN(parseFloat(str));
-  const startWithW = (str) => str.startsWith('w');
+    const extractNumber = (str) => +str.match(/[-+]?\d+(\.\d+)?/)[0];
+    const isNumber = (str) => !isNaN(parseFloat(str));
+    const startWithW = (str) => str.startsWith('w');
 
-  sizes.sort((a, b) => {
-    const aIsNumber = isNumber(a);
-    const bIsNumber = isNumber(b);
+    sizes.sort((a, b) => {
+      const aIsNumber = isNumber(a);
+      const bIsNumber = isNumber(b);
 
-    switch (true) {
-      case (aIsNumber && bIsNumber) || (!aIsNumber && !bIsNumber):
-        return extractNumber(a) - extractNumber(b);
-      case startWithW(a) && !startWithW(b):
-        return -1;
-      case !startWithW(a) && startWithW(b):
-        return 1;
-      default:
-        return a.localeCompare(b);
-    }
-  });
+      switch (true) {
+        case (aIsNumber && bIsNumber) || (!aIsNumber && !bIsNumber):
+          return extractNumber(a) - extractNumber(b);
+        case startWithW(a) && !startWithW(b):
+          return 1;
+        case !startWithW(a) && startWithW(b):
+          return -1;
+        default:
+          return a.localeCompare(b);
+      }
+    });
 
-  return { sizes, bestFor, material, hues };
+    return { sizes, bestFor, material, hues };
+  } catch {}
 }
 
 export {
