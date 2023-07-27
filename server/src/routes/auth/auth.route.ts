@@ -1,45 +1,28 @@
 import express from 'express';
 import passport from 'passport';
 
-import {
-  checkLoggedIn,
-  checkLoggedOut,
-  checkPermissions,
-} from '../../middlewares/auth/auth.checks.js';
-import {
-  regenerateMiddleware,
-  userLocalSession,
-} from '../../config/auth.session.js';
-import {
-  httpsSignup,
-  httpsLogin,
-  htppsLogout,
-  htppsSecret,
-} from './auth.controller.js';
+import localRoute from './local/local.route.js';
+import googleRoute from './google/google.js';
 
-import './auth.passport.js';
+import { htppsLogout } from './auth.controller.js';
+import { checkLoggedIn } from '../../middlewares/auth.checks.js';
+import {
+  userSession,
+  regenerateMiddleware,
+} from '../../config/auth.session.js';
+
+import './passport.js';
 
 const authRoute = express.Router();
 
-authRoute.use(userLocalSession);
+authRoute.use(userSession, regenerateMiddleware);
 
-authRoute.use(regenerateMiddleware);
+authRoute.use(passport.initialize(), passport.session());
 
-authRoute.use(passport.initialize());
+authRoute.use('/local', localRoute);
 
-authRoute.use(passport.session());
-
-authRoute.post('/signup', checkLoggedOut, httpsSignup);
-
-authRoute.post(
-  '/login',
-  checkLoggedOut,
-  passport.authenticate('local'),
-  httpsLogin
-);
+authRoute.use('/google', googleRoute);
 
 authRoute.post('/logout', checkLoggedIn, htppsLogout);
-
-authRoute.get('/secret', checkLoggedIn, checkPermissions, htppsSecret);
 
 export default authRoute;

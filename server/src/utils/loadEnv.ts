@@ -34,4 +34,6 @@ export const {
 } = process.env;
 
 const CLIENT_URL = `${CLIENT_DOMAIN}:${CLIENT_PORT}`;
-export { IS_PRODUCTION, CLIENT_URL };
+const SERVER_URL = `${SERVER_DOMAIN}:${SERVER_PORT}`;
+
+export { IS_PRODUCTION, CLIENT_URL, SERVER_URL };
