@@ -9,7 +9,7 @@ import {
 const sessionOptions = {
   name: 'user',
   keys: [SESSION_KEY_1, SESSION_KEY_2],
-  maxAge: 30 * 24 * 60 * 60,
+  maxAge: 30 * 24 * 60 * 60 * 1000,
   secure: IS_PRODUCTION,
 };
 

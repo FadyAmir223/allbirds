@@ -2,7 +2,7 @@ import User from './user.mongo.js';
 
 async function getEmail(email) {
   try {
-    const emailExist = await User.findOne({ email }, 'email');
+    const emailExist = await User.findOne({ email }, 'email').lean();
     return emailExist;
   } catch {
     return false;
@@ -11,13 +11,13 @@ async function getEmail(email) {
 
 async function getUser(email) {
   try {
-    return await User.findOne({ email });
+    return await User.findOne({ email }).lean();
   } catch {}
 }
 
 async function getUserById(id) {
   try {
-    return await User.findById(id, '-__v -password');
+    return await User.findById(id, '-__v -password').lean();
   } catch {}
 }
 
@@ -38,7 +38,11 @@ async function createSocialUser(
   refreshToken
 ) {
   try {
-    const user = await User.findOneAndUpdate(
+    const now = new Date();
+
+    now.setHours(now.getHours() + 1);
+
+    return await User.findOneAndUpdate(
       { email },
       {
         username,
@@ -46,11 +50,24 @@ async function createSocialUser(
         verified: true,
         social: { provider, accessToken, refreshToken },
       },
-      { upsert: true, new: true, runValidators: true }
+      { upsert: true, new: true }
     );
-
-    return user._id;
   } catch {}
 }
 
-export { getEmail, getUser, getUserById, createLocalUser, createSocialUser };
+async function updateAccessToken(_id, accessToken) {
+  try {
+    return await User.findByIdAndUpdate(_id, {
+      social: { accessToken },
+    }).lean();
+  } catch {}
+}
+
+export {
+  getEmail,
+  getUser,
+  getUserById,
+  createLocalUser,
+  createSocialUser,
+  updateAccessToken,
+};

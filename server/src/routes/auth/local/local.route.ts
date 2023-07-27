@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 
-import { checkLoggedOut } from '../../../middlewares/auth.checks.js';
+import { checkLoggedOut } from '../../../middlewares/checkAuth.js';
 import { httpsLogin, httpsSignup } from './local.controller.js';
 
 const localRoute = express.Router();

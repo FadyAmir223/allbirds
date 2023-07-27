@@ -21,7 +21,7 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
   const { displayName, provider } = profile;
   const email = profile.emails[0].value;
 
-  const id = await createSocialUser(
+  const user = await createSocialUser(
     displayName,
     email,
     provider,
@@ -29,7 +29,7 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
     refreshToken
   );
 
-  return done(null, id);
+  return done(null, user);
 }
 
 const googleStrategy = new Strategy(AUTH_OPTIONS, verifyCallback);

@@ -2,10 +2,10 @@ import express from 'express';
 import passport from 'passport';
 
 import localRoute from './local/local.route.js';
-import googleRoute from './google/google.js';
+import googleRoute from './social/google.js';
 
 import { htppsLogout } from './auth.controller.js';
-import { checkLoggedIn } from '../../middlewares/auth.checks.js';
+import { checkLoggedIn } from '../../middlewares/checkAuth.js';
 import {
   userSession,
   regenerateMiddleware,

@@ -7,14 +7,17 @@ import {
   SESSION_KEY_1,
   SESSION_KEY_2,
   IS_PRODUCTION,
+  CLIENT_URL,
 } from '../utils/loadEnv.js';
 import { dbName } from '../services/mongo.js';
 
-const store = mongoStore.create({
+const options = {
   mongoUrl: MONGO_URL,
   dbName,
   collectionName: 'carts',
-});
+};
+
+// if (!IS_PRODUCTION) options['domain'] = CLIENT_URL;
 
 const cartSession = serverSession({
   genid: () => uuidv4(),
@@ -23,7 +26,7 @@ const cartSession = serverSession({
   resave: true,
   rolling: true,
   saveUninitialized: false,
-  store,
+  store: mongoStore.create(options),
   cookie: {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     secure: IS_PRODUCTION,
