@@ -13,11 +13,8 @@ const cartRoute = express.Router();
 cartRoute.use(cartSession);
 
 cartRoute.get('/', httpsGetCart);
-
 cartRoute.post('/add', httpsAddCartItem);
-
 cartRoute.delete('/remove', httpsRemoveCartItem);
-
 cartRoute.delete('/delete', httpsDeleteCartItem);
 
 export default cartRoute;

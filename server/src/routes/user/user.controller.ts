@@ -1,6 +1,44 @@
-async function htppsGetSecret(req, res) {
-  const { username } = req.user;
-  return res.json({ username });
+import {
+  addLocation,
+  getLocations,
+  removeLocation,
+  updateLocation,
+} from '../../models/user/user.model.js';
+
+async function htppsGetLocations(req, res) {
+  const { status, message, locations } = await getLocations(req.user._id);
+  return res.status(status).json({ message, locations });
 }
 
-export { htppsGetSecret };
+async function httpsAddLocation(req, res) {
+  const { locations, status, message } = await addLocation(
+    req.user._id,
+    req.body
+  );
+  res.status(status).json({ locations, message });
+}
+
+async function httpsRemoveLocation(req, res) {
+  const { locations, status, message } = await removeLocation(
+    req.user._id,
+    req.params.id
+  );
+  res.status(status).json({ locations, message });
+}
+
+async function httpsUpdateLocation(req, res) {
+  const { locations, status, message } = await updateLocation(
+    req.user._id,
+    req.params,
+    req.body
+  );
+
+  res.status(status).json({ locations, message });
+}
+
+export {
+  htppsGetLocations,
+  httpsAddLocation,
+  httpsRemoveLocation,
+  httpsUpdateLocation,
+};

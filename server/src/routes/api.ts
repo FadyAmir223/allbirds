@@ -9,13 +9,9 @@ import userRoute from './user/user.route.js';
 const api = express.Router();
 
 api.use('/collections', collectionRoute);
-
 api.use('/products', productRoute);
-
 api.use('/cart', cartRoute);
-
 api.use('/auth', authRoute);
-
 api.use('/user', userRoute);
 
 export default api;

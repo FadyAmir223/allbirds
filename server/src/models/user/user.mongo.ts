@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     refreshToken: String,
   },
   verified: { type: Boolean, default: false },
-  location: [
+  locations: [
     {
       company: String,
       address: String,
@@ -19,6 +19,13 @@ const userSchema = new mongoose.Schema({
       state: String,
       zipCode: Number,
       phone: String,
+    },
+  ],
+  orders: [
+    {
+      productId: mongoose.Types.ObjectId,
+      editionId: String,
+      size: String,
     },
   ],
 });

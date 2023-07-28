@@ -9,9 +9,7 @@ import {
 const collectionRoute = express.Router();
 
 collectionRoute.get('/', httpsGetCollection);
-
 collectionRoute.get('/sale', httpsGetCollectionSale);
-
 collectionRoute.get('/filters', httpsGetCollectionFilters);
 
 export default collectionRoute;

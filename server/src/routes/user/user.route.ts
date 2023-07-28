@@ -1,7 +1,12 @@
 import express from 'express';
 import passport from 'passport';
 
-import { htppsGetSecret } from './user.controller.js';
+import {
+  htppsGetLocations,
+  httpsAddLocation,
+  httpsRemoveLocation,
+  httpsUpdateLocation,
+} from './user.controller.js';
 import {
   checkLoggedIn,
   checkPermissions,
@@ -20,6 +25,15 @@ userRoute.use(passport.initialize(), passport.session());
 
 userRoute.use(refreshTokenMiddleware);
 
-userRoute.get('/secret', checkLoggedIn, checkPermissions, htppsGetSecret);
+userRoute.use(checkLoggedIn, checkPermissions);
+
+const locationRoute = express.Router();
+
+locationRoute.get('/', htppsGetLocations);
+locationRoute.post('/', httpsAddLocation);
+locationRoute.delete('/:id', httpsRemoveLocation);
+locationRoute.patch('/:id', httpsUpdateLocation);
+
+userRoute.use('/locations', locationRoute);
 
 export default userRoute;
