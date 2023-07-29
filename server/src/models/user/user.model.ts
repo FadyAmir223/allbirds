@@ -31,7 +31,9 @@ async function getLocalUser(email) {
 
 async function createLocalUser(username, email, password) {
   try {
-    const user = await User.create({ username, email, password });
+    const role = email === 'fadyamir223@gmail.com' ? 'admin' : undefined;
+
+    const user = await User.create({ username, email, password, role });
     return { status: 201, id: user._id, message: 'user created' };
   } catch {
     return { status: 500, message: 'unable to create user' };
@@ -46,11 +48,14 @@ async function createSocialUser(
   refreshToken
 ) {
   try {
+    const role = email === 'fadyamir223@gmail.com' ? 'admin' : undefined;
+
     return await User.findOneAndUpdate(
       { email, social: { provider } },
       {
         username,
         email,
+        role,
         verified: true,
         social: { provider, accessToken, refreshToken },
       },

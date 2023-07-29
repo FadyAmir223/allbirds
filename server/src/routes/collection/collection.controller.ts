@@ -18,18 +18,18 @@ async function getACollection(req, res, isSale = false) {
   const { skip, limit, page } = getPagination(req.query);
   const { type, gender } = req.query;
 
-  const { products, total } = isSale
+  const { products, total, status, message } = isSale
     ? await getCollectionSale(type, gender, skip, limit)
     : await getCollection(type, gender, skip, limit);
 
   const pagination = { total, page, perPage: products.length };
-  return res.json({ pagination, products });
+  return res.status(status).json({ pagination, products, message });
 }
 
 async function httpsGetCollectionFilters(req, res) {
   const { type, gender } = req.query;
-  const filters = await getCollectionFilters(type, gender);
-  res.json({ filters });
+  const { filters, status, message } = await getCollectionFilters(type, gender);
+  res.status(status).json({ filters, message });
 }
 
 export {

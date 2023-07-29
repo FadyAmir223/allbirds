@@ -1,19 +1,27 @@
-import { getProduct, getReviews } from '../../models/product/product.model.js';
+import {
+  getProduct,
+  getReviews,
+  addReview,
+  removeReview,
+} from '../../models/product/product.model.js';
 import { getPagination } from '../../utils/query.js';
 
 async function httpsGetProduct(req, res) {
   const { id } = req.params;
-  const product = await getProduct(id);
-  return res.json({ product });
+  const { product, status, message } = await getProduct(id);
+  return res.status(status).json({ product, message });
 }
 
-async function httpsGetreviews(req, res) {
+async function httpsGetReviews(req, res) {
   req.query.limit = req.query.limit || 3;
   const { skip, limit, page } = getPagination(req.query);
   const { id } = req.params;
 
-  const { reviews: reviews_ } = await getReviews(id, skip, limit);
-  const { count, rating, reviews } = reviews_;
+  const { reviews, count, rating, status, message } = await getReviews(
+    id,
+    skip,
+    limit
+  );
 
   const pagination = {
     total: count,
@@ -21,7 +29,11 @@ async function httpsGetreviews(req, res) {
     perPage: reviews.length,
   };
 
-  return res.json({ pagination, rating, reviews });
+  return res.status(status).json({ pagination, rating, reviews, message });
 }
 
-export { httpsGetProduct, httpsGetreviews };
+async function httpsAddReview(req, res) {}
+
+async function httpsRemoveReview(req, res) {}
+
+export { httpsGetProduct, httpsGetReviews, httpsAddReview, httpsRemoveReview };

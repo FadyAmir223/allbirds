@@ -2,7 +2,7 @@ import {
   getCart,
   addCartItem,
   removeCartItem,
-} from '../../models/cart/cart.model.js';
+} from '../../models/product/product.model.js';
 
 async function httpsGetCart(req, res) {
   const { items } = req.session;

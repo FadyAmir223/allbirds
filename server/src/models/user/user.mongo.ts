@@ -4,6 +4,7 @@ const userSchema = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
+  role: { type: String, default: 'user' },
   social: {
     provider: String,
     accessToken: String,
@@ -26,6 +27,8 @@ const userSchema = new mongoose.Schema({
       productId: mongoose.Types.ObjectId,
       editionId: String,
       size: String,
+      amount: Number,
+      delivered: { type: Boolean, default: false },
     },
   ],
 });
