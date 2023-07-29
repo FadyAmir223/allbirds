@@ -1,10 +1,14 @@
 import mongoose from 'mongoose';
 
 import User from './user.mongo.js';
+import { getCart } from '../product/product.model.js';
 
 async function getUserById(id) {
   try {
-    return await User.findById(id, 'username email social verified').lean();
+    return await User.findById(
+      id,
+      'username email social verified role'
+    ).lean();
   } catch {}
 }
 
@@ -136,6 +140,35 @@ async function updateLocation(userId, locationId, fields) {
   }
 }
 
+async function orderCart(user, items) {
+  try {
+    if (items?.length)
+      return { status: 401, message: 'there is no items to purchase' };
+
+    const { cart } = await getCart(items);
+
+    if (items.length !== cart?.length)
+      return { status: 401, message: 'invalid product in cart' };
+
+    const soldOutItems = cart
+      .filter(({ soldOut }) => soldOut)
+      .map(({ name, colorName }) => `${name} - ${colorName}`);
+
+    if (soldOutItems.length !== 0)
+      return {
+        status: 404,
+        message: 'products in cart are sold out',
+        soldOutItems,
+      };
+
+    // payment
+
+    return { status: 201, message: 'purchased successfully' };
+  } catch {
+    return { status: 500, message: 'error happened during purchase' };
+  }
+}
+
 export {
   getUserById,
   getUserByEmail,
@@ -147,4 +180,5 @@ export {
   addLocation,
   removeLocation,
   updateLocation,
+  orderCart,
 };

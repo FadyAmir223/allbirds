@@ -20,11 +20,9 @@ authRoute.use(userSession, regenerateMiddleware);
 
 authRoute.use(passport.initialize(), passport.session());
 
-authRoute.use(checkLoggedIn);
-
 authRoute.use('/local', localRoute);
 authRoute.use('/google', googleRoute);
 authRoute.use('/facebook', facebookRoute);
-authRoute.post('/logout', htppsLogout);
+authRoute.post('/logout', checkLoggedIn, htppsLogout);
 
 export default authRoute;

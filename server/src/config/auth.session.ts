@@ -20,6 +20,7 @@ const userSession = cookieSession(sessionOptions);
 function regenerateMiddleware(req, res, next) {
   req.session.regenerate = (cb) => cb();
   req.session.save = (cb) => cb();
+  // req.session.touch = () => {};
   next();
 }
 

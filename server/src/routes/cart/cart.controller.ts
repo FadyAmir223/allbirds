@@ -3,6 +3,7 @@ import {
   addCartItem,
   removeCartItem,
 } from '../../models/product/product.model.js';
+import { orderCart } from '../../models/user/user.model.js';
 
 async function httpsGetCart(req, res) {
   const { items } = req.session;
@@ -39,9 +40,17 @@ async function httpsDecrementCartItem(req, res, _delete?) {
   return res.status(status).json({ cart, message });
 }
 
+async function httpsOrderCart(req, res) {
+  const { items } = req.session;
+  const { user } = req;
+  const { status, message } = await orderCart(user, items);
+  res.status(status).json({ message });
+}
+
 export {
   httpsGetCart,
   httpsAddCartItem,
   httpsRemoveCartItem,
   httpsDeleteCartItem,
+  httpsOrderCart,
 };

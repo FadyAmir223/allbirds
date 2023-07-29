@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Product from './product.mongo.js';
 import products from '../../data/allbirds.json' assert { type: 'json' };
 
@@ -7,7 +8,7 @@ async function saveProducts() {
       products.map((product) => ({
         updateOne: {
           filter: { handle: product.handle },
-          update: { product },
+          update: { $set: product },
           upsert: true,
         },
       }))
@@ -327,8 +328,10 @@ async function addReview() {}
 async function removeReview() {}
 
 async function getCart(items) {
-  if (!items) return { status: 404, message: "cart doesn't exist" };
   try {
+    if (!items || items.length === 0)
+      return { status: 404, message: 'your cart is empty' };
+
     const cart = (
       await Promise.all(
         items.map(
@@ -438,7 +441,6 @@ async function removeCartItem(items, { editionId, size }, _delete = false) {
     else items[matchedIdx].amount--;
 
     const { status, cart, message } = await getCart(items);
-
     return { status, newItems: items, cart, message };
   } catch (error) {
     return {
