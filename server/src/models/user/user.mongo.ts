@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
   orders: [
     {
       productId: mongoose.Types.ObjectId,
-      editionId: String,
+      editionId: Number,
       size: String,
       amount: Number,
       delivered: { type: Boolean, default: false },

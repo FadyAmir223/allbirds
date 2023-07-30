@@ -41,10 +41,11 @@ async function httpsDecrementCartItem(req, res, _delete?) {
 }
 
 async function httpsOrderCart(req, res) {
+  const { userId } = req.query;
   const { items } = req.session;
-  const { user } = req;
-  const { status, message } = await orderCart(user, items);
-  res.status(status).json({ message });
+  const { orders, status, message } = await orderCart(userId, items);
+  req.session.items = [];
+  res.status(status).json({ orders, message });
 }
 
 export {

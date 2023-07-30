@@ -94,11 +94,10 @@ async function addLocation(userId, location) {
       { new: true }
     ).lean();
 
-    if (!locations) throw new Error('user not found');
+    if (!locations) return { status: 404, message: 'user not found' };
     return { locations, status: 201 };
-  } catch (err) {
-    const message = err?.message ? err.message : 'unable to add location';
-    return { status: 500, message };
+  } catch {
+    return { status: 500, message: 'unable to add location' };
   }
 }
 
@@ -110,11 +109,10 @@ async function removeLocation(userId, locationId) {
       { new: true }
     ).lean();
 
-    if (!locations) throw new Error('user not found');
+    if (!locations) return { status: 404, message: 'user not found' };
     return { locations, status: 200 };
-  } catch (err) {
-    const message = err?.message ? err.message : 'unable to add location';
-    return { status: 500, message };
+  } catch {
+    return { status: 500, message: 'unable to add location' };
   }
 }
 
@@ -132,17 +130,16 @@ async function updateLocation(userId, locationId, fields) {
       { new: true }
     ).lean();
 
-    if (!locations) throw new Error('user not found');
+    if (!locations) return { status: 404, message: 'user not found' };
     return { locations, status: 200 };
-  } catch (err) {
-    const message = err?.message ? err.message : 'unable to update location';
-    return { status: 500, message };
+  } catch {
+    return { status: 500, message: 'unable to update location' };
   }
 }
 
-async function orderCart(user, items) {
+async function orderCart(userId, items) {
   try {
-    if (items?.length)
+    if (items?.length === 0)
       return { status: 401, message: 'there is no items to purchase' };
 
     const { cart } = await getCart(items);
@@ -157,13 +154,48 @@ async function orderCart(user, items) {
     if (soldOutItems.length !== 0)
       return {
         status: 404,
-        message: 'products in cart are sold out',
+        message: 'some products in cart are sold out',
         soldOutItems,
       };
 
-    // payment
+    const user = await User.findById(userId, 'orders');
 
-    return { status: 201, message: 'purchased successfully' };
+    if (!user) return { status: 404, message: 'user not found' };
+
+    for (const item of items) {
+      const { productId, editionId, size, amount } = item;
+
+      const existingOrder = user.orders.find(
+        (order) =>
+          String(order.productId) === productId &&
+          order.editionId === editionId &&
+          order.size === size
+      );
+
+      if (existingOrder) existingOrder.amount += amount;
+      else
+        user.orders.push({
+          productId,
+          editionId,
+          size,
+          amount,
+          delivered: false,
+        });
+    }
+
+    await user.save();
+
+    // TODO:
+
+    /////////////
+    // payment //
+    /////////////
+
+    return {
+      orders: user.orders,
+      status: 201,
+      message: 'purchased successfully',
+    };
   } catch {
     return { status: 500, message: 'error happened during purchase' };
   }

@@ -36,9 +36,14 @@ async function httpsUpdateLocation(req, res) {
   res.status(status).json({ locations, message });
 }
 
+function httpsOrderCart(req, res) {
+  res.redirect(`/api/cart/order?userId=${req.user._id}`);
+}
+
 export {
   htppsGetLocations,
   httpsAddLocation,
   httpsRemoveLocation,
   httpsUpdateLocation,
+  httpsOrderCart,
 };
