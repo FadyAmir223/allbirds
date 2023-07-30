@@ -23,7 +23,7 @@ async function getACollection(req, res, isSale = false) {
     : await getCollection(type, gender, skip, limit);
 
   const pagination = { total, page, perPage: products.length };
-  return res.status(status).json({ pagination, products, message });
+  res.status(status).json({ pagination, products, message });
 }
 
 async function httpsGetCollectionFilters(req, res) {

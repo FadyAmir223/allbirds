@@ -17,6 +17,7 @@ cartRoute.get('/', httpsGetCart);
 cartRoute.post('/add', httpsAddCartItem);
 cartRoute.delete('/remove', httpsRemoveCartItem);
 cartRoute.delete('/delete', httpsDeleteCartItem);
-cartRoute.get('/order', httpsOrderCart);
+
+cartRoute.get('/orders', httpsOrderCart);
 
 export default cartRoute;

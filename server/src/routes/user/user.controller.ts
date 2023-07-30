@@ -3,11 +3,12 @@ import {
   getLocations,
   removeLocation,
   updateLocation,
+  getOrders,
 } from '../../models/user/user.model.js';
 
 async function htppsGetLocations(req, res) {
   const { status, message, locations } = await getLocations(req.user._id);
-  return res.status(status).json({ message, locations });
+  res.status(status).json({ message, locations });
 }
 
 async function httpsAddLocation(req, res) {
@@ -37,7 +38,12 @@ async function httpsUpdateLocation(req, res) {
 }
 
 function httpsOrderCart(req, res) {
-  res.redirect(`/api/cart/order?userId=${req.user._id}`);
+  res.redirect(`/api/cart/orders?userId=${req.user._id}`);
+}
+
+async function httpsGetOrders(req, res) {
+  const { orders, status, message } = await getOrders(req.user._id);
+  res.status(status).json({ orders, message });
 }
 
 export {
@@ -46,4 +52,5 @@ export {
   httpsRemoveLocation,
   httpsUpdateLocation,
   httpsOrderCart,
+  httpsGetOrders,
 };

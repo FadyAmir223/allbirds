@@ -31,12 +31,12 @@ async function httpsSignup(req, res) {
 
   req.login(id, (err) => {
     if (err) return res.status(500).json({ message: 'error during login' });
-    return res.status(status).json({ message });
+    res.status(status).json({ message });
   });
 }
 
 async function httpsLogin(req, res) {
-  return res.status(200).json({ login: true });
+  res.status(200).json({ login: true });
 }
 
 passport.use(

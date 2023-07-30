@@ -9,7 +9,7 @@ import { getPagination } from '../../utils/query.js';
 async function httpsGetProduct(req, res) {
   const { id } = req.params;
   const { product, status, message } = await getProduct(id);
-  return res.status(status).json({ product, message });
+  res.status(status).json({ product, message });
 }
 
 async function httpsGetReviews(req, res) {
@@ -29,7 +29,7 @@ async function httpsGetReviews(req, res) {
     perPage: reviews.length,
   };
 
-  return res.status(status).json({ pagination, rating, reviews, message });
+  res.status(status).json({ pagination, rating, reviews, message });
 }
 
 async function httpsAddReview(req, res) {}

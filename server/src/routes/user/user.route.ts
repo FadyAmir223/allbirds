@@ -7,6 +7,7 @@ import {
   httpsRemoveLocation,
   httpsUpdateLocation,
   httpsOrderCart,
+  httpsGetOrders,
 } from './user.controller.js';
 import { checkLoggedIn } from '../../middlewares/checkAuth.js';
 import {
@@ -22,15 +23,16 @@ userRoute.use(passport.initialize(), passport.session());
 userRoute.use(refreshTokenMiddleware);
 userRoute.use(checkLoggedIn);
 
-userRoute.post('/order', httpsOrderCart);
-
 const locationRoute = express.Router();
-
 locationRoute.get('/', htppsGetLocations);
 locationRoute.post('/', httpsAddLocation);
 locationRoute.delete('/:id', httpsRemoveLocation);
 locationRoute.patch('/:id', httpsUpdateLocation);
-
 userRoute.use('/locations', locationRoute);
+
+const orderRoute = express.Router();
+orderRoute.get('/', httpsGetOrders);
+orderRoute.post('/', httpsOrderCart);
+userRoute.use('/orders', orderRoute);
 
 export default userRoute;

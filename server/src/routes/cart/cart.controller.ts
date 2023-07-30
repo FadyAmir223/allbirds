@@ -8,7 +8,7 @@ import { orderCart } from '../../models/user/user.model.js';
 async function httpsGetCart(req, res) {
   const { items } = req.session;
   const { status, cart, message } = await getCart(items);
-  return res.status(status).json({ cart, message });
+  res.status(status).json({ cart, message });
 }
 
 async function httpsAddCartItem(req, res) {
@@ -18,7 +18,7 @@ async function httpsAddCartItem(req, res) {
     req.body
   );
   if (newItems) req.session.items = newItems;
-  return res.status(status).json({ cart, message });
+  res.status(status).json({ cart, message });
 }
 
 async function httpsRemoveCartItem(req, res) {
@@ -37,7 +37,7 @@ async function httpsDecrementCartItem(req, res, _delete?) {
     _delete
   );
   if (newItems) req.session.items = newItems;
-  return res.status(status).json({ cart, message });
+  res.status(status).json({ cart, message });
 }
 
 async function httpsOrderCart(req, res) {

@@ -5,7 +5,7 @@ async function htppsLogout(req, res) {
         .status(500)
         .json({ logout: false, message: 'error during logout' });
 
-    return res.status(200).json({ logout: true });
+    res.status(200).json({ logout: true });
   });
 }
 

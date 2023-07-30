@@ -5,10 +5,7 @@ import { getCart } from '../product/product.model.js';
 
 async function getUserById(id) {
   try {
-    return await User.findById(
-      id,
-      'username email social verified role'
-    ).lean();
+    return await User.findById(id, 'username email social role').lean();
   } catch {}
 }
 
@@ -201,6 +198,20 @@ async function orderCart(userId, items) {
   }
 }
 
+async function getOrders(userId) {
+  try {
+    const user = await User.findOne(
+      { _id: userId, 'orders.delivered': true },
+      'orders'
+    ).lean();
+
+    const orders = user?.orders ? user.orders : [];
+    return { orders, status: 200 };
+  } catch {
+    return { status: 500, message: 'unable to get orders' };
+  }
+}
+
 export {
   getUserById,
   getUserByEmail,
@@ -213,4 +224,5 @@ export {
   removeLocation,
   updateLocation,
   orderCart,
+  getOrders,
 };
