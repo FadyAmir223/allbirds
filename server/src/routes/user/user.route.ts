@@ -1,5 +1,4 @@
 import express from 'express';
-import passport from 'passport';
 
 import {
   htppsGetLocations,
@@ -9,19 +8,11 @@ import {
   httpsOrderCart,
   httpsGetOrders,
 } from './user.controller.js';
-import { checkLoggedIn } from '../../middlewares/checkAuth.js';
-import {
-  regenerateMiddleware,
-  userSession,
-} from '../../config/auth.session.js';
-import { refreshTokenMiddleware } from '../../middlewares/refreshToken.js';
+import needAuth from '../../middlewares/needAuth.js';
 
 const userRoute = express.Router();
 
-userRoute.use(userSession, regenerateMiddleware);
-userRoute.use(passport.initialize(), passport.session());
-userRoute.use(refreshTokenMiddleware);
-userRoute.use(checkLoggedIn);
+userRoute.use(needAuth);
 
 const locationRoute = express.Router();
 locationRoute.get('/', htppsGetLocations);

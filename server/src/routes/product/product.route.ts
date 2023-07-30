@@ -6,12 +6,16 @@ import {
   httpsAddReview,
   httpsRemoveReview,
 } from './product.controller.js';
+import needAuth from '../../middlewares/needAuth.js';
 
 const productRoute = express.Router();
 
 productRoute.get('/:id', httpsGetProduct);
-productRoute.get('/:id/:reviews', httpsGetReviews);
-productRoute.post('/:id/:reviews', httpsAddReview);
-productRoute.delete('/:id/:reviews', httpsRemoveReview);
+productRoute.get('/:id/reviews', httpsGetReviews);
+
+productRoute.use(needAuth);
+
+productRoute.post('/:id/review', httpsAddReview);
+productRoute.delete('/:id/review', httpsRemoveReview);
 
 export default productRoute;

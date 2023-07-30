@@ -17,7 +17,6 @@ import './passport.js';
 const authRoute = express.Router();
 
 authRoute.use(userSession, regenerateMiddleware);
-
 authRoute.use(passport.initialize(), passport.session());
 
 authRoute.use('/local', localRoute);

@@ -5,7 +5,10 @@ import { getCart } from '../product/product.model.js';
 
 async function getUserById(id) {
   try {
-    return await User.findById(id, 'username email social role').lean();
+    return await User.findById(
+      id,
+      'username email social role verified'
+    ).lean();
   } catch {}
 }
 
@@ -13,7 +16,7 @@ async function getUserByEmail(email) {
   try {
     return await User.findOne(
       { email },
-      'username email password social verified'
+      'username email password social'
     ).lean();
   } catch {}
 }
@@ -32,9 +35,20 @@ async function getLocalUser(email) {
 
 async function createLocalUser(username, email, password) {
   try {
-    const role = email === 'fadyamir223@gmail.com' ? 'admin' : undefined;
+    let role, verified;
 
-    const user = await User.create({ username, email, password, role });
+    if (email === 'fadyamir223@gmail.com') {
+      role = 'admin';
+      verified = true;
+    }
+
+    const user = await User.create({
+      username,
+      email,
+      password,
+      role,
+      verified,
+    });
     return { status: 201, id: user._id, message: 'user created' };
   } catch {
     return { status: 500, message: 'unable to create user' };
@@ -201,7 +215,7 @@ async function orderCart(userId, items) {
 async function getOrders(userId) {
   try {
     const user = await User.findOne(
-      { _id: userId, 'orders.delivered': true },
+      { _id: userId, 'orders.delivered': false },
       'orders'
     ).lean();
 

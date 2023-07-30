@@ -32,7 +32,14 @@ async function httpsGetReviews(req, res) {
   res.status(status).json({ pagination, rating, reviews, message });
 }
 
-async function httpsAddReview(req, res) {}
+async function httpsAddReview(req, res) {
+  const { reviews, status, message } = await addReview(
+    req.params.id,
+    req.user._id,
+    req.body
+  );
+  res.status(status).json({ reviews, message });
+}
 
 async function httpsRemoveReview(req, res) {}
 

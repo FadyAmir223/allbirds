@@ -1,9 +1,13 @@
 import mongoose from 'mongoose';
 import Product from './product.mongo.js';
 import products from '../../data/allbirds.json' assert { type: 'json' };
+import { getUserById } from '../user/user.model.js';
 
 async function saveProducts() {
   try {
+    const count = await Product.countDocuments();
+    if (count !== 0) return;
+
     await Product.bulkWrite(
       products.map((product) => ({
         updateOne: {
@@ -323,7 +327,94 @@ async function getReviews(productId, skip, limit) {
   }
 }
 
-async function addReview() {}
+async function addReview(productId, userId, review) {
+  try {
+    let { username, verified: verifiedBuyer } = await getUserById(userId);
+
+    let [first, last] = username.split(' ');
+    first = first[0].toUpperCase() + first.slice(1);
+    last = last[0].toUpperCase();
+    username = `${first} ${last}.`;
+
+    // if (!verifiedBuyer)
+    //   return { status: 401, message: 'you must verify your account first' };
+
+    const { score, title, content, customFields } = review;
+
+    const [{ _id: scores }] = await Product.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(productId) } },
+      { $project: { _id: '$reviews.reviews.score' } },
+    ]);
+
+    scores.push(score);
+
+    const avgScores = scores.reduce((acc, i) => acc + i, 0);
+    const rating = Number(avgScores / scores.length).toFixed(1);
+
+    const createdAt = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    const newReview = {
+      score,
+      title,
+      content,
+      username,
+      verifiedBuyer,
+      createdAt,
+      customFields,
+    };
+
+    const { acknowledged } = await Product.updateOne(
+      { _id: new mongoose.Types.ObjectId(productId) },
+      {
+        $push: { 'reviews.reviews': newReview },
+        $inc: { 'reviews.count': 1 },
+        $set: { 'reviews.rating': rating },
+      },
+      { new: true }
+    ).lean();
+
+    if (!acknowledged) throw new Error();
+
+    const ltsReviews = await Product.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(productId) } },
+      {
+        $project: {
+          count: '$reviews.count',
+          rating: '$reviews.rating',
+          reviews: {
+            $slice: ['$reviews.reviews', -3],
+          },
+        },
+      },
+      { $unwind: '$reviews' },
+      { $sort: { 'reviews.createdAt': -1 } },
+      {
+        $group: {
+          _id: null,
+          count: { $first: '$count' },
+          rating: { $first: '$rating' },
+          reviews: { $push: '$reviews' },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          count: 1,
+          rating: 1,
+          reviews: 1,
+        },
+      },
+    ]);
+
+    return { reviews: ltsReviews, status: 201 };
+  } catch {
+    return { status: 500, message: 'unable to save review' };
+  }
+}
 
 async function removeReview() {}
 
