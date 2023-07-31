@@ -16,6 +16,6 @@ productRoute.get('/:id/reviews', httpsGetReviews);
 productRoute.use(needAuth);
 
 productRoute.post('/:id/review', httpsAddReview);
-productRoute.delete('/:id/review', httpsRemoveReview);
+productRoute.delete('/:id/review/:reviewId', httpsRemoveReview);
 
 export default productRoute;

@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
+
 import Product from './product.mongo.js';
 import products from '../../data/allbirds.json' assert { type: 'json' };
-import { getUserById } from '../user/user.model.js';
+import User from '../user/user.mongo.js';
 
 async function saveProducts() {
   try {
@@ -308,7 +309,7 @@ async function getProduct(id) {
   }
 }
 
-async function getReviews(productId, skip, limit) {
+async function getReviews(productId, skip = 0, limit = 3, page = 1) {
   try {
     const {
       reviews: { reviews, count, rating },
@@ -321,35 +322,64 @@ async function getReviews(productId, skip, limit) {
 
     if (!reviews)
       return { status: 404, message: 'no reviews for this product' };
-    return { status: 200, reviews, count, rating };
+
+    const pagination = {
+      total: count,
+      page,
+      perPage: reviews.length,
+    };
+
+    return { status: 200, pagination, rating, reviews };
   } catch {
     return { status: 500, message: 'unable to get reviews' };
   }
 }
 
-async function addReview(productId, userId, review) {
+async function addReview(productId, review, user) {
   try {
-    let { username, verified: verifiedBuyer } = await getUserById(userId);
+    let { _id: userId, username, verified: verifiedBuyer } = user;
+    const { score, title, content, customFields } = review;
+
+    if (!(score && title && content))
+      return { status: 400, message: 'some fields are empty' };
+
+    if (!(score === Number.parseInt(score) && score >= 1 && score <= 5))
+      return { status: 400, message: 'wrong rating' };
+
+    if (!verifiedBuyer)
+      return { status: 401, message: 'you must verify your account first' };
+
+    let sizePurchased;
+    for (const field of review?.customFields)
+      if (field?.title === 'Size Purchased') sizePurchased = field.value;
+
+    const userOrders = await User.findOne(
+      {
+        _id: userId,
+        'orders.productId': new mongoose.Types.ObjectId(productId),
+        'orders.size': sizePurchased,
+      },
+      { 'orders.$': 1 }
+    );
+
+    if (!userOrders?.orders || userOrders?.orders.length === 0)
+      return {
+        status: 400,
+        message: "you didn't order this size of the product",
+      };
+
+    const [{ delivered, reviewed }] = userOrders.orders;
+
+    // if (!delivered)
+    //   return { status: 400, message: "your order hasn't been delivered yet" };
+
+    if (reviewed)
+      return { status: 400, message: 'you have been reviewed this product' };
 
     let [first, last] = username.split(' ');
     first = first[0].toUpperCase() + first.slice(1);
     last = last[0].toUpperCase();
     username = `${first} ${last}.`;
-
-    // if (!verifiedBuyer)
-    //   return { status: 401, message: 'you must verify your account first' };
-
-    const { score, title, content, customFields } = review;
-
-    const [{ _id: scores }] = await Product.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(productId) } },
-      { $project: { _id: '$reviews.reviews.score' } },
-    ]);
-
-    scores.push(score);
-
-    const avgScores = scores.reduce((acc, i) => acc + i, 0);
-    const rating = Number(avgScores / scores.length).toFixed(1);
 
     const createdAt = new Date().toLocaleDateString('en-US', {
       year: 'numeric',
@@ -363,60 +393,78 @@ async function addReview(productId, userId, review) {
       content,
       username,
       verifiedBuyer,
+      userId,
       createdAt,
       customFields,
     };
 
-    const { acknowledged } = await Product.updateOne(
+    const newRating = await getNewRating(productId, score);
+
+    const { acknowledged: productAcknowledged } = await Product.updateOne(
       { _id: new mongoose.Types.ObjectId(productId) },
       {
-        $push: { 'reviews.reviews': newReview },
         $inc: { 'reviews.count': 1 },
-        $set: { 'reviews.rating': rating },
+        $set: { 'reviews.rating': newRating },
+        $push: { 'reviews.reviews': { $each: [newReview], $position: 0 } },
       },
       { new: true }
-    ).lean();
+    );
 
-    if (!acknowledged) throw new Error();
+    if (!productAcknowledged) throw new Error();
 
-    const ltsReviews = await Product.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(productId) } },
+    const { acknowledged: userAcknowledged } = await User.updateOne(
       {
-        $project: {
-          count: '$reviews.count',
-          rating: '$reviews.rating',
-          reviews: {
-            $slice: ['$reviews.reviews', -3],
-          },
-        },
+        _id: user._id,
+        'orders.productId': new mongoose.Types.ObjectId(productId),
+        'orders.size': sizePurchased,
       },
-      { $unwind: '$reviews' },
-      { $sort: { 'reviews.createdAt': -1 } },
-      {
-        $group: {
-          _id: null,
-          count: { $first: '$count' },
-          rating: { $first: '$rating' },
-          reviews: { $push: '$reviews' },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          count: 1,
-          rating: 1,
-          reviews: 1,
-        },
-      },
-    ]);
+      { $set: { 'orders.$.reviewed': true } }
+    );
 
-    return { reviews: ltsReviews, status: 201 };
-  } catch {
+    if (!userAcknowledged) throw new Error();
+
+    const { status, pagination, rating, reviews, message } = await getReviews(
+      productId
+    );
+
+    return {
+      status: status === 200 ? 201 : status,
+      pagination,
+      rating,
+      reviews,
+      message,
+    };
+  } catch (err) {
+    console.log(err);
     return { status: 500, message: 'unable to save review' };
   }
 }
 
-async function removeReview() {}
+async function removeReview(productId, reviewId, userId) {
+  try {
+    const newRating = await getNewRating(productId);
+
+    const { acknowledged } = await Product.updateOne(
+      {
+        _id: productId,
+        'reviews.reviews._id': reviewId,
+        'reviews.reviews.userId': userId,
+      },
+      {
+        $pull: { 'reviews.reviews': { _id: reviewId } },
+        $inc: { 'reviews.count': -1 },
+        $set: { 'reviews.rating': newRating },
+      }
+    );
+
+    if (!acknowledged) throw new Error();
+
+    const reviews = await getReviews(productId);
+    return { status: 200, reviews };
+  } catch {
+    return { status: 500, message: 'unable to remove reivew' };
+  }
+}
 
 async function getCart(items) {
   try {
@@ -539,6 +587,19 @@ async function removeCartItem(items, { editionId, size }, _delete = false) {
       message: 'unable to remove item from cart',
     };
   }
+}
+
+async function getNewRating(productId, score?) {
+  const [{ _id: scores }] = await Product.aggregate([
+    { $match: { _id: new mongoose.Types.ObjectId(productId) } },
+    { $project: { _id: '$reviews.reviews.score' } },
+  ]);
+
+  if (score) scores.push(score);
+
+  const totalScores = scores.reduce((acc, i) => acc + i, 0);
+  const newRating = Number(totalScores / scores.length).toFixed(1);
+  return newRating;
 }
 
 export {

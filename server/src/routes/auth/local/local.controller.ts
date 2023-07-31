@@ -11,7 +11,7 @@ async function httpsSignup(req, res) {
   const { firstName, lastName, email, password, confirmPassword } = req.body;
 
   if (!(firstName && lastName && email && password && confirmPassword))
-    return res.status(400).json({ message: 'empty field' });
+    return res.status(400).json({ message: 'some fields are empty' });
 
   if (password !== confirmPassword)
     return res.status(400).json({ message: 'unmatched passwords' });

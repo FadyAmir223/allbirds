@@ -17,30 +17,33 @@ async function httpsGetReviews(req, res) {
   const { skip, limit, page } = getPagination(req.query);
   const { id } = req.params;
 
-  const { reviews, count, rating, status, message } = await getReviews(
+  const { status, pagination, rating, reviews, message } = await getReviews(
     id,
     skip,
-    limit
+    limit,
+    page
   );
-
-  const pagination = {
-    total: count,
-    page,
-    perPage: reviews.length,
-  };
-
   res.status(status).json({ pagination, rating, reviews, message });
 }
 
 async function httpsAddReview(req, res) {
-  const { reviews, status, message } = await addReview(
+  const { status, pagination, rating, reviews, message } = await addReview(
     req.params.id,
-    req.user._id,
-    req.body
+    req.body,
+    req.user
+  );
+  res.status(status).json({ pagination, rating, reviews, message });
+}
+
+async function httpsRemoveReview(req, res) {
+  const { id, reviewId } = req.params;
+
+  const { status, reviews, message } = await removeReview(
+    id,
+    reviewId,
+    req.user._id
   );
   res.status(status).json({ reviews, message });
 }
-
-async function httpsRemoveReview(req, res) {}
 
 export { httpsGetProduct, httpsGetReviews, httpsAddReview, httpsRemoveReview };

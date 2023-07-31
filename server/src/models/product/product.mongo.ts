@@ -59,6 +59,7 @@ const productSchema = new mongoose.Schema({
         score: Number,
         title: String,
         content: String,
+        userId: mongoose.Types.ObjectId,
         username: String,
         verifiedBuyer: Boolean,
         createdAt: String,

@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema({
       size: String,
       amount: Number,
       delivered: { type: Boolean, default: false },
+      reviewed: { type: Boolean, default: false },
     },
   ],
 });
