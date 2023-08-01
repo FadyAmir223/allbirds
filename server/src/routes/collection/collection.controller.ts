@@ -18,7 +18,7 @@ async function getACollection(req, res, isSale = false) {
   const { skip, limit, page } = getPagination(req.query);
   const { type, gender } = req.query;
 
-  const { products, total, status, message } = isSale
+  const { status, products, total, message } = isSale
     ? await getCollectionSale(type, gender, skip, limit)
     : await getCollection(type, gender, skip, limit);
 
@@ -28,7 +28,7 @@ async function getACollection(req, res, isSale = false) {
 
 async function httpsGetCollectionFilters(req, res) {
   const { type, gender } = req.query;
-  const { filters, status, message } = await getCollectionFilters(type, gender);
+  const { status, filters, message } = await getCollectionFilters(type, gender);
   res.status(status).json({ filters, message });
 }
 

@@ -43,7 +43,7 @@ async function httpsDecrementCartItem(req, res, _delete?) {
 async function httpsOrderCart(req, res) {
   const { userId } = req.query;
   const { items } = req.session;
-  const { orders, status, message } = await orderCart(userId, items);
+  const { status, orders, message } = await orderCart(userId, items);
   req.session.items = [];
   res.status(status).json({ orders, message });
 }

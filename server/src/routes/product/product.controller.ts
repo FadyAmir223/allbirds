@@ -8,7 +8,7 @@ import { getPagination } from '../../utils/query.js';
 
 async function httpsGetProduct(req, res) {
   const { id } = req.params;
-  const { product, status, message } = await getProduct(id);
+  const { status, product, message } = await getProduct(id);
   res.status(status).json({ product, message });
 }
 

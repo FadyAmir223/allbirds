@@ -14,11 +14,11 @@ async function httpsSignup(req, res) {
     return res.status(400).json({ message: 'some fields are empty' });
 
   if (password !== confirmPassword)
-    return res.status(400).json({ message: 'unmatched passwords' });
+    return res.status(400).json({ message: 'non matched passwords' });
 
   const user = await getLocalUser(email);
   if (user?.email)
-    return res.status(409).json({ message: 'email aleady used' });
+    return res.status(409).json({ message: 'email already used' });
 
   const username = `${firstName} ${lastName}`;
   const hashPassword = await bcrypt.hash(password, 10);

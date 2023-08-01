@@ -12,7 +12,7 @@ async function htppsGetLocations(req, res) {
 }
 
 async function httpsAddLocation(req, res) {
-  const { locations, status, message } = await addLocation(
+  const { status, locations, message } = await addLocation(
     req.user._id,
     req.body
   );
@@ -20,7 +20,7 @@ async function httpsAddLocation(req, res) {
 }
 
 async function httpsRemoveLocation(req, res) {
-  const { locations, status, message } = await removeLocation(
+  const { status, locations, message } = await removeLocation(
     req.user._id,
     req.params.id
   );
@@ -28,7 +28,7 @@ async function httpsRemoveLocation(req, res) {
 }
 
 async function httpsUpdateLocation(req, res) {
-  const { locations, status, message } = await updateLocation(
+  const { status, locations, message } = await updateLocation(
     req.user._id,
     req.params,
     req.body
@@ -42,7 +42,7 @@ function httpsOrderCart(req, res) {
 }
 
 async function httpsGetOrders(req, res) {
-  const { orders, status, message } = await getOrders(req.user._id);
+  const { status, orders, message } = await getOrders(req.user._id);
   res.status(status).json({ orders, message });
 }
 

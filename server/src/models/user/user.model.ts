@@ -1,7 +1,11 @@
 import mongoose from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcrypt';
 
 import User from './user.mongo.js';
 import { getCart } from '../product/product.model.js';
+import { mailResetPassword, mailVerifyAccount } from '../../services/mail.js';
+import { CLIENT_URL } from '../../utils/loadEnv.js';
 
 async function getUserById(id) {
   try {
@@ -37,19 +41,25 @@ async function createLocalUser(username, email, password) {
   try {
     let role, verified;
 
-    if (email === 'fadyamir223@gmail.com') {
-      role = 'admin';
-      verified = true;
-    }
+    // if (email === 'fadyamir223@gmail.com') {
+    //   role = 'admin';
+    //   verified = true;
+    // }
 
-    const user = await User.create({
+    const verifyToken = !verified
+      ? await sendVerifyEmail({ username, email })
+      : undefined;
+
+    const { _id: id } = await User.create({
       username,
       email,
       password,
       role,
       verified,
+      verifyToken,
     });
-    return { status: 201, id: user._id, message: 'user created' };
+
+    return { status: 201, id, message: 'user created' };
   } catch {
     return { status: 500, message: 'unable to create user' };
   }
@@ -91,7 +101,7 @@ async function getLocations(userId) {
   try {
     const { locations } = await User.findById(userId, { locations: 1 }).lean();
     if (!locations) return { status: 404, message: 'user not found' };
-    return { locations, status: 200 };
+    return { status: 200, locations };
   } catch {
     return { status: 500, message: 'unable to get locations' };
   }
@@ -106,7 +116,7 @@ async function addLocation(userId, location) {
     ).lean();
 
     if (!locations) return { status: 404, message: 'user not found' };
-    return { locations, status: 201 };
+    return { status: 201, locations };
   } catch {
     return { status: 500, message: 'unable to add location' };
   }
@@ -121,7 +131,7 @@ async function removeLocation(userId, locationId) {
     ).lean();
 
     if (!locations) return { status: 404, message: 'user not found' };
-    return { locations, status: 200 };
+    return { status: 200, locations };
   } catch {
     return { status: 500, message: 'unable to add location' };
   }
@@ -142,7 +152,7 @@ async function updateLocation(userId, locationId, fields) {
     ).lean();
 
     if (!locations) return { status: 404, message: 'user not found' };
-    return { locations, status: 200 };
+    return { status: 200, locations };
   } catch {
     return { status: 500, message: 'unable to update location' };
   }
@@ -191,20 +201,20 @@ async function orderCart(userId, items) {
           size,
           amount,
           delivered: false,
+          reviewed: false,
         });
     }
 
     await user.save();
 
     // TODO:
-
     /////////////
     // payment //
     /////////////
 
     return {
-      orders: user.orders,
       status: 201,
+      orders: user.orders,
       message: 'purchased successfully',
     };
   } catch {
@@ -220,10 +230,151 @@ async function getOrders(userId) {
     ).lean();
 
     const orders = user?.orders ? user.orders : [];
-    return { orders, status: 200 };
+    return { status: 200, orders };
   } catch {
     return { status: 500, message: 'unable to get orders' };
   }
+}
+
+async function verifyUser(verifyToken) {
+  try {
+    const { acknowledged, modifiedCount } = await User.updateOne(
+      { verifyToken },
+      { $set: { verified: true, verifyToken: '' } }
+    );
+
+    const verified = acknowledged && modifiedCount !== 0;
+    const message = verified
+      ? 'email has been verified'
+      : 'invalid verification token';
+
+    return { status: 200, verified, message };
+  } catch {
+    return { status: 500, verified: false, message: 'unable to verify' };
+  }
+}
+
+async function requestResetPassword(email) {
+  try {
+    const user = await User.findOne(
+      {
+        email,
+        'social.provider': { $exists: false },
+      },
+      '_id username verified social'
+    );
+
+    const { _id, username, verified, social } = user;
+
+    if (social?.provider)
+      return {
+        status: 401,
+        message: `you are using "${social.provider}" as a provider for your account`,
+      };
+
+    if (!verified) {
+      await sendVerifyEmail({ username, email });
+      return {
+        status: 401,
+        message: `your email is not verified.
+verify to be able to reset your password
+a verification email has been sent to ${email}`,
+      };
+    }
+
+    const expireDate = new Date(Date.now() + 60 * 60 * 1000);
+    const token = await sendResetPasswordEmail({ username, email });
+
+    user.resetPassword = { token, expireDate };
+    user.save();
+
+    return { status: 200, message: `email has been sent to ${email}` };
+  } catch {
+    return {
+      status: 500,
+      message: 'problem has happend during sending the email, please try again',
+    };
+  }
+}
+
+async function verifyResetToken(token) {
+  try {
+    const user = await User.findOne(
+      { 'resetPassword.token': token },
+      'resetPassword.expireDate'
+    ).lean();
+
+    if (!user) return { status: 400, verified: false };
+
+    if (!user?.resetPassword || user.resetPassword.expireDate < new Date())
+      throw new Error();
+
+    return { status: 200, verified: true };
+  } catch {
+    return { status: 401, verified: false };
+  }
+}
+
+async function resetPassword(data) {
+  try {
+    const { token, password, confirmPassword } = data;
+
+    if (!token || token.length !== 36)
+      return { status: 400, message: 'invalid token' };
+
+    if (!(password && confirmPassword))
+      return { status: 400, message: 'some fields are empty' };
+
+    if (password !== confirmPassword)
+      return { status: 400, message: 'non matched passwords' };
+
+    const user = await User.findOne(
+      { 'resetPassword.token': token },
+      'verified social'
+    );
+    if (!user) return { status: 400, message: 'invalid token' };
+    const { verified, social } = user;
+
+    if (social?.provider)
+      return {
+        status: 401,
+        message: `you are using "${social.provider}" as a provider for your account`,
+      };
+
+    if (!verified)
+      return {
+        status: 401,
+        message: 'your email is not verified',
+      };
+
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    user.password = hashPassword;
+    user.resetPassword = null;
+
+    user.save();
+
+    return { status: 200, message: 'password has been resetted' };
+  } catch {
+    return {
+      status: 500,
+      message: 'unable to reset password, please try again',
+    };
+  }
+}
+
+async function sendVerifyEmail(reciver) {
+  const token = uuidv4();
+  const verificationUrl = `${CLIENT_URL}/verify?token=${token}`;
+  await mailVerifyAccount(reciver, verificationUrl);
+  return token;
+}
+
+async function sendResetPasswordEmail(reciver) {
+  const token = uuidv4();
+  const resetUrl = `${CLIENT_URL}/reset-password?token=${token}`;
+  await mailResetPassword(reciver, resetUrl);
+  return token;
 }
 
 export {
@@ -239,4 +390,8 @@ export {
   updateLocation,
   orderCart,
   getOrders,
+  verifyUser,
+  requestResetPassword,
+  verifyResetToken,
+  resetPassword,
 };

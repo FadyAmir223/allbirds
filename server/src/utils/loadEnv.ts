@@ -7,13 +7,14 @@ const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 dotenv.config();
 
 export const {
-  EMAIL_APP_PASSWORD,
   SESSION_KEY_1,
   SESSION_KEY_2,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   FACEBOOK_APP_ID,
   FACEBOOK_APP_SECRET,
+  EMAIL_APP_PASSWORD,
+  EMAIL_SENDER,
 } = process.env;
 
 dotenv.config({

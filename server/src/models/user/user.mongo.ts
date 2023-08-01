@@ -5,12 +5,17 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   role: { type: String, default: 'user' },
+  verified: { type: Boolean, default: false },
+  verifyToken: String,
+  resetPassword: {
+    token: String,
+    expireDate: Date,
+  },
   social: {
     provider: String,
     accessToken: String,
     refreshToken: String,
   },
-  verified: { type: Boolean, default: false },
   locations: [
     {
       company: String,

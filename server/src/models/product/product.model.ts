@@ -105,7 +105,7 @@ async function getCollection(type, gender, skip, limit) {
       },
     ]);
 
-    return { products, total, status: 200 };
+    return { status: 200, products, total };
   } catch {
     return { status: 500, message: 'unable to get sales' };
   }
@@ -210,7 +210,7 @@ async function getCollectionSale(type, gender, skip, limit) {
       },
     ]);
 
-    return { products, total, status: 200 };
+    return { status: 200, products, total };
   } catch {
     return { status: 500, message: 'unable to get sales' };
   }
@@ -289,7 +289,7 @@ async function getCollectionFilters(type, gender) {
       }
     });
 
-    return { filters: { sizes, bestFor, material, hues }, status: 200 };
+    return { status: 200, filters: { sizes, bestFor, material, hues } };
   } catch {
     return { status: 500, message: 'unable to get filters' };
   }
