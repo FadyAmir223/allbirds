@@ -14,6 +14,10 @@ async function httpsGetProduct(req, res) {
 
 async function httpsGetReviews(req, res) {
   req.query.limit = req.query.limit || 3;
+
+  if (req.query.limit > 50)
+    return res.status(400).json({ message: "reviews can't exceed 50" });
+
   const { skip, limit, page } = getPagination(req.query);
   const { id } = req.params;
 

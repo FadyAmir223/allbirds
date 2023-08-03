@@ -6,6 +6,7 @@ import {
   createLocalUser,
   getLocalUser,
 } from '../../../models/user/user.model.js';
+import { isPasswordComplex } from '../../../utils/authProtection.js';
 
 async function httpsSignup(req, res) {
   const { firstName, lastName, email, password, confirmPassword } = req.body;
@@ -16,9 +17,11 @@ async function httpsSignup(req, res) {
   if (password !== confirmPassword)
     return res.status(400).json({ message: 'non matched passwords' });
 
+  if (!isPasswordComplex(password))
+    return res.status(400).json({ message: 'password not complex enough' });
+
   const user = await getLocalUser(email);
-  if (user?.email)
-    return res.status(409).json({ message: 'email already used' });
+  if (user) return res.status(409).json({ message: 'email already used' });
 
   const username = `${firstName} ${lastName}`;
   const hashPassword = await bcrypt.hash(password, 10);
@@ -42,8 +45,6 @@ async function httpsLogin(req, res) {
 passport.use(
   new Strategy(async (email, password, done) => {
     try {
-      console.log({ email, password });
-
       const user = await getLocalUser(email);
 
       if (!user) return done(null, false);

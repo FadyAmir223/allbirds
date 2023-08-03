@@ -6,6 +6,7 @@ import User from './user.mongo.js';
 import { getCart } from '../product/product.model.js';
 import { mailResetPassword, mailVerifyAccount } from '../../services/mail.js';
 import { CLIENT_URL } from '../../utils/loadEnv.js';
+import { isPasswordComplex } from '../../utils/authProtection.js';
 
 async function getUserById(id) {
   try {
@@ -207,10 +208,14 @@ async function orderCart(userId, items) {
 
     await user.save();
 
-    // TODO:
-    /////////////
-    // payment //
-    /////////////
+    // TODO: payment
+
+    /*
+      1- total = items.price * items.count
+      2- gateway: Stripe, PayPal, Skrill, Payoneer
+      3- create payment request { total, paymentMethod, customerInfo  }
+      4- handle response
+    */
 
     return {
       status: 201,
@@ -327,6 +332,9 @@ async function resetPassword(data) {
 
     if (password !== confirmPassword)
       return { status: 400, message: 'non matched passwords' };
+
+    if (!isPasswordComplex(password))
+      return { status: 400, message: 'password not complex enough' };
 
     const user = await User.findOne(
       { 'resetPassword.token': token },

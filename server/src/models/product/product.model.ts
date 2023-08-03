@@ -535,9 +535,21 @@ async function addCartItem(items, { productId, editionId, size }) {
       (item) => item.editionId === editionId && item.size === size
     );
 
-    existingItem
-      ? existingItem.amount++
-      : items.push({ productId, editionId, size, amount: 1 });
+    if (existingItem) existingItem.amount++;
+    else {
+      const productExists = await Product.findOne(
+        { _id: productId, 'editions.products.id': editionId },
+        '-_id handle sizes'
+      ).lean();
+
+      if (!productExists)
+        return { status: 404, message: "prdouct doesn't exist" };
+
+      if (!productExists.sizes.includes(size))
+        return { status: 404, message: 'this size is soldout' };
+
+      items.push({ productId, editionId, size, amount: 1 });
+    }
 
     const { status, cart, message } = await getCart(items);
 

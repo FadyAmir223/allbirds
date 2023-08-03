@@ -34,7 +34,7 @@ export const {
   MONGO_URL,
 } = process.env;
 
-const CLIENT_URL = `${CLIENT_DOMAIN}:${CLIENT_PORT}`;
-const SERVER_URL = `${SERVER_DOMAIN}:${SERVER_PORT}`;
+const CLIENT_URL = CLIENT_DOMAIN + CLIENT_PORT ? ':' + CLIENT_PORT : '';
+const SERVER_URL = SERVER_DOMAIN + SERVER_PORT ? ':' + SERVER_PORT : '';
 
 export { IS_PRODUCTION, CLIENT_URL, SERVER_URL };
