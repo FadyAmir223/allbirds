@@ -16,11 +16,19 @@ mongoose.connection.on('error', (err) => {
 });
 
 const mongoConnect = async () => {
-  await mongoose.connect(DB_URL);
+  try {
+    await mongoose.connect(DB_URL);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const mongoDisconnect = async () => {
-  await mongoose.disconnect();
+  try {
+    await mongoose.disconnect();
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export { DB_URL, dbName, mongoConnect, mongoDisconnect };

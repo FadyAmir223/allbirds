@@ -11,6 +11,7 @@ import {
   SERVER_URL,
 } from '../../../utils/loadEnv.js';
 import verifyCallback from './_verifyCallback.js';
+import { addUserAgent } from '../../../models/user/user.model.js';
 
 const AUTH_OPTIONS = {
   clientID: GOOGLE_CLIENT_ID,
@@ -35,10 +36,15 @@ googleRoute.get(
 googleRoute.get(
   '/callback',
   passport.authenticate('google', {
-    successRedirect: CLIENT_URL,
+    // successRedirect: CLIENT_URL,
     failureRedirect: CLIENT_URL + '/login',
     session: true,
-  })
+  }),
+  async (req, res) => {
+    const userAgent = req.headers['user-agent'];
+    await addUserAgent(req.user.id, userAgent);
+    res.status(200).json({ login: true }); //.redirect(CLIENT_URL)
+  }
 );
 
 export default googleRoute;

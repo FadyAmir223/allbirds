@@ -7,14 +7,17 @@ const userSchema = new mongoose.Schema({
   role: { type: String, default: 'user' },
   verified: { type: Boolean, default: false },
   verifyToken: String,
-  resetPassword: {
-    token: String,
-    expireDate: Date,
-  },
   social: {
     provider: String,
     accessToken: String,
     refreshToken: String,
+  },
+  resetPassword: {
+    token: String,
+    expireDate: Date,
+  },
+  security: {
+    userAgent: [String],
   },
   locations: [
     {

@@ -12,7 +12,7 @@ async function getUserById(id) {
   try {
     return await User.findById(
       id,
-      'username email social role verified'
+      'email social role verified security.userAgent'
     ).lean();
   } catch {}
 }
@@ -26,15 +26,16 @@ async function getUserByEmail(email) {
   } catch {}
 }
 
-async function getLocalUser(email) {
+async function getLocalUser(_email) {
   try {
-    return await User.findOne(
+    const { email, password, id } = await User.findOne(
       {
-        email,
+        email: _email,
         'social.provider': { $exists: false },
       },
-      '-__v -social'
-    ).lean();
+      'email password'
+    );
+    return { email, password, id };
   } catch {}
 }
 
@@ -42,16 +43,16 @@ async function createLocalUser(username, email, password) {
   try {
     let role, verified;
 
-    // if (email === 'fadyamir223@gmail.com') {
-    //   role = 'admin';
-    //   verified = true;
-    // }
+    if (email === 'fadyamir223@gmail.com') {
+      role = 'admin';
+      verified = true;
+    }
 
     const verifyToken = !verified
       ? await sendVerifyEmail({ username, email })
       : undefined;
 
-    const { _id: id } = await User.create({
+    const { id } = await User.create({
       username,
       email,
       password,
@@ -76,8 +77,16 @@ async function createSocialUser(
   try {
     const role = email === 'fadyamir223@gmail.com' ? 'admin' : undefined;
 
+    const user = await User.findOne(
+      {
+        email,
+        'social.provider': provider,
+      },
+      'email'
+    );
+
     return await User.findOneAndUpdate(
-      { email, social: { provider } },
+      { email, 'social.provider': provider },
       {
         username,
         email,
@@ -87,6 +96,30 @@ async function createSocialUser(
       },
       { upsert: true, new: true }
     );
+
+    if (user) {
+      user.social.accessToken = accessToken;
+      user.social.refreshToken = refreshToken;
+      await user.save();
+      return user;
+    }
+
+    return await User.create({
+      username,
+      email,
+      role,
+      verified: true,
+      social: { provider, accessToken, refreshToken },
+    });
+  } catch {}
+}
+
+async function addUserAgent(id, userAgent) {
+  try {
+    const user = await User.findById(id, { 'security.userAgent': 1 });
+    if (!user || user.security.userAgent.includes(userAgent)) return;
+    user.security.userAgent.push(userAgent);
+    await user.save();
   } catch {}
 }
 
@@ -161,9 +194,6 @@ async function updateLocation(userId, locationId, fields) {
 
 async function orderCart(userId, items) {
   try {
-    if (items?.length === 0)
-      return { status: 401, message: 'there is no items to purchase' };
-
     const { cart } = await getCart(items);
 
     if (items.length !== cart?.length)
@@ -227,10 +257,12 @@ async function orderCart(userId, items) {
   }
 }
 
-async function getOrders(userId) {
+async function getOrders(userId, history = false) {
   try {
+    const filter = history ? {} : { 'orders.delivered': true };
+
     const user = await User.findOne(
-      { _id: userId, 'orders.delivered': false },
+      { _id: userId, ...filter },
       'orders'
     ).lean();
 
@@ -304,15 +336,14 @@ a verification email has been sent to ${email}`,
 
 async function verifyResetToken(token) {
   try {
+    if (!token || token.length !== 36) throw new Error();
+
     const user = await User.findOne(
       { 'resetPassword.token': token },
       'resetPassword.expireDate'
     ).lean();
 
-    if (!user) return { status: 400, verified: false };
-
-    if (!user?.resetPassword || user.resetPassword.expireDate < new Date())
-      throw new Error();
+    if (!(user?.resetPassword?.expireDate > new Date())) throw new Error();
 
     return { status: 200, verified: true };
   } catch {
@@ -320,27 +351,20 @@ async function verifyResetToken(token) {
   }
 }
 
-async function resetPassword(data) {
+async function resetPassword(token, password) {
   try {
-    const { token, password, confirmPassword } = data;
-
     if (!token || token.length !== 36)
-      return { status: 400, message: 'invalid token' };
-
-    if (!(password && confirmPassword))
-      return { status: 400, message: 'some fields are empty' };
-
-    if (password !== confirmPassword)
-      return { status: 400, message: 'non matched passwords' };
-
-    if (!isPasswordComplex(password))
-      return { status: 400, message: 'password not complex enough' };
+      return { status: 401, message: 'invalid token' };
 
     const user = await User.findOne(
       { 'resetPassword.token': token },
       'verified social'
     );
-    if (!user) return { status: 400, message: 'invalid token' };
+
+    const min_5 = Date.now() - 50 * 60 * 1000;
+    if (user?.resetPassword?.expireDate < new Date(min_5))
+      return { status: 401, message: 'invalid token' };
+
     const { verified, social } = user;
 
     if (social?.provider)
@@ -391,6 +415,7 @@ export {
   getLocalUser,
   createLocalUser,
   createSocialUser,
+  addUserAgent,
   updateAccessToken,
   getLocations,
   addLocation,

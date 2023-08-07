@@ -12,6 +12,11 @@ async function htppsGetLocations(req, res) {
 }
 
 async function httpsAddLocation(req, res) {
+  const { address, city, country, state, phone } = req.body;
+
+  if (!(address && city && country && state && phone))
+    return res.status(400).json({ message: 'missing some filds' });
+
   const { status, locations, message } = await addLocation(
     req.user._id,
     req.body
@@ -20,6 +25,11 @@ async function httpsAddLocation(req, res) {
 }
 
 async function httpsRemoveLocation(req, res) {
+  const { id } = req.params;
+
+  if (!id || id.length !== 24)
+    return res.status(400).json({ message: 'invalid location id' });
+
   const { status, locations, message } = await removeLocation(
     req.user._id,
     req.params.id
@@ -28,6 +38,14 @@ async function httpsRemoveLocation(req, res) {
 }
 
 async function httpsUpdateLocation(req, res) {
+  const { id } = req.params;
+
+  if (!id || id.length !== 24)
+    return res.status(400).json({ message: 'invalid location id' });
+
+  if (!req.body)
+    return res.status(400).json({ message: 'no fields to update location' });
+
   const { status, locations, message } = await updateLocation(
     req.user._id,
     req.params,
@@ -46,6 +64,11 @@ async function httpsGetOrders(req, res) {
   res.status(status).json({ orders, message });
 }
 
+async function httpsGetOrderHistory(req, res) {
+  const { status, orders, message } = await getOrders(req.user._id, true);
+  res.status(status).json({ orders, message });
+}
+
 export {
   htppsGetLocations,
   httpsAddLocation,
@@ -53,4 +76,5 @@ export {
   httpsUpdateLocation,
   httpsOrderCart,
   httpsGetOrders,
+  httpsGetOrderHistory,
 };

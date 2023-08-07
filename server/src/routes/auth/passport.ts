@@ -3,7 +3,7 @@ import passport from 'passport';
 import { getUserById } from '../../models/user/user.model.js';
 
 passport.serializeUser(async (user, done) => {
-  done(null, user._id);
+  done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {

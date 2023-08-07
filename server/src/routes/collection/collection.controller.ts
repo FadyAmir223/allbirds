@@ -15,6 +15,10 @@ async function httpsGetCollectionSale(req, res) {
 
 async function getACollection(req, res, isSale = false) {
   req.query.limit = req.query.limit || 10;
+
+  if (req.query.limit > 50)
+    return res.status(400).json({ message: 'limit must be less than 50' });
+
   const { skip, limit, page } = getPagination(req.query);
   const { type, gender } = req.query;
 
@@ -31,7 +35,7 @@ async function getACollection(req, res, isSale = false) {
 async function httpsGetCollectionFilters(req, res) {
   const { type, gender } = req.query;
 
-  if (!type) return res.status(400).json({ message: 'type field is empty' });
+  if (!type) return res.status(400).json({ message: 'type filed is missing' });
 
   const { status, filters, message } = await getCollectionFilters(type, gender);
   res.status(status).json({ filters, message });

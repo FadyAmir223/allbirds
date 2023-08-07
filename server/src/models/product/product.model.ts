@@ -340,35 +340,29 @@ async function addReview(productId, review, user) {
     let { _id: userId, username, verified: verifiedBuyer } = user;
     const { score, title, content, customFields } = review;
 
-    if (!(score && title && content))
-      return { status: 400, message: 'some fields are empty' };
-
-    if (!(score === Number.parseInt(score) && score >= 1 && score <= 5))
-      return { status: 400, message: 'wrong rating' };
-
-    if (!verifiedBuyer)
-      return { status: 401, message: 'you must verify your account first' };
-
     let sizePurchased;
-    for (const field of review?.customFields)
+    for (const field of customFields)
       if (field?.title === 'Size Purchased') sizePurchased = field.value;
 
-    const userOrders = await User.findOne(
+    if (!sizePurchased)
+      return { status: 400, message: 'missing size purchased field' };
+
+    const _user = await User.findOne(
       {
         _id: userId,
         'orders.productId': new mongoose.Types.ObjectId(productId),
         'orders.size': sizePurchased,
       },
-      { 'orders.$': 1 }
-    );
+      { 'orders.$': 1, username: 1 }
+    ).lean();
 
-    if (!userOrders?.orders || userOrders?.orders.length === 0)
+    if (!_user?.orders || _user?.orders.length === 0)
       return {
         status: 400,
         message: "you didn't order this size of the product",
       };
 
-    const [{ delivered, reviewed }] = userOrders.orders;
+    const [{ delivered, reviewed }] = _user.orders;
 
     // if (!delivered)
     //   return { status: 400, message: "your order hasn't been delivered yet" };
@@ -376,7 +370,7 @@ async function addReview(productId, review, user) {
     if (reviewed)
       return { status: 400, message: 'you have been reviewed this product' };
 
-    let [first, last] = username.split(' ');
+    let [first, last] = _user.username.split(' ');
     first = first[0].toUpperCase() + first.slice(1);
     last = last[0].toUpperCase();
     username = `${first} ${last}.`;
@@ -414,7 +408,7 @@ async function addReview(productId, review, user) {
 
     const { acknowledged: userAcknowledged } = await User.updateOne(
       {
-        _id: user._id,
+        _id: user.id,
         'orders.productId': new mongoose.Types.ObjectId(productId),
         'orders.size': sizePurchased,
       },
@@ -434,8 +428,7 @@ async function addReview(productId, review, user) {
       reviews,
       message,
     };
-  } catch (err) {
-    console.log(err);
+  } catch {
     return { status: 500, message: 'unable to save review' };
   }
 }

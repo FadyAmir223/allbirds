@@ -4,6 +4,7 @@ import {
   verifyResetToken,
   resetPassword,
 } from '../../models/user/user.model.js';
+import { isPasswordComplex } from '../../utils/authProtection.js';
 
 function htppsLogout(req, res) {
   req.logout((err) => {
@@ -26,6 +27,8 @@ async function httpsVerifyUser(req, res) {
 
 async function httpsRequestResetPassword(req, res) {
   const { email } = req.body;
+  if (!email) return res.status(400).json({ message: 'no email provided' });
+
   const { status, message } = await requestResetPassword(email);
   res.status(status).json({ message });
 }
@@ -37,7 +40,18 @@ async function httpsVerifyResetToken(req, res) {
 }
 
 async function httpsResetPassword(req, res) {
-  const { status, message } = await resetPassword(req.body);
+  const { token, password, confirmPassword } = req.body;
+
+  if (!(password && confirmPassword))
+    return res.status(400).json({ message: 'some fields are empty' });
+
+  if (password !== confirmPassword)
+    return res.status(400).json({ message: 'non matched passwords' });
+
+  if (!isPasswordComplex(password))
+    return res.status(400).json({ message: 'password not complex enough' });
+
+  const { status, message } = await resetPassword(token, password);
   res.status(status).json({ message });
 }
 

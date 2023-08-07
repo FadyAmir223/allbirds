@@ -43,6 +43,10 @@ async function httpsDecrementCartItem(req, res, _delete?) {
 async function httpsOrderCart(req, res) {
   const { userId } = req.query;
   const { items } = req.session;
+
+  if (items && items?.length === 0)
+    return res.status(400).json({ message: 'there is no items to purchase' });
+
   const { status, orders, message } = await orderCart(userId, items);
   req.session.items = [];
   res.status(status).json({ orders, message });

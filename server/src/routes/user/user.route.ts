@@ -7,6 +7,7 @@ import {
   httpsUpdateLocation,
   httpsOrderCart,
   httpsGetOrders,
+  httpsGetOrderHistory,
 } from './user.controller.js';
 import needAuth from '../../middlewares/needAuth.js';
 
@@ -23,6 +24,7 @@ userRoute.use('/locations', locationRoute);
 
 const orderRoute = express.Router();
 orderRoute.get('/', httpsGetOrders);
+orderRoute.get('/history', httpsGetOrderHistory);
 orderRoute.post('/', httpsOrderCart);
 userRoute.use('/orders', orderRoute);
 

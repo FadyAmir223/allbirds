@@ -3,10 +3,12 @@ import { Strategy } from 'passport-local';
 import bcrypt from 'bcrypt';
 
 import {
+  addUserAgent,
   createLocalUser,
   getLocalUser,
 } from '../../../models/user/user.model.js';
 import { isPasswordComplex } from '../../../utils/authProtection.js';
+import { loginFailRateLimit } from '../../../config/rateLimitConfig.js';
 
 async function httpsSignup(req, res) {
   const { firstName, lastName, email, password, confirmPassword } = req.body;
@@ -32,30 +34,42 @@ async function httpsSignup(req, res) {
     hashPassword
   );
 
-  req.login(id, (err) => {
+  req.login({ id }, (err) => {
     if (err) return res.status(500).json({ message: 'error during login' });
     res.status(status).json({ message });
   });
 }
 
 async function httpsLogin(req, res) {
+  const userAgent = req.headers['user-agent'];
+  await addUserAgent(req.user.id, userAgent);
   res.status(200).json({ login: true });
 }
 
 passport.use(
-  new Strategy(async (email, password, done) => {
+  new Strategy(async (email_ip, password, done) => {
     try {
+      const email = email_ip.split('---')[0];
       const user = await getLocalUser(email);
 
       if (!user) return done(null, false);
       if (email !== user?.email) return done(null, false);
 
       const passwordMatch = await bcrypt.compare(password, user?.password);
-      if (!passwordMatch) return done(null, false);
+      if (!passwordMatch)
+        try {
+          await loginFailRateLimit.consume(email_ip);
+        } finally {
+          return done(null, false);
+        }
 
-      return done(null, user);
-    } catch (error) {
-      if (error) return done(error);
+      try {
+        await loginFailRateLimit.delete(email_ip);
+      } finally {
+        return done(null, user);
+      }
+    } catch (err) {
+      return done(err);
     }
   })
 );

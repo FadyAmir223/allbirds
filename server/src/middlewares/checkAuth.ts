@@ -25,4 +25,14 @@ function checkPermissions(req, res, next) {
   next();
 }
 
-export { checkLoggedIn, checkLoggedOut, checkPermissions };
+function checkUserAgent(req, res, next) {
+  const validUserAgents = req.user.security.userAgent;
+  const requestUserAgent = req.headers['user-agent'];
+
+  if (!validUserAgents || !validUserAgents.includes(requestUserAgent))
+    return res.status(401).json({ message: 'unauthorized access' });
+
+  next();
+}
+
+export { checkLoggedIn, checkLoggedOut, checkPermissions, checkUserAgent };

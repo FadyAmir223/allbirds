@@ -17,6 +17,7 @@ import {
   userSession,
   regenerateMiddleware,
 } from '../../config/auth.session.js';
+import { resetPasswordRateLimitMiddleware } from '../../middlewares/rateLimit.js';
 
 import './passport.js';
 
@@ -25,7 +26,11 @@ const authRoute = express.Router();
 authRoute.get('/verify/:verifyToken', httpsVerifyUser);
 
 const passwordRoute = express.Router();
-passwordRoute.post('/request-reset-token', httpsRequestResetPassword);
+passwordRoute.post(
+  '/request-reset-token',
+  resetPasswordRateLimitMiddleware,
+  httpsRequestResetPassword
+);
 passwordRoute.post('/verify-reset-token', httpsVerifyResetToken);
 passwordRoute.post('/reset', httpsResetPassword);
 authRoute.use('/password', passwordRoute);

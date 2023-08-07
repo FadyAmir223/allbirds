@@ -8,18 +8,26 @@ import { getPagination } from '../../utils/query.js';
 
 async function httpsGetProduct(req, res) {
   const { id } = req.params;
+
+  if (!id || id.length !== 24)
+    return res.status(400).json({ message: 'invalid product id' });
+
   const { status, product, message } = await getProduct(id);
   res.status(status).json({ product, message });
 }
 
 async function httpsGetReviews(req, res) {
+  const { id } = req.params;
+
+  if (!id || id.length !== 24)
+    return res.status(400).json({ message: 'invalid product id' });
+
   req.query.limit = req.query.limit || 3;
 
   if (req.query.limit > 50)
     return res.status(400).json({ message: "reviews can't exceed 50" });
 
   const { skip, limit, page } = getPagination(req.query);
-  const { id } = req.params;
 
   const { status, pagination, rating, reviews, message } = await getReviews(
     id,
@@ -31,8 +39,26 @@ async function httpsGetReviews(req, res) {
 }
 
 async function httpsAddReview(req, res) {
+  const { id } = req.params;
+
+  if (!id || id.length !== 24)
+    return res.status(400).json({ message: 'invalid product id' });
+
+  if (!req.user.verified)
+    return res
+      .status(401)
+      .json({ message: 'you must verify your account first' });
+
+  const { score, title, content } = req.body;
+
+  if (!(score && title && content))
+    return res.status(400).json({ message: 'some fields are empty' });
+
+  if (!(score === Number.parseInt(score) && score >= 1 && score <= 5))
+    return res.status(400).json({ message: 'invalid rating' });
+
   const { status, pagination, rating, reviews, message } = await addReview(
-    req.params.id,
+    id,
     req.body,
     req.user
   );
@@ -41,6 +67,12 @@ async function httpsAddReview(req, res) {
 
 async function httpsRemoveReview(req, res) {
   const { id, reviewId } = req.params;
+
+  if (!id || id.length !== 24)
+    return res.status(400).json({ message: 'invalid product id' });
+
+  if (!reviewId || reviewId.length !== 24)
+    return res.status(400).json({ message: 'invalid review id' });
 
   const { status, reviews, message } = await removeReview(
     id,
