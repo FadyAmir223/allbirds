@@ -26,14 +26,10 @@ const authRoute = express.Router();
 authRoute.get('/verify/:verifyToken', httpsVerifyUser);
 
 const passwordRoute = express.Router();
-passwordRoute.post(
-  '/request-reset-token',
-  resetPasswordRateLimitMiddleware,
-  httpsRequestResetPassword
-);
+passwordRoute.post('/request-reset-token', httpsRequestResetPassword);
 passwordRoute.post('/verify-reset-token', httpsVerifyResetToken);
 passwordRoute.post('/reset', httpsResetPassword);
-authRoute.use('/password', passwordRoute);
+authRoute.use('/password', resetPasswordRateLimitMiddleware, passwordRoute);
 
 authRoute.use(userSession, regenerateMiddleware);
 authRoute.use(passport.initialize(), passport.session());

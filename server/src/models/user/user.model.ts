@@ -301,13 +301,7 @@ async function requestResetPassword(email) {
       '_id username verified social'
     );
 
-    const { _id, username, verified, social } = user;
-
-    if (social?.provider)
-      return {
-        status: 401,
-        message: `you are using "${social.provider}" as a provider for your account`,
-      };
+    const { id, username, verified } = user;
 
     if (!verified) {
       await sendVerifyEmail({ username, email });
@@ -320,9 +314,10 @@ a verification email has been sent to ${email}`,
     }
 
     const expireDate = new Date(Date.now() + 60 * 60 * 1000);
-    const token = await sendResetPasswordEmail({ username, email });
+    const token = await sendResetPasswordEmail({ id, username, email });
+    const hashToken = await bcrypt.hash(token, 10);
 
-    user.resetPassword = { token, expireDate };
+    user.resetPassword = { token: hashToken, expireDate };
     user.save();
 
     return { status: 200, message: `email has been sent to ${email}` };
@@ -334,16 +329,14 @@ a verification email has been sent to ${email}`,
   }
 }
 
-async function verifyResetToken(token) {
+async function verifyResetToken(uid, token) {
   try {
-    if (!token || token.length !== 36) throw new Error();
+    const {
+      resetPassword: { token: hashToken, expireDate },
+    } = await User.findById(uid, 'resetPassword').lean();
 
-    const user = await User.findOne(
-      { 'resetPassword.token': token },
-      'resetPassword.expireDate'
-    ).lean();
-
-    if (!(user?.resetPassword?.expireDate > new Date())) throw new Error();
+    const tokenMatch = await bcrypt.compare(token, hashToken);
+    if (!tokenMatch || expireDate < new Date()) throw new Error();
 
     return { status: 200, verified: true };
   } catch {
@@ -351,39 +344,21 @@ async function verifyResetToken(token) {
   }
 }
 
-async function resetPassword(token, password) {
+async function resetPassword(uid, token, password) {
   try {
-    if (!token || token.length !== 36)
+    const user = await User.findById(uid, 'resetPassword');
+    const { token: hashToken, expireDate } = user?.resetPassword;
+
+    const tokenMatch = await bcrypt.compare(token, hashToken);
+
+    const min_5 = Date.now() - 5 * 60 * 1000;
+    if (!tokenMatch || expireDate < new Date(min_5))
       return { status: 401, message: 'invalid token' };
-
-    const user = await User.findOne(
-      { 'resetPassword.token': token },
-      'verified social'
-    );
-
-    const min_5 = Date.now() - 50 * 60 * 1000;
-    if (user?.resetPassword?.expireDate < new Date(min_5))
-      return { status: 401, message: 'invalid token' };
-
-    const { verified, social } = user;
-
-    if (social?.provider)
-      return {
-        status: 401,
-        message: `you are using "${social.provider}" as a provider for your account`,
-      };
-
-    if (!verified)
-      return {
-        status: 401,
-        message: 'your email is not verified',
-      };
 
     const hashPassword = await bcrypt.hash(password, 10);
 
     user.password = hashPassword;
-    user.resetPassword = null;
-
+    user.resetPassword = {};
     user.save();
 
     return { status: 200, message: 'password has been resetted' };
@@ -404,7 +379,7 @@ async function sendVerifyEmail(reciver) {
 
 async function sendResetPasswordEmail(reciver) {
   const token = uuidv4();
-  const resetUrl = `${CLIENT_URL}/reset-password?token=${token}`;
+  const resetUrl = `${CLIENT_URL}/reset-password?uid=${reciver.id}&token=${token}`;
   await mailResetPassword(reciver, resetUrl);
   return token;
 }

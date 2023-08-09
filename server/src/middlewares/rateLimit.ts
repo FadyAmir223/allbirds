@@ -1,6 +1,8 @@
 import {
   createAccountRateLimit,
-  loginFailRateLimit,
+  loginRateLimit_IP,
+  loginRateLimit_IP_Email,
+  loginRateLimit_Email,
   resetPasswordRateLimit,
 } from '../config/rateLimitConfig.js';
 import { secondsToHoursMinutes } from '../utils/date.js';
@@ -33,28 +35,44 @@ async function resetPasswordRateLimitMiddleware(req, res, next) {
 
 async function failedLoginRateLimitMiddleware(req, res, next) {
   try {
-    req.body.username += '---' + req.ip;
+    const isDeviceTrusted = true;
+    // checkDeviceWasUsedPreviously(req.body.email, req.cookies.deviceId);
+
     const email = req.body.username;
+    const { ip } = req;
+    const email_ip = req.body.username + '---' + ip;
+    req.body.username = email_ip + '---' + isDeviceTrusted;
 
-    const rl = await loginFailRateLimit.get(email);
+    const promises = [loginRateLimit_IP_Email.get(email_ip)];
 
-    if (rl && rl.consumedPoints > loginFailRateLimit.points) {
-      const retrySecs = Math.round(rl.msBeforeNext / 1000) || 1;
-      const { hours, minutes } = secondsToHoursMinutes(retrySecs);
+    if (!isDeviceTrusted)
+      promises.push(loginRateLimit_IP.get(ip), loginRateLimit_Email.get(email));
 
-      return res
-        .set('Retry-After', String(retrySecs))
-        .status(429)
-        .json({
-          message: `too many password resets, try after: ${hours} hours and ${minutes} minutes`,
-        });
-    }
+    const [resIpUsername, resIp, resUsername] = await Promise.all(promises);
 
-    next();
+    let retrySecs = 0;
+
+    if (resIpUsername?.consumedPoints > loginRateLimit_IP_Email.points)
+      retrySecs = Math.round(resIpUsername.msBeforeNext / 1000) || 1;
+    else if (resIp?.consumedPoints > loginRateLimit_IP.points)
+      retrySecs = Math.round(resIp.msBeforeNext / 1000) || 1;
+    else if (resUsername?.consumedPoints > loginRateLimit_Email.points)
+      retrySecs = Math.round(resUsername.msBeforeNext / 1000) || 1;
+
+    if (retrySecs === 0) return next();
+
+    const { hours, minutes } = secondsToHoursMinutes(retrySecs);
+
+    return res
+      .status(429)
+      .set('Retry-After', String(retrySecs))
+      .json({
+        message: `too many login attempts, try after: ${hours}h, ${minutes}m`,
+      });
   } catch (rateLimiterRes) {
     if (rateLimiterRes?.remainingPoints === 0)
       return res.status(429).json({
-        message: 'too many password resets, please try again later',
+        message: 'too many login attempts, try again later',
       });
 
     next();

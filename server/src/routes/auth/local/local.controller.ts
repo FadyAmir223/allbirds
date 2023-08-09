@@ -8,10 +8,15 @@ import {
   getLocalUser,
 } from '../../../models/user/user.model.js';
 import { isPasswordComplex } from '../../../utils/authProtection.js';
-import { loginFailRateLimit } from '../../../config/rateLimitConfig.js';
+import {
+  loginRateLimit_IP,
+  loginRateLimit_IP_Email,
+  loginRateLimit_Email,
+} from '../../../config/rateLimitConfig.js';
 
 async function httpsSignup(req, res) {
-  const { firstName, lastName, email, password, confirmPassword } = req.body;
+  const { firstName, lastName, password, confirmPassword } = req.body;
+  let email = req.body.email.toLowerCase();
 
   if (!(firstName && lastName && email && password && confirmPassword))
     return res.status(400).json({ message: 'some fields are empty' });
@@ -47,9 +52,12 @@ async function httpsLogin(req, res) {
 }
 
 passport.use(
-  new Strategy(async (email_ip, password, done) => {
+  new Strategy(async (email_ip_isDeviceTrusted, password, done) => {
     try {
-      const email = email_ip.split('---')[0];
+      let [email, ip, isDeviceTrusted] = email_ip_isDeviceTrusted.split('---');
+      const email_ip = email + '---' + ip;
+
+      email = email.toLowerCase();
       const user = await getLocalUser(email);
 
       if (!user) return done(null, false);
@@ -58,13 +66,21 @@ passport.use(
       const passwordMatch = await bcrypt.compare(password, user?.password);
       if (!passwordMatch)
         try {
-          await loginFailRateLimit.consume(email_ip);
+          const promises = [loginRateLimit_IP_Email.consume(email_ip)];
+
+          if (isDeviceTrusted === 'false')
+            promises.push(
+              loginRateLimit_IP.consume(ip),
+              loginRateLimit_Email.consume(email)
+            );
+
+          await Promise.all(promises);
         } finally {
           return done(null, false);
         }
 
       try {
-        await loginFailRateLimit.delete(email_ip);
+        await loginRateLimit_IP_Email.delete(email_ip);
       } finally {
         return done(null, user);
       }

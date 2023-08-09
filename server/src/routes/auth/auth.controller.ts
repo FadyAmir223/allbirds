@@ -34,15 +34,18 @@ async function httpsRequestResetPassword(req, res) {
 }
 
 async function httpsVerifyResetToken(req, res) {
-  const { token } = req.body;
-  const { status, verified } = await verifyResetToken(token);
+  const { uid, token } = req.body;
+  if (!(uid && token))
+    return res.status(400).json({ message: 'some fields are empty' });
+
+  const { status, verified } = await verifyResetToken(uid, token);
   res.status(status).json({ verified });
 }
 
 async function httpsResetPassword(req, res) {
-  const { token, password, confirmPassword } = req.body;
+  const { uid, token, password, confirmPassword } = req.body;
 
-  if (!(password && confirmPassword))
+  if (!(uid && token && password && confirmPassword))
     return res.status(400).json({ message: 'some fields are empty' });
 
   if (password !== confirmPassword)
@@ -51,7 +54,10 @@ async function httpsResetPassword(req, res) {
   if (!isPasswordComplex(password))
     return res.status(400).json({ message: 'password not complex enough' });
 
-  const { status, message } = await resetPassword(token, password);
+  if (token.length !== 36)
+    return res.status(400).json({ message: 'invalid token' });
+
+  const { status, message } = await resetPassword(uid, token, password);
   res.status(status).json({ message });
 }
 

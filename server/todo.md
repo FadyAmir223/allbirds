@@ -1,16 +1,16 @@
-POST auth/login
-POST auth/signup
-POST auth/logout
+admin endpoints
+dashboard
 
-POST auth/google
-POST auth/facebook
+pm2
+  start | stop
+    <file | name | id>
+  delete | reload | restart | show
+    <name | id>
+      -i <[number] | max>
+      -l <logs.txt>
 
-GET user/address
-POST user/address
-PUT user/address
-DELETE user/address
+  monit
 
-GET cart
-POST cart
-
-const session = require('express-session');
+  ls | list | status
+  logs
+    --lines <[number]>

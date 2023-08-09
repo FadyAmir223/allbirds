@@ -9,16 +9,16 @@ import {
 async function sendEmail(receiver, subject, content) {
   if (!IS_PRODUCTION) return true;
 
-  const text = `Hello ${receiver.username},
+  const html = `Hello ${receiver.username},
 
 ${content}
 
-Best regards,
-The allbirds Team`;
+<p>Best regards,</p>
+<p>The allbirds Team</p>`;
 
   try {
     const sender = EMAIL_SENDER;
-    const options = { from: sender, to: receiver.email, subject, text };
+    const options = { from: sender, to: receiver.email, subject, html };
 
     let transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -36,29 +36,22 @@ The allbirds Team`;
 
 async function mailVerifyAccount(receiver, verificationLink) {
   const subject = 'Verify Your Account';
-  const content = `Thank you for signing up with allbirds.
-To complete your account registration, please click the link below to verify your email address:
+  const content = `<p>Thank you for signing up with allbirds.</p>
+<p>To verify your email please click <a href="${verificationLink}">here</a></p>
 
-Verification Link: ${verificationLink}
-
-If you did not create an account on allbirds, please ignore this email.`;
+<p>If you did not create an account on allbirds, please ignore this email.</p>`;
 
   return await sendEmail(receiver, subject, content);
 }
 
 async function mailResetPassword(receiver, resetLink) {
   const subject = 'Reset Your Password';
-  const content = `We hope this email finds you well. We have received a request to reset the password for your account. If you did not initiate this request, please disregard this email.
+  const content = `<p>We have received a request to reset the password for your account.</p>
+  <p>If you did not initiate this request, please disregard this email.</p>
 
-To proceed with the password reset, please follow the instructions below:
+<p>To access the password reset page paease click <a href="${resetLink}">here</a></p>
 
-Click on the following link to access the password reset page: ${resetLink}
-
-On the password reset page, you will be prompted to enter a new password for your account. Please choose a strong and unique password to ensure the security of your account.
-
-After setting the new password, click on the "Reset Password" button to confirm the change.
-
-Note: This password reset link is valid for "1 Hour" from the time of this email. If you do not reset your password within this period, you may need to request another password reset.`;
+<p>This link is valid for 1 Hour</p>`;
 
   return await sendEmail(receiver, subject, content);
 }

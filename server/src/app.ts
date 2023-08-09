@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import path from 'path';
 import url from 'url';
 
-import { CLIENT_URL } from './utils/loadEnv.js';
+import { CLIENT_URL, IS_PRODUCTION } from './utils/loadEnv.js';
 import api from './routes/api.js';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
@@ -33,7 +33,7 @@ app.use(
 
 app.use(express.json());
 
-app.use(morgan('dev'));
+app.use(morgan(IS_PRODUCTION ? 'combined' : 'dev'));
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
