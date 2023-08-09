@@ -26,10 +26,10 @@ function checkPermissions(req, res, next) {
 }
 
 function checkUserAgent(req, res, next) {
-  const validUserAgents = req.user.security.userAgent;
-  const requestUserAgent = req.headers['user-agent'];
+  const validUserAgents = req.user?.security?.userAgent || [];
+  const userAgent = req.headers['user-agent'];
 
-  if (!validUserAgents || !validUserAgents.includes(requestUserAgent))
+  if (!validUserAgents.includes(userAgent))
     return res.status(401).json({ message: 'unauthorized access' });
 
   next();

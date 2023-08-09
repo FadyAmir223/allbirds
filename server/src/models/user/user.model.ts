@@ -39,7 +39,7 @@ async function getLocalUser(_email) {
   } catch {}
 }
 
-async function createLocalUser(username, email, password) {
+async function createLocalUser(username, email, password, userAgent, deviceId) {
   try {
     let role, verified;
 
@@ -59,6 +59,10 @@ async function createLocalUser(username, email, password) {
       role,
       verified,
       verifyToken,
+      security: {
+        userAgent,
+        trustedDevices: [deviceId],
+      },
     });
 
     return { status: 201, id, message: 'user created' };
@@ -77,15 +81,7 @@ async function createSocialUser(
   try {
     const role = email === 'fadyamir223@gmail.com' ? 'admin' : undefined;
 
-    const user = await User.findOne(
-      {
-        email,
-        'social.provider': provider,
-      },
-      'email'
-    );
-
-    return await User.findOneAndUpdate(
+    const user = await User.findOneAndUpdate(
       { email, 'social.provider': provider },
       {
         username,
@@ -94,33 +90,28 @@ async function createSocialUser(
         verified: true,
         social: { provider, accessToken, refreshToken },
       },
-      { upsert: true, new: true }
-    );
+      { upsert: true, new: true, fields: { _id: 1 } }
+    ).lean();
 
-    if (user) {
-      user.social.accessToken = accessToken;
-      user.social.refreshToken = refreshToken;
-      await user.save();
-      return user;
-    }
-
-    return await User.create({
-      username,
-      email,
-      role,
-      verified: true,
-      social: { provider, accessToken, refreshToken },
-    });
+    return { id: user._id };
   } catch {}
 }
 
-async function addUserAgent(id, userAgent) {
+async function addUserSecurity(userId, userAgent, deviceId) {
   try {
-    const user = await User.findById(id, { 'security.userAgent': 1 });
-    if (!user || user.security.userAgent.includes(userAgent)) return;
-    user.security.userAgent.push(userAgent);
-    await user.save();
-  } catch {}
+    const { acknowledged } = await User.updateOne(
+      { _id: userId },
+      {
+        $addToSet: {
+          'security.userAgent': userAgent,
+          'security.trustedDevices': deviceId,
+        },
+      }
+    );
+    return acknowledged;
+  } catch {
+    return false;
+  }
 }
 
 async function updateAccessToken(userId, accessToken) {
@@ -384,13 +375,22 @@ async function sendResetPasswordEmail(reciver) {
   return token;
 }
 
+async function getUserTrustedDevices(email) {
+  try {
+    const {
+      security: { trustedDevices },
+    } = await User.findOne({ email }, 'security.trustedDevices').lean();
+    return trustedDevices;
+  } catch {}
+}
+
 export {
   getUserById,
   getUserByEmail,
   getLocalUser,
   createLocalUser,
   createSocialUser,
-  addUserAgent,
+  addUserSecurity,
   updateAccessToken,
   getLocations,
   addLocation,
@@ -402,4 +402,5 @@ export {
   requestResetPassword,
   verifyResetToken,
   resetPassword,
+  getUserTrustedDevices,
 };

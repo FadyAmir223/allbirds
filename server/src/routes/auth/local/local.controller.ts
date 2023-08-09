@@ -1,9 +1,9 @@
 import passport from 'passport';
 import { Strategy } from 'passport-local';
 import bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
-  addUserAgent,
   createLocalUser,
   getLocalUser,
 } from '../../../models/user/user.model.js';
@@ -13,6 +13,7 @@ import {
   loginRateLimit_IP_Email,
   loginRateLimit_Email,
 } from '../../../config/rateLimitConfig.js';
+import { deviceIdSessionConfig } from '../../../config/auth.session.js';
 
 async function httpsSignup(req, res) {
   const { firstName, lastName, password, confirmPassword } = req.body;
@@ -33,22 +34,26 @@ async function httpsSignup(req, res) {
   const username = `${firstName} ${lastName}`;
   const hashPassword = await bcrypt.hash(password, 10);
 
+  const userAgent = req.headers['user-agent'];
+
+  let { deviceId } = req.cookies;
+  if (!deviceId) {
+    deviceId = uuidv4();
+    res.cookie('deviceId', deviceId, deviceIdSessionConfig);
+  }
+
   const { status, id, message } = await createLocalUser(
     username,
     email,
-    hashPassword
+    hashPassword,
+    userAgent,
+    deviceId
   );
 
   req.login({ id }, (err) => {
     if (err) return res.status(500).json({ message: 'error during login' });
     res.status(status).json({ message });
   });
-}
-
-async function httpsLogin(req, res) {
-  const userAgent = req.headers['user-agent'];
-  await addUserAgent(req.user.id, userAgent);
-  res.status(200).json({ login: true });
 }
 
 passport.use(
@@ -90,4 +95,4 @@ passport.use(
   })
 );
 
-export { httpsSignup, httpsLogin };
+export { httpsSignup };

@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
 import url from 'url';
+import cookieParser from 'cookie-parser';
 
 import { CLIENT_URL, IS_PRODUCTION } from './utils/loadEnv.js';
 import api from './routes/api.js';
@@ -32,6 +33,8 @@ app.use(
 );
 
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.use(morgan(IS_PRODUCTION ? 'combined' : 'dev'));
 

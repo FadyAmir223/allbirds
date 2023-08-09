@@ -10,8 +10,7 @@ import {
   GOOGLE_CLIENT_SECRET,
   SERVER_URL,
 } from '../../../utils/loadEnv.js';
-import verifyCallback from './_verifyCallback.js';
-import { addUserAgent } from '../../../models/user/user.model.js';
+import { verifyCallback, socialCallback } from './_verifyCallback.js';
 
 const AUTH_OPTIONS = {
   clientID: GOOGLE_CLIENT_ID,
@@ -40,11 +39,7 @@ googleRoute.get(
     failureRedirect: CLIENT_URL + '/login',
     session: true,
   }),
-  async (req, res) => {
-    const userAgent = req.headers['user-agent'];
-    await addUserAgent(req.user.id, userAgent);
-    res.status(200).json({ login: true }); //.redirect(CLIENT_URL)
-  }
+  socialCallback
 );
 
 export default googleRoute;

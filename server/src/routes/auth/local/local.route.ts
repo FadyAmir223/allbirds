@@ -2,11 +2,12 @@ import express from 'express';
 import passport from 'passport';
 
 import { checkLoggedOut } from '../../../middlewares/checkAuth.js';
-import { httpsLogin, httpsSignup } from './local.controller.js';
+import { httpsSignup } from './local.controller.js';
 import {
   createAccountRateLimitMiddleware,
-  failedLoginRateLimitMiddleware,
+  loginRateLimitMiddleware,
 } from '../../../middlewares/rateLimit.js';
+import { socialCallback } from '../social/_verifyCallback.js';
 
 const localRoute = express.Router();
 
@@ -20,9 +21,9 @@ localRoute.post(
 localRoute.post(
   '/login',
   checkLoggedOut,
-  failedLoginRateLimitMiddleware,
+  loginRateLimitMiddleware,
   passport.authenticate('local'),
-  httpsLogin
+  socialCallback
 );
 
 export default localRoute;

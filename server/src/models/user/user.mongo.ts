@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
   },
   security: {
     userAgent: [String],
+    trustedDevices: [String],
   },
   locations: [
     {

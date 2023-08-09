@@ -14,7 +14,7 @@ const createAccountRateLimit = new RateLimiterMongo({
 
 const resetPasswordRateLimit = new RateLimiterMongo({
   storeClient,
-  points: IS_PRODUCTION ? 100 : Number.MAX_VALUE,
+  points: IS_PRODUCTION ? 5 : Number.MAX_VALUE,
   duration: 60 * 60 * 24,
   keyPrefix: 'reset_password',
   tableName: 'rate-limit',

@@ -5,6 +5,7 @@ import {
   loginRateLimit_Email,
   resetPasswordRateLimit,
 } from '../config/rateLimitConfig.js';
+import { getUserTrustedDevices } from '../models/user/user.model.js';
 import { secondsToHoursMinutes } from '../utils/date.js';
 
 async function createAccountRateLimitMiddleware(req, res, next) {
@@ -33,14 +34,16 @@ async function resetPasswordRateLimitMiddleware(req, res, next) {
   }
 }
 
-async function failedLoginRateLimitMiddleware(req, res, next) {
+async function loginRateLimitMiddleware(req, res, next) {
   try {
-    const isDeviceTrusted = true;
-    // checkDeviceWasUsedPreviously(req.body.email, req.cookies.deviceId);
-
     const email = req.body.username;
     const { ip } = req;
     const email_ip = req.body.username + '---' + ip;
+
+    const trustedDevices = await getUserTrustedDevices(email);
+    const deviceId = req.cookies.deviceId;
+
+    const isDeviceTrusted = trustedDevices.includes(deviceId);
     req.body.username = email_ip + '---' + isDeviceTrusted;
 
     const promises = [loginRateLimit_IP_Email.get(email_ip)];
@@ -82,5 +85,5 @@ async function failedLoginRateLimitMiddleware(req, res, next) {
 export {
   createAccountRateLimitMiddleware,
   resetPasswordRateLimitMiddleware,
-  failedLoginRateLimitMiddleware,
+  loginRateLimitMiddleware,
 };
