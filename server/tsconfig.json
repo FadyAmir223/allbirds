@@ -2,18 +2,18 @@
   "compilerOptions": {
     "module": "NodeNext",
     "moduleResolution": "nodenext",
-    "target": "ES2020",
+    "target": "ESNext",
     "sourceMap": false,
     "outDir": "dist",
-
     "skipLibCheck": true,
     "removeComments": true,
-     
+    
     // "strict": true,
     // "noUnusedLocals": true,
     // "noUnusedParameters": true,
-
-    "resolveJsonModule": true
+    
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
   },
   "include": ["src"]
 }

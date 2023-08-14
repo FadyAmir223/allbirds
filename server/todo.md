@@ -1,3 +1,8 @@
+bad word for review detection
+
+image upload
+nsfw for pic uplad detection
+
 admin endpoints
 dashboard
 

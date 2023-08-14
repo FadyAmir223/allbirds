@@ -1,3 +1,5 @@
+import Filter from 'bad-words';
+
 import {
   getProduct,
   getReviews,
@@ -49,13 +51,17 @@ async function httpsAddReview(req, res) {
       .status(401)
       .json({ message: 'you must verify your account first' });
 
-  const { score, title, content } = req.body;
+  let { score, title, content, customFields } = req.body;
 
-  if (!(score && title && content))
+  if (!(score && title && content && customFields))
     return res.status(400).json({ message: 'some fields are empty' });
 
   if (!(score === Number.parseInt(score) && score >= 1 && score <= 5))
     return res.status(400).json({ message: 'invalid rating' });
+
+  const filter = new Filter();
+  req.body.title = filter.clean(title);
+  req.body.content = filter.clean(content);
 
   const { status, pagination, rating, reviews, message } = await addReview(
     id,
