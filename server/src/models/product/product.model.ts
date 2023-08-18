@@ -1,8 +1,7 @@
-import mongoose from 'mongoose';
-
 import Product from './product.mongo.js';
 import products from '../../data/allbirds.json' assert { type: 'json' };
 import User from '../user/user.mongo.js';
+import { IS_PRODUCTION } from '../../utils/loadEnv.js';
 
 async function saveProducts() {
   try {
@@ -105,7 +104,7 @@ async function getCollection(type, gender, skip, limit) {
       },
     ]);
 
-    return { status: 200, products, total };
+    return { status: 200, products: products || [], total: total || 0 };
   } catch {
     return { status: 500, message: 'unable to get sales' };
   }
@@ -210,7 +209,7 @@ async function getCollectionSale(type, gender, skip, limit) {
       },
     ]);
 
-    return { status: 200, products, total };
+    return { status: 200, products: products || [], total: total || 0 };
   } catch {
     return { status: 500, message: 'unable to get sales' };
   }
@@ -222,7 +221,7 @@ async function getCollectionFilters(type, gender) {
       {
         $match: {
           $or: [
-            { type: type, gender: gender },
+            { type: type, gender },
             { type: type, gender: 'unisex' },
           ],
         },
@@ -295,10 +294,10 @@ async function getCollectionFilters(type, gender) {
   }
 }
 
-async function getProduct(id) {
+async function getProduct(handle) {
   try {
-    const product = await Product.findById(
-      id,
+    const product = await Product.findOne(
+      { handle },
       '-__v -recommendations._id -material_features._id -dropdown._id -editions._id -reviews'
     ).lean();
 
@@ -309,16 +308,19 @@ async function getProduct(id) {
   }
 }
 
-async function getReviews(productId, skip = 0, limit = 3, page = 1) {
+async function getReviews(handle, skip = 0, limit = 3, page = 1) {
   try {
     const {
       reviews: { reviews, count, rating },
-    } = await Product.findById(productId, {
-      _id: 0,
-      'reviews.count': 1,
-      'reviews.rating': 1,
-      'reviews.reviews': { $slice: [skip, limit] },
-    }).lean();
+    } = await Product.findOne(
+      { handle },
+      {
+        _id: 0,
+        'reviews.count': 1,
+        'reviews.rating': 1,
+        'reviews.reviews': { $slice: [skip, limit] },
+      }
+    ).lean();
 
     if (!reviews)
       return { status: 404, message: 'no reviews for this product' };
@@ -335,7 +337,7 @@ async function getReviews(productId, skip = 0, limit = 3, page = 1) {
   }
 }
 
-async function addReview(productId, review, user) {
+async function addReview(handle, review, user) {
   try {
     let { _id: userId, username, verified: verifiedBuyer } = user;
     const { score, title, content, customFields } = review;
@@ -350,7 +352,7 @@ async function addReview(productId, review, user) {
     const _user = await User.findOne(
       {
         _id: userId,
-        'orders.productId': new mongoose.Types.ObjectId(productId),
+        'orders.handle': handle,
         'orders.size': sizePurchased,
       },
       { 'orders.$': 1, username: 1 }
@@ -364,7 +366,7 @@ async function addReview(productId, review, user) {
 
     const [{ delivered, reviewed }] = _user.orders;
 
-    // if (!delivered)
+    // if (IS_PRODUCTION && !delivered)
     //   return { status: 400, message: "your order hasn't been delivered yet" };
 
     if (reviewed)
@@ -392,10 +394,10 @@ async function addReview(productId, review, user) {
       customFields,
     };
 
-    const newRating = await getNewRating(productId, score);
+    const newRating = await getNewRating(handle, score);
 
     const { acknowledged: productAcknowledged } = await Product.updateOne(
-      { _id: new mongoose.Types.ObjectId(productId) },
+      { handle },
       {
         $inc: { 'reviews.count': 1 },
         $set: { 'reviews.rating': newRating },
@@ -409,7 +411,7 @@ async function addReview(productId, review, user) {
     const { acknowledged: userAcknowledged } = await User.updateOne(
       {
         _id: user.id,
-        'orders.productId': new mongoose.Types.ObjectId(productId),
+        'orders.handle': handle,
         'orders.size': sizePurchased,
       },
       { $set: { 'orders.$.reviewed': true } }
@@ -418,7 +420,7 @@ async function addReview(productId, review, user) {
     if (!userAcknowledged) throw new Error();
 
     const { status, pagination, rating, reviews, message } = await getReviews(
-      productId
+      handle
     );
 
     return {
@@ -433,13 +435,16 @@ async function addReview(productId, review, user) {
   }
 }
 
-async function removeReview(productId, reviewId, userId) {
+async function removeReview(handle, reviewId, userId) {
   try {
-    const newRating = await getNewRating(productId);
+    // TODO: calculate new rating after removing review
+    // check if reveiw id exists
+
+    const newRating = await getNewRating(handle);
 
     const { acknowledged } = await Product.updateOne(
       {
-        _id: productId,
+        handle,
         'reviews.reviews._id': reviewId,
         'reviews.reviews.userId': userId,
       },
@@ -452,7 +457,7 @@ async function removeReview(productId, reviewId, userId) {
 
     if (!acknowledged) throw new Error();
 
-    const reviews = await getReviews(productId);
+    const reviews = await getReviews(handle);
     return { status: 200, reviews };
   } catch {
     return { status: 500, message: 'unable to remove reivew' };
@@ -467,18 +472,17 @@ async function getCart(items) {
     const cart = (
       await Promise.all(
         items.map(
-          async ({ productId, editionId, size, amount }) =>
+          async ({ handle, editionId, size, amount }) =>
             await Product.aggregate([
-              { $match: { _id: new mongoose.Types.ObjectId(productId) } },
+              { $match: { handle } },
               { $unwind: '$editions' },
               { $unwind: '$editions.products' },
               { $match: { 'editions.products.id': editionId } },
-              { $addFields: { amount, productId, editionId } },
+              { $addFields: { amount, handle, editionId } },
               {
                 $project: {
                   _id: 0,
                   amount,
-                  productId,
                   editionId,
                   size,
                   handle: '$handle',
@@ -520,7 +524,7 @@ async function getCart(items) {
   }
 }
 
-async function addCartItem(items, { productId, editionId, size }) {
+async function addCartItem(items, { handle, editionId, size }) {
   try {
     if (!items) items = [];
 
@@ -531,7 +535,7 @@ async function addCartItem(items, { productId, editionId, size }) {
     if (existingItem) existingItem.amount++;
     else {
       const productExists = await Product.findOne(
-        { _id: productId, 'editions.products.id': editionId },
+        { handle, 'editions.products.id': editionId },
         '-_id handle sizes'
       ).lean();
 
@@ -541,7 +545,7 @@ async function addCartItem(items, { productId, editionId, size }) {
       if (!productExists.sizes.includes(size))
         return { status: 404, message: 'this size is soldout' };
 
-      items.push({ productId, editionId, size, amount: 1 });
+      items.push({ handle, editionId, size, amount: 1 });
     }
 
     const { status, cart, message } = await getCart(items);
@@ -594,9 +598,9 @@ async function removeCartItem(items, { editionId, size }, _delete = false) {
   }
 }
 
-async function getNewRating(productId, score?) {
+async function getNewRating(handle, score?) {
   const [{ _id: scores }] = await Product.aggregate([
-    { $match: { _id: new mongoose.Types.ObjectId(productId) } },
+    { $match: { handle } },
     { $project: { _id: '$reviews.reviews.score' } },
   ]);
 

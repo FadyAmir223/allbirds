@@ -1,3 +1,5 @@
+import { Request, Response } from 'express';
+
 import {
   verifyUser,
   requestResetPassword,
@@ -6,18 +8,18 @@ import {
 } from '../../models/user/user.model.js';
 import { isPasswordComplex } from '../../utils/authProtection.js';
 
-function htppsLogout(req, res) {
-  req.logout((err) => {
-    if (err)
-      return res
-        .status(500)
-        .json({ logout: false, message: 'error during logout' });
-
+async function htppsLogout(req: Request, res: Response): Promise<Response> {
+  try {
+    await req.logout();
     res.status(200).json({ logout: true });
-  });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ logout: false, message: 'error during logout' });
+  }
 }
 
-async function httpsVerifyUser(req, res) {
+async function httpsVerifyUser(req: Request, res: Response): Promise<Response> {
   const { verifyToken } = req.params;
   if (verifyToken.length !== 36)
     return res.status(400).json({ message: 'invalid verification id' });
@@ -25,7 +27,10 @@ async function httpsVerifyUser(req, res) {
   res.status(status).json({ verified, message });
 }
 
-async function httpsRequestResetPassword(req, res) {
+async function httpsRequestResetPassword(
+  req: Request,
+  res: Response
+): Promise<Response> {
   const { email } = req.body;
   if (!email) return res.status(400).json({ message: 'no email provided' });
 
@@ -33,7 +38,10 @@ async function httpsRequestResetPassword(req, res) {
   res.status(status).json({ message });
 }
 
-async function httpsVerifyResetToken(req, res) {
+async function httpsVerifyResetToken(
+  req: Request,
+  res: Response
+): Promise<Response> {
   const { uid, token } = req.body;
   if (!(uid && token))
     return res.status(400).json({ message: 'some fields are empty' });
@@ -42,7 +50,10 @@ async function httpsVerifyResetToken(req, res) {
   res.status(status).json({ verified });
 }
 
-async function httpsResetPassword(req, res) {
+async function httpsResetPassword(
+  req: Request,
+  res: Response
+): Promise<Response> {
   const { uid, token, password, confirmPassword } = req.body;
 
   if (!(uid && token && password && confirmPassword))

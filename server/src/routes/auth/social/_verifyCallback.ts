@@ -1,3 +1,5 @@
+import { Request, Response } from 'express';
+
 import { deviceIdSessionConfig } from '../../../config/auth.session.js';
 import {
   addUserSecurity,
@@ -21,7 +23,7 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
   return done(null, user);
 }
 
-async function socialCallback(req, res) {
+async function socialCallback(req: Request, res: Response) {
   const userAgent = req.headers['user-agent'];
 
   let { deviceId } = req.cookies;

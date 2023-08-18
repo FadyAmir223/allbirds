@@ -1,3 +1,5 @@
+import { Request, Response } from 'express';
+
 import {
   getCart,
   addCartItem,
@@ -5,13 +7,13 @@ import {
 } from '../../models/product/product.model.js';
 import { orderCart } from '../../models/user/user.model.js';
 
-async function httpsGetCart(req, res) {
+async function httpsGetCart(req: Request, res: Response) {
   const { items } = req.session;
   const { status, cart, message } = await getCart(items);
   res.status(status).json({ cart, message });
 }
 
-async function httpsAddCartItem(req, res) {
+async function httpsAddCartItem(req: Request, res: Response) {
   const { items } = req.session;
   const { status, newItems, cart, message } = await addCartItem(
     items,
@@ -21,11 +23,11 @@ async function httpsAddCartItem(req, res) {
   res.status(status).json({ cart, message });
 }
 
-async function httpsRemoveCartItem(req, res) {
+async function httpsRemoveCartItem(req: Request, res: Response) {
   return await httpsDecrementCartItem(req, res);
 }
 
-async function httpsDeleteCartItem(req, res) {
+async function httpsDeleteCartItem(req: Request, res: Response) {
   return await httpsDecrementCartItem(req, res, true);
 }
 
@@ -40,7 +42,7 @@ async function httpsDecrementCartItem(req, res, _delete?) {
   res.status(status).json({ cart, message });
 }
 
-async function httpsOrderCart(req, res) {
+async function httpsOrderCart(req: Request, res: Response): Promise<Response> {
   const { userId } = req.query;
   const { items } = req.session;
 

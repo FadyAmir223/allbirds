@@ -7,9 +7,10 @@
   "scripts": {
     "dev": "concurrently \"tsc -w\" \"cross-env NODE_ENV=development nodemon dist/server.js\"",
     "build": "cross-env NODE_ENV=production node dist/server.js",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand --detectOpenHandles --forceExit",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest --detectOpenHandles --forceExit",
     "cluster": "cross-env NODE_ENV=production pm2 start dist/server.js -i max",
-    "cluster-reload": "pm2 reload server"
+    "cluster-reload": "pm2 reload server",
+    "tsc": "tsc -w"
   },
   "keywords": [],
   "author": "",

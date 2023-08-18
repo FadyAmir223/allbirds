@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import Filter from 'bad-words';
 
 import {
@@ -8,31 +9,25 @@ import {
 } from '../../models/product/product.model.js';
 import { getPagination } from '../../utils/query.js';
 
-async function httpsGetProduct(req, res) {
-  const { id } = req.params;
+async function httpsGetProduct(req: Request, res: Response) {
+  const { handle } = req.params;
 
-  if (!id || id.length !== 24)
-    return res.status(400).json({ message: 'invalid product id' });
-
-  const { status, product, message } = await getProduct(id);
+  const { status, product, message } = await getProduct(handle);
   res.status(status).json({ product, message });
 }
 
-async function httpsGetReviews(req, res) {
-  const { id } = req.params;
+async function httpsGetReviews(req: Request, res: Response): Promise<Response> {
+  const { handle } = req.params;
 
-  if (!id || id.length !== 24)
-    return res.status(400).json({ message: 'invalid product id' });
+  if (!req.query?.limit) req.query.limit = '3';
 
-  req.query.limit = req.query.limit || 3;
-
-  if (req.query.limit > 50)
+  if (+req.query.limit > 50)
     return res.status(400).json({ message: "reviews can't exceed 50" });
 
   const { skip, limit, page } = getPagination(req.query);
 
   const { status, pagination, rating, reviews, message } = await getReviews(
-    id,
+    handle,
     skip,
     limit,
     page
@@ -40,11 +35,8 @@ async function httpsGetReviews(req, res) {
   res.status(status).json({ pagination, rating, reviews, message });
 }
 
-async function httpsAddReview(req, res) {
-  const { id } = req.params;
-
-  if (!id || id.length !== 24)
-    return res.status(400).json({ message: 'invalid product id' });
+async function httpsAddReview(req: Request, res: Response): Promise<Response> {
+  const { handle } = req.params;
 
   if (!req.user.verified)
     return res
@@ -64,24 +56,24 @@ async function httpsAddReview(req, res) {
   req.body.content = filter.clean(content);
 
   const { status, pagination, rating, reviews, message } = await addReview(
-    id,
+    handle,
     req.body,
     req.user
   );
   res.status(status).json({ pagination, rating, reviews, message });
 }
 
-async function httpsRemoveReview(req, res) {
-  const { id, reviewId } = req.params;
-
-  if (!id || id.length !== 24)
-    return res.status(400).json({ message: 'invalid product id' });
+async function httpsRemoveReview(
+  req: Request,
+  res: Response
+): Promise<Response> {
+  const { handle, reviewId } = req.params;
 
   if (!reviewId || reviewId.length !== 24)
     return res.status(400).json({ message: 'invalid review id' });
 
   const { status, reviews, message } = await removeReview(
-    id,
+    handle,
     reviewId,
     req.user._id
   );

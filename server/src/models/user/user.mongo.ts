@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
   ],
   orders: [
     {
-      productId: mongoose.Types.ObjectId,
+      handle: String,
       editionId: Number,
       size: String,
       amount: Number,

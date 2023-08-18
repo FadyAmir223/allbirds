@@ -206,11 +206,11 @@ async function orderCart(userId, items) {
     if (!user) return { status: 404, message: 'user not found' };
 
     for (const item of items) {
-      const { productId, editionId, size, amount } = item;
+      const { handle, editionId, size, amount } = item;
 
       const existingOrder = user.orders.find(
         (order) =>
-          String(order.productId) === productId &&
+          String(order.handle) === handle &&
           order.editionId === editionId &&
           order.size === size
       );
@@ -218,7 +218,7 @@ async function orderCart(userId, items) {
       if (existingOrder) existingOrder.amount += amount;
       else
         user.orders.push({
-          productId,
+          handle,
           editionId,
           size,
           amount,
@@ -250,7 +250,7 @@ async function orderCart(userId, items) {
 
 async function getOrders(userId, history = false) {
   try {
-    const filter = history ? {} : { 'orders.delivered': true };
+    const filter = history ? { 'orders.delivered': true } : {};
 
     const user = await User.findOne(
       { _id: userId, ...filter },

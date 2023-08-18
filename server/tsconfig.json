@@ -3,17 +3,16 @@
     "module": "NodeNext",
     "moduleResolution": "nodenext",
     "target": "ESNext",
-    "sourceMap": false,
     "outDir": "dist",
+    "sourceMap": false,
     "skipLibCheck": true,
-    "removeComments": true,
-    
-    // "strict": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    
+    "removeComments": true,    
     "resolveJsonModule": true,
     "esModuleInterop": true,
+
+    // "strict": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,    
   },
   "include": ["src"]
 }

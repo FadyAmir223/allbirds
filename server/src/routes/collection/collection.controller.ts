@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import {
   getCollection,
   getCollectionSale,
@@ -5,18 +6,24 @@ import {
 } from '../../models/product/product.model.js';
 import { getPagination } from '../../utils/query.js';
 
-async function httpsGetCollection(req, res) {
+async function httpsGetCollection(
+  req: Request,
+  res: Response
+): Promise<Response> {
   return await getACollection(req, res, false);
 }
 
-async function httpsGetCollectionSale(req, res) {
+async function httpsGetCollectionSale(
+  req: Request,
+  res: Response
+): Promise<Response> {
   return await getACollection(req, res, true);
 }
 
 async function getACollection(req, res, isSale = false) {
-  req.query.limit = req.query.limit || 10;
+  if (!req.query?.limit) req.query.limit = 10;
 
-  if (req.query.limit > 50)
+  if (req.query?.limit > 50)
     return res.status(400).json({ message: 'limit must be less than 50' });
 
   const { skip, limit, page } = getPagination(req.query);
@@ -28,11 +35,14 @@ async function getACollection(req, res, isSale = false) {
     ? await getCollectionSale(type, gender, skip, limit)
     : await getCollection(type, gender, skip, limit);
 
-  const pagination = { total, page, perPage: products.length };
+  const pagination = { total, page, perPage: products?.length || 0 };
   res.status(status).json({ pagination, products, message });
 }
 
-async function httpsGetCollectionFilters(req, res) {
+async function httpsGetCollectionFilters(
+  req: Request,
+  res: Response
+): Promise<Response> {
   const { type, gender } = req.query;
 
   if (!type) return res.status(400).json({ message: 'type filed is missing' });

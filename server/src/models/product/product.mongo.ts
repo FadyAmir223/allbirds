@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema({
   name: String,
-  handle: String,
+  handle: { type: String, index: true, unique: true },
   price: Number,
   type: String,
   gender: String,
@@ -53,10 +53,10 @@ const productSchema = new mongoose.Schema({
   ],
   reviews: {
     count: Number,
-    rating: Number,
+    rating: { type: Number, min: 1, max: 5 },
     reviews: [
       {
-        score: Number,
+        score: { type: Number, min: 1, max: 5 },
         title: String,
         content: String,
         userId: mongoose.Types.ObjectId,

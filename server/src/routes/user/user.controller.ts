@@ -1,3 +1,5 @@
+import { Request, Response } from 'express';
+
 import {
   addLocation,
   getLocations,
@@ -6,12 +8,15 @@ import {
   getOrders,
 } from '../../models/user/user.model.js';
 
-async function htppsGetLocations(req, res) {
+async function htppsGetLocations(req: Request, res: Response) {
   const { status, message, locations } = await getLocations(req.user._id);
   res.status(status).json({ message, locations });
 }
 
-async function httpsAddLocation(req, res) {
+async function httpsAddLocation(
+  req: Request,
+  res: Response
+): Promise<Response> {
   const { address, city, country, state, phone } = req.body;
 
   if (!(address && city && country && state && phone))
@@ -24,7 +29,10 @@ async function httpsAddLocation(req, res) {
   res.status(status).json({ locations, message });
 }
 
-async function httpsRemoveLocation(req, res) {
+async function httpsRemoveLocation(
+  req: Request,
+  res: Response
+): Promise<Response> {
   const { id } = req.params;
 
   if (!id || id.length !== 24)
@@ -37,7 +45,10 @@ async function httpsRemoveLocation(req, res) {
   res.status(status).json({ locations, message });
 }
 
-async function httpsUpdateLocation(req, res) {
+async function httpsUpdateLocation(
+  req: Request,
+  res: Response
+): Promise<Response> {
   const { id } = req.params;
 
   if (!id || id.length !== 24)
@@ -55,16 +66,16 @@ async function httpsUpdateLocation(req, res) {
   res.status(status).json({ locations, message });
 }
 
-function httpsOrderCart(req, res) {
+function httpsOrderCart(req: Request, res: Response) {
   res.redirect(`/api/cart/orders?userId=${req.user._id}`);
 }
 
-async function httpsGetOrders(req, res) {
+async function httpsGetOrders(req: Request, res: Response) {
   const { status, orders, message } = await getOrders(req.user._id);
   res.status(status).json({ orders, message });
 }
 
-async function httpsGetOrderHistory(req, res) {
+async function httpsGetOrderHistory(req: Request, res: Response) {
   const { status, orders, message } = await getOrders(req.user._id, true);
   res.status(status).json({ orders, message });
 }

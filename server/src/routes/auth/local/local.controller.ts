@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import passport from 'passport';
 import { Strategy } from 'passport-local';
 import bcrypt from 'bcrypt';
@@ -15,7 +16,7 @@ import {
 } from '../../../config/rateLimitConfig.js';
 import { deviceIdSessionConfig } from '../../../config/auth.session.js';
 
-async function httpsSignup(req, res) {
+async function httpsSignup(req: Request, res: Response): Promise<Response> {
   const { firstName, lastName, password, confirmPassword } = req.body;
   let email = req.body.email.toLowerCase();
 

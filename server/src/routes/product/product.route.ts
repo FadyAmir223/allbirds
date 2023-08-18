@@ -10,12 +10,12 @@ import needAuth from '../../middlewares/needAuth.js';
 
 const productRoute = express.Router();
 
-productRoute.get('/:id', httpsGetProduct);
-productRoute.get('/:id/reviews', httpsGetReviews);
+productRoute.get('/:handle', httpsGetProduct);
+productRoute.get('/:handle/reviews', httpsGetReviews);
 
 productRoute.use(needAuth);
 
-productRoute.post('/:id/review', httpsAddReview);
-productRoute.delete('/:id/review/:reviewId', httpsRemoveReview);
+productRoute.post('/:handle/review', httpsAddReview);
+productRoute.delete('/:handle/review/:reviewId', httpsRemoveReview);
 
 export default productRoute;
