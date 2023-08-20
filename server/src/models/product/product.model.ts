@@ -1,5 +1,5 @@
 import Product from './product.mongo.js';
-import products from '../../data/allbirds.json' assert { type: 'json' };
+import products from '../../data/allbirds.json'; // assert { type: 'json' };
 import User from '../user/user.mongo.js';
 import { IS_PRODUCTION } from '../../utils/loadEnv.js';
 

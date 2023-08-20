@@ -16,12 +16,13 @@ const jestConfig: JestConfigWithTsJest = {
       },
     ],
   },
-  coverageReporters: ['text', 'html'],
-  coverageDirectory: '<rootDir>/coverage/',
   testEnvironment: 'node',
   testMatch: ['<rootDir>/src/**/*.test.ts'],
-  globalSetup: '<rootDir>/dist/test/setup.js',
-  globalTeardown: '<rootDir>/dist/test/teardown.js',
+  globalSetup: '<rootDir>/src/test/globalSetup.ts',
+  globalTeardown: '<rootDir>/src/test/globalTeardown.ts',
+  setupFilesAfterEnv: ['<rootDir>/src/test/setupFile.ts'],
+  coverageReporters: ['text', 'html'],
+  coverageDirectory: '<rootDir>/coverage',
 };
 
 export default jestConfig;

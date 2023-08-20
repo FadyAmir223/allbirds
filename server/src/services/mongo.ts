@@ -15,9 +15,9 @@ mongoose.connection.on('error', (err) => {
   console.error(err);
 });
 
-const mongoConnect = async () => {
+const mongoConnect = async (dbUrl: string = DB_URL) => {
   try {
-    await mongoose.connect(DB_URL);
+    if (mongoose.connection.readyState !== 1) await mongoose.connect(dbUrl);
   } catch (err) {
     console.log(err);
   }
@@ -25,7 +25,7 @@ const mongoConnect = async () => {
 
 const mongoDisconnect = async () => {
   try {
-    await mongoose.disconnect();
+    if (mongoose.connection.readyState !== 0) await mongoose.disconnect();
   } catch (err) {
     console.log(err);
   }
