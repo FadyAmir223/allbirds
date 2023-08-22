@@ -1,12 +1,19 @@
+import fs from 'fs';
+import path from 'path';
+
 import Product from './product.mongo.js';
-import products from '../../data/allbirds.json'; // assert { type: 'json' };
 import User from '../user/user.mongo.js';
-import { IS_PRODUCTION } from '../../utils/loadEnv.js';
+import { IS_PRODUCTION, __dirname } from '../../utils/loadEnv.js';
+// import products from '../../data/allbirds.json' assert { type: 'json' };
 
 async function saveProducts() {
   try {
     const count = await Product.countDocuments();
     if (count !== 0) return;
+
+    const filePath = path.join(__dirname, '../../data/allbirds.json');
+    const jsonData = fs.readFileSync(filePath, { encoding: 'utf8', flag: 'r' });
+    const products = JSON.parse(jsonData);
 
     await Product.bulkWrite(
       products.map((product) => ({
@@ -534,16 +541,20 @@ async function addCartItem(items, { handle, editionId, size }) {
 
     if (existingItem) existingItem.amount++;
     else {
-      const productExists = await Product.findOne(
+      const product = await Product.findOne(
         { handle, 'editions.products.id': editionId },
-        '-_id handle sizes'
+        '-_id editions.products.$'
       ).lean();
 
-      if (!productExists)
-        return { status: 404, message: "prdouct doesn't exist" };
+      if (!product) return { status: 404, message: "prdouct doesn't exist" };
 
-      if (!productExists.sizes.includes(size))
-        return { status: 404, message: 'this size is soldout' };
+      for (const _editions of product.editions)
+        for (const _producst of _editions.products)
+          if (
+            _producst.id === editionId &&
+            _producst.sizesSoldOut.includes(size)
+          )
+            return { status: 404, message: 'this size is soldout' };
 
       items.push({ handle, editionId, size, amount: 1 });
     }
@@ -566,7 +577,7 @@ async function addCartItem(items, { handle, editionId, size }) {
 
 async function removeCartItem(items, { editionId, size }, _delete = false) {
   try {
-    if (items?.length === 0)
+    if (!items || items?.length === 0)
       return { status: 404, message: 'no items in cart' };
 
     let matchedItem, matchedIdx;

@@ -187,9 +187,6 @@ async function orderCart(userId, items) {
   try {
     const { cart } = await getCart(items);
 
-    if (items.length !== cart?.length)
-      return { status: 401, message: 'invalid product in cart' };
-
     const soldOutItems = cart
       .filter(({ soldOut }) => soldOut)
       .map(({ name, colorName }) => `${name} - ${colorName}`);
@@ -272,11 +269,11 @@ async function verifyUser(verifyToken) {
     );
 
     const verified = acknowledged && modifiedCount !== 0;
-    const message = verified
-      ? 'email has been verified'
-      : 'invalid verification token';
+    const res = verified
+      ? { status: 200, message: 'email has been verified' }
+      : { status: 401, message: 'invalid verification token' };
 
-    return { status: 200, verified, message };
+    return { ...res, verified };
   } catch {
     return { status: 500, verified: false, message: 'unable to verify' };
   }
@@ -339,7 +336,6 @@ async function resetPassword(uid, token, password) {
   try {
     const user = await User.findById(uid, 'resetPassword');
     const { token: hashToken, expireDate } = user?.resetPassword;
-
     const tokenMatch = await bcrypt.compare(token, hashToken);
 
     const min_5 = Date.now() - 5 * 60 * 1000;

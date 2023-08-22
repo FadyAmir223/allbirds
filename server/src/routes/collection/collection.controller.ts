@@ -29,7 +29,7 @@ async function getACollection(req, res, isSale = false) {
   const { skip, limit, page } = getPagination(req.query);
   const { type, gender } = req.query;
 
-  if (!type) return res.status(400).json({ message: 'type field is empty' });
+  if (!type) return res.status(400).json({ message: 'type field is missing' });
 
   const { status, products, total, message } = isSale
     ? await getCollectionSale(type, gender, skip, limit)
@@ -45,7 +45,7 @@ async function httpsGetCollectionFilters(
 ): Promise<Response> {
   const { type, gender } = req.query;
 
-  if (!type) return res.status(400).json({ message: 'type filed is missing' });
+  if (!type) return res.status(400).json({ message: 'type field is missing' });
 
   const { status, filters, message } = await getCollectionFilters(type, gender);
   res.status(status).json({ filters, message });

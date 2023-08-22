@@ -1,6 +1,6 @@
 {
   "memory": true,
-  "iP": "127.0.0.1",
+  "ip": "127.0.0.1",
   "port": "27017",
-  "database": "allbirds-test"
+  "database": "allbirds"
 }

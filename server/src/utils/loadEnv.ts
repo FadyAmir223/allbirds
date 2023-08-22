@@ -1,5 +1,5 @@
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import url from 'url';
+import path from 'path';
 import dotenv from 'dotenv';
 
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
@@ -18,8 +18,8 @@ export const {
 } = process.env;
 
 dotenv.config({
-  path: join(
-    dirname(fileURLToPath(import.meta.url)),
+  path: path.join(
+    path.dirname(url.fileURLToPath(import.meta.url)),
     '..',
     '..',
     IS_PRODUCTION ? '.env.production' : '.env.development'
@@ -27,6 +27,7 @@ dotenv.config({
 });
 
 export const {
+  NODE_ENV,
   CLIENT_DOMAIN,
   CLIENT_PORT,
   SERVER_DOMAIN,
@@ -38,3 +39,5 @@ const CLIENT_URL = CLIENT_DOMAIN + (CLIENT_PORT ? ':' + CLIENT_PORT : '');
 const SERVER_URL = SERVER_DOMAIN + (SERVER_PORT ? ':' + SERVER_PORT : '');
 
 export { IS_PRODUCTION, CLIENT_URL, SERVER_URL };
+
+export const __dirname = path.dirname(url.fileURLToPath(import.meta.url));

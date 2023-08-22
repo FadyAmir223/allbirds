@@ -14,12 +14,20 @@ async function httpsGetCart(req: Request, res: Response) {
 }
 
 async function httpsAddCartItem(req: Request, res: Response) {
+  const { handle, editionId, size } = req.body;
+
+  if (!(handle && editionId && size))
+    return res.status(400).json({ message: 'some fields are empty' });
+
   const { items } = req.session;
+
   const { status, newItems, cart, message } = await addCartItem(
     items,
     req.body
   );
+
   if (newItems) req.session.items = newItems;
+
   res.status(status).json({ cart, message });
 }
 
@@ -33,6 +41,12 @@ async function httpsDeleteCartItem(req: Request, res: Response) {
 
 async function httpsDecrementCartItem(req, res, _delete?) {
   const { items } = req.session;
+
+  const { editionId, size } = req.body;
+
+  if (!(editionId && size))
+    return res.status(400).json({ message: 'some fields are empty' });
+
   const { status, newItems, cart, message } = await removeCartItem(
     items,
     req.body,
@@ -43,10 +57,12 @@ async function httpsDecrementCartItem(req, res, _delete?) {
 }
 
 async function httpsOrderCart(req: Request, res: Response): Promise<Response> {
-  const { userId } = req.query;
+  // const { userId } = req.query;
+  const userId = JSON.parse(atob(req.cookies.user)).passport.user;
+
   const { items } = req.session;
 
-  if (items && items?.length === 0)
+  if (!items || items?.length === 0)
     return res.status(400).json({ message: 'there is no items to purchase' });
 
   const { status, orders, message } = await orderCart(userId, items);

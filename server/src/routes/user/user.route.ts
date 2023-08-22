@@ -24,8 +24,8 @@ userRoute.use('/locations', locationRoute);
 
 const orderRoute = express.Router();
 orderRoute.get('/', httpsGetOrders);
-orderRoute.get('/history', httpsGetOrderHistory);
 orderRoute.post('/', httpsOrderCart);
+orderRoute.get('/history', httpsGetOrderHistory);
 userRoute.use('/orders', orderRoute);
 
 export default userRoute;

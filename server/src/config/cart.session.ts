@@ -1,4 +1,5 @@
-import serverSession from 'express-session';
+import session from 'express-session';
+import createMemoryStore from 'memorystore';
 import mongoStore from 'connect-mongo';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,26 +8,32 @@ import {
   SESSION_KEY_1,
   SESSION_KEY_2,
   IS_PRODUCTION,
-  CLIENT_URL,
+  NODE_ENV,
 } from '../utils/loadEnv.js';
 import { dbName } from '../services/mongo.js';
 
-const options = {
-  mongoUrl: MONGO_URL,
-  dbName,
-  collectionName: 'carts',
-};
+let store;
 
-// if (!IS_PRODUCTION) options['domain'] = CLIENT_URL;
+if (NODE_ENV === 'test') {
+  const MemoryStore = createMemoryStore(session);
+  store = new MemoryStore({
+    checkPeriod: 1000 * 60 * 5,
+  });
+} else
+  store = mongoStore.create({
+    mongoUrl: MONGO_URL,
+    dbName,
+    collectionName: 'carts',
+  });
 
-const cartSession = serverSession({
+const cartSession = session({
   genid: () => uuidv4(),
   name: 'cart',
   secret: [SESSION_KEY_1, SESSION_KEY_2],
   resave: true,
   rolling: true,
   saveUninitialized: false,
-  store: mongoStore.create(options),
+  store,
   cookie: {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     secure: IS_PRODUCTION,

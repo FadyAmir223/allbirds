@@ -8,21 +8,24 @@ import {
 } from '../../models/user/user.model.js';
 import { isPasswordComplex } from '../../utils/authProtection.js';
 
-async function htppsLogout(req: Request, res: Response): Promise<Response> {
-  try {
-    await req.logout();
-    res.status(200).json({ logout: true });
-  } catch (err) {
-    return res
-      .status(500)
-      .json({ logout: false, message: 'error during logout' });
-  }
+async function htppsLogout(req: Request, res: Response) {
+  req.logout(function (err) {
+    if (err)
+      return res
+        .status(500)
+        .json({ logout: false, message: 'error during logout' });
+
+    return res.status(200).json({ logout: true });
+    // return res.status(302).redirect(CLIENT_URL);
+  });
 }
 
 async function httpsVerifyUser(req: Request, res: Response): Promise<Response> {
   const { verifyToken } = req.params;
+
   if (verifyToken.length !== 36)
     return res.status(400).json({ message: 'invalid verification id' });
+
   const { status, message, verified } = await verifyUser(verifyToken);
   res.status(status).json({ verified, message });
 }
@@ -44,7 +47,7 @@ async function httpsVerifyResetToken(
 ): Promise<Response> {
   const { uid, token } = req.body;
   if (!(uid && token))
-    return res.status(400).json({ message: 'some fields are empty' });
+    return res.status(400).json({ message: 'some fields not provided' });
 
   const { status, verified } = await verifyResetToken(uid, token);
   res.status(status).json({ verified });

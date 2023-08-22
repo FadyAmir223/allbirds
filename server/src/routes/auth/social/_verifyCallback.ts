@@ -33,7 +33,7 @@ async function socialCallback(req: Request, res: Response) {
   }
   await addUserSecurity(req.user.id, userAgent, deviceId);
 
-  // res.status(200).redirect(CLIENT_URL);
+  // res.status(302).redirect(CLIENT_URL);
   res.status(200).json({ login: true });
 }
 
