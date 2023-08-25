@@ -1,19 +1,15 @@
 import request from 'supertest';
 
 import app from '../../app.js';
+import { server } from '../../test/test.utils.js';
+import {
+  product,
+  productSoldOut,
+  productToRemove,
+  product_2nd,
+} from '../../test/test.data.js';
 
 describe('/cart', () => {
-  const server = request(app);
-
-  const product = {
-    handle: 'mens-tree-runners',
-    editionId: 6660112482384,
-    size: '9',
-  };
-  const product_2nd = { ...product, size: '10' };
-  const productSoldOut = { ...product, size: '8' };
-  const productToRemove = { editionId: product.editionId, size: product.size };
-
   describe('GET /', () => {
     test('empty cart', async () => {
       await server

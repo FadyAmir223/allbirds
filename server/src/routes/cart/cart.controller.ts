@@ -6,6 +6,7 @@ import {
   removeCartItem,
 } from '../../models/product/product.model.js';
 import { orderCart } from '../../models/user/user.model.js';
+import { NODE_ENV } from '../../utils/loadEnv.js';
 
 async function httpsGetCart(req: Request, res: Response) {
   const { items } = req.session;
@@ -57,8 +58,12 @@ async function httpsDecrementCartItem(req, res, _delete?) {
 }
 
 async function httpsOrderCart(req: Request, res: Response): Promise<Response> {
-  // const { userId } = req.query;
-  const userId = JSON.parse(atob(req.cookies.user)).passport.user;
+  let { userId } = req.query;
+
+  if (NODE_ENV === 'test')
+    userId = JSON.parse(
+      Buffer.from(req.cookies?.user || '', 'base64').toString('utf8')
+    ).passport.user;
 
   const { items } = req.session;
 

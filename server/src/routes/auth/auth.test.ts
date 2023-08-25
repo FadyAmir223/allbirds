@@ -3,23 +3,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 import app from '../../app.js';
 import User from '../../models/user/user.mongo.js';
+import { server } from '../../test/test.utils.js';
+import { loginData, userData } from '../../test/test.data.js';
 
 describe('/auth', () => {
-  const userData = {
-    firstName: 'fady',
-    lastName: 'amir',
-    email: 'fadyamir23@gmail.com',
-    password: 'P@ssw0rd',
-    confirmPassword: 'P@ssw0rd',
-  };
-
-  const loginData = {
-    username: userData.email,
-    password: userData.password,
-  };
-
-  const server = request(app);
-
   beforeAll(async () => {
     await server.post('/api/auth/local/signup').send(userData);
   });

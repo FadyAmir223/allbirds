@@ -247,16 +247,30 @@ async function orderCart(userId, items) {
 
 async function getOrders(userId, history = false) {
   try {
-    const filter = history ? { 'orders.delivered': true } : {};
+    const filter = history
+      ? {
+          $filter: {
+            input: '$orders',
+            as: 'order',
+            cond: { $eq: ['$$order.delivered', true] },
+          },
+        }
+      : 1;
 
-    const user = await User.findOne(
-      { _id: userId, ...filter },
-      'orders'
-    ).lean();
+    const user = await User.aggregate([
+      { $match: { _id: userId } },
+      {
+        $project: {
+          orders: filter,
+        },
+      },
+    ]);
 
-    const orders = user?.orders ? user.orders : [];
+    const orders = user[0]?.orders || [];
     return { status: 200, orders };
-  } catch {
+  } catch (err) {
+    console.log(err);
+
     return { status: 500, message: 'unable to get orders' };
   }
 }

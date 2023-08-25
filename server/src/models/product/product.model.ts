@@ -1,9 +1,11 @@
 import fs from 'fs';
 import path from 'path';
+import Filter from 'bad-words';
 
 import Product from './product.mongo.js';
 import User from '../user/user.mongo.js';
 import { IS_PRODUCTION, __dirname } from '../../utils/loadEnv.js';
+import mongoose from 'mongoose';
 // import products from '../../data/allbirds.json' assert { type: 'json' };
 
 async function saveProducts() {
@@ -347,11 +349,13 @@ async function getReviews(handle, skip = 0, limit = 3, page = 1) {
 async function addReview(handle, review, user) {
   try {
     let { _id: userId, username, verified: verifiedBuyer } = user;
-    const { score, title, content, customFields } = review;
+    const { score, customFields } = review;
+    let { title, content } = review;
 
     let sizePurchased;
     for (const field of customFields)
-      if (field?.title === 'Size Purchased') sizePurchased = field.value;
+      if (field?.title.toLowerCase() === 'size purchased')
+        sizePurchased = field.value;
 
     if (!sizePurchased)
       return { status: 400, message: 'missing size purchased field' };
@@ -377,7 +381,11 @@ async function addReview(handle, review, user) {
     //   return { status: 400, message: "your order hasn't been delivered yet" };
 
     if (reviewed)
-      return { status: 400, message: 'you have been reviewed this product' };
+      return { status: 400, message: 'you already have reviewed this product' };
+
+    const filter = new Filter();
+    title = filter.clean(title);
+    content = filter.clean(content);
 
     let [first, last] = _user.username.split(' ');
     first = first[0].toUpperCase() + first.slice(1);
@@ -415,16 +423,13 @@ async function addReview(handle, review, user) {
 
     if (!productAcknowledged) throw new Error();
 
-    const { acknowledged: userAcknowledged } = await User.updateOne(
-      {
-        _id: user.id,
-        'orders.handle': handle,
-        'orders.size': sizePurchased,
-      },
-      { $set: { 'orders.$.reviewed': true } }
-    );
+    const userToUpdate = await User.findById(user._id, 'orders');
 
-    if (!userAcknowledged) throw new Error();
+    for (const order of userToUpdate.orders)
+      if (order.handle === handle && order.size === sizePurchased)
+        order.reviewed = true;
+
+    userToUpdate.save();
 
     const { status, pagination, rating, reviews, message } = await getReviews(
       handle
@@ -445,11 +450,10 @@ async function addReview(handle, review, user) {
 async function removeReview(handle, reviewId, userId) {
   try {
     // TODO: calculate new rating after removing review
-    // check if reveiw id exists
 
     const newRating = await getNewRating(handle);
 
-    const { acknowledged } = await Product.updateOne(
+    const { acknowledged, modifiedCount } = await Product.updateOne(
       {
         handle,
         'reviews.reviews._id': reviewId,
@@ -464,8 +468,14 @@ async function removeReview(handle, reviewId, userId) {
 
     if (!acknowledged) throw new Error();
 
-    const reviews = await getReviews(handle);
-    return { status: 200, reviews };
+    if (modifiedCount === 0)
+      return { status: 400, message: 'invalid review id' };
+
+    const { status, pagination, rating, reviews, message } = await getReviews(
+      handle
+    );
+
+    return { status, pagination, rating, reviews, message };
   } catch {
     return { status: 500, message: 'unable to remove reivew' };
   }

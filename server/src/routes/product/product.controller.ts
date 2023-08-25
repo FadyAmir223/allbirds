@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import Filter from 'bad-words';
 
 import {
   getProduct,
@@ -51,10 +50,6 @@ async function httpsAddReview(req: Request, res: Response): Promise<Response> {
   if (!(score === Number.parseInt(score) && score >= 1 && score <= 5))
     return res.status(400).json({ message: 'invalid rating' });
 
-  const filter = new Filter();
-  req.body.title = filter.clean(title);
-  req.body.content = filter.clean(content);
-
   const { status, pagination, rating, reviews, message } = await addReview(
     handle,
     req.body,
@@ -69,15 +64,16 @@ async function httpsRemoveReview(
 ): Promise<Response> {
   const { handle, reviewId } = req.params;
 
-  if (!reviewId || reviewId.length !== 24)
+  if (reviewId.length !== 24)
     return res.status(400).json({ message: 'invalid review id' });
 
-  const { status, reviews, message } = await removeReview(
+  const { status, pagination, rating, reviews, message } = await removeReview(
     handle,
     reviewId,
     req.user._id
   );
-  res.status(status).json({ reviews, message });
+
+  res.status(status).json({ pagination, rating, reviews, message });
 }
 
 export { httpsGetProduct, httpsGetReviews, httpsAddReview, httpsRemoveReview };

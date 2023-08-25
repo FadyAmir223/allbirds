@@ -20,7 +20,7 @@ async function httpsAddLocation(
   const { address, city, country, state, phone } = req.body;
 
   if (!(address && city && country && state && phone))
-    return res.status(400).json({ message: 'missing some filds' });
+    return res.status(400).json({ message: 'some fields are missing' });
 
   const { status, locations, message } = await addLocation(
     req.user._id,
@@ -50,17 +50,18 @@ async function httpsUpdateLocation(
   res: Response
 ): Promise<Response> {
   const { id } = req.params;
+  const { body } = req;
 
   if (!id || id.length !== 24)
     return res.status(400).json({ message: 'invalid location id' });
 
-  if (!req.body)
+  if (Object.values(body).every((value) => value === ''))
     return res.status(400).json({ message: 'no fields to update location' });
 
   const { status, locations, message } = await updateLocation(
     req.user._id,
     req.params,
-    req.body
+    body
   );
 
   res.status(status).json({ locations, message });

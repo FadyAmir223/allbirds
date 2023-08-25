@@ -1,12 +1,8 @@
-import request from 'supertest';
-
-import app from '../../app.js';
+import { server } from '../../test/test.utils.js';
 
 describe('/collections', () => {
-  const server = request(app);
-
   describe('GET /', () => {
-    test('200 status & products', async () => {
+    test('products', async () => {
       const response = await server
         .get('/api/collections?type=shoes&gender=mens&page=2')
         .expect(200)
@@ -20,23 +16,19 @@ describe('/collections', () => {
       expect(response.body.products).toHaveLength(10);
     });
 
-    test('400 status when limit is greater than 50', async () => {
+    test('limit is greater than 50', async () => {
       await server
         .get('/api/collections?type=socks&limit=51')
         .expect(400)
         .expect('Content-Type', /json/)
-
-        .expect({
-          message: 'limit must be less than 50',
-        });
+        .expect({ message: 'limit must be less than 50' });
     });
 
-    test('400 status when type field is missing', async () => {
+    test('type field is missing', async () => {
       const response = await server
         .get('/api/collections')
         .expect(400)
         .expect('Content-Type', /json/)
-
         .expect({ message: 'type field is missing' });
     });
 
