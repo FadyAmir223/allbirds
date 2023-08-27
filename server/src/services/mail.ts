@@ -20,7 +20,7 @@ ${content}
     const sender = EMAIL_SENDER;
     const options = { from: sender, to: receiver.email, subject, html };
 
-    let transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: { user: sender, pass: EMAIL_APP_PASSWORD },
       tls: { rejectUnauthorized: false },

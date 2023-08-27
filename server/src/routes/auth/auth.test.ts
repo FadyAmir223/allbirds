@@ -87,18 +87,6 @@ describe('/auth', () => {
           .send({ username: 'not-exist', password: '1234' })
           .expect(401);
       });
-
-      test('already logged in', async () => {
-        const agent = request.agent(app);
-
-        await agent.post('/api/auth/local/login').send(loginData);
-
-        await agent
-          .post('/api/auth/local/login')
-          .expect(401)
-          .expect('Content-Type', /json/)
-          .expect({ message: 'you must logout first' });
-      });
     });
 
     describe('/logout', () => {

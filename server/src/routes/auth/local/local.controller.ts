@@ -18,7 +18,7 @@ import { deviceIdSessionConfig } from '../../../config/auth.session.js';
 
 async function httpsSignup(req: Request, res: Response): Promise<Response> {
   const { firstName, lastName, password, confirmPassword } = req.body;
-  let email = req.body.email.toLowerCase();
+  const email = req.body.email?.toLowerCase();
 
   if (!(firstName && lastName && email && password && confirmPassword))
     return res.status(400).json({ message: 'some fields are empty' });
@@ -61,10 +61,10 @@ async function httpsSignup(req: Request, res: Response): Promise<Response> {
 passport.use(
   new Strategy(async (email_ip_isDeviceTrusted, password, done) => {
     try {
-      let [email, ip, isDeviceTrusted] = email_ip_isDeviceTrusted.split('---');
+      const [email, ip, isDeviceTrusted] =
+        email_ip_isDeviceTrusted.split('---');
       const email_ip = email + '---' + ip;
 
-      email = email.toLowerCase();
       const user = await getLocalUser(email);
 
       if (!user) return done(null, false);
@@ -82,14 +82,14 @@ passport.use(
             );
 
           await Promise.all(promises);
-        } finally {
+        } catch {
           return done(null, false);
         }
 
       try {
         await loginRateLimit_IP_Email.delete(email_ip);
       } finally {
-        return done(null, user);
+        done(null, user);
       }
     } catch (err) {
       return done(err);

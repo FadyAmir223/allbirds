@@ -2,7 +2,8 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import config from './config.db.json';
 
-export default async function (globalConfig, projectConfig) {
+// globalConfig, projectConfig
+export default async function () {
   if (config.memory) {
     const instance = await MongoMemoryServer.create();
     const uri = instance.getUri();

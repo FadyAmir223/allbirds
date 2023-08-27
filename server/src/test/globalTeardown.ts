@@ -1,7 +1,8 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import config from './config.db.json';
 
-export default async function (globalConfig, projectConfig) {
+// globalConfig, projectConfig
+export default async function () {
   if (config.memory) {
     const instance: MongoMemoryServer = globalThis.__MONGOINSTANCE;
     await instance.stop();

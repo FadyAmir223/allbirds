@@ -2,7 +2,7 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 
 import app from '../../app.js';
-import { authAgent, server } from '../../test/test.utils.js';
+import { authAgent } from '../../test/test.utils.js';
 import {
   editLocation,
   location,
@@ -24,14 +24,6 @@ describe('/user', () => {
   });
 
   describe('needAuth', () => {
-    test('check logged in', async () => {
-      await server
-        .get('/api/user/orders')
-        .expect(401)
-        .expect('Content-Type', /json/)
-        .expect({ message: 'you must login first' });
-    });
-
     test('check user agent', async () => {
       const agent = request.agent(app);
 

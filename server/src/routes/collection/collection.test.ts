@@ -25,7 +25,7 @@ describe('/collections', () => {
     });
 
     test('type field is missing', async () => {
-      const response = await server
+      await server
         .get('/api/collections')
         .expect(400)
         .expect('Content-Type', /json/)
@@ -65,7 +65,7 @@ describe('/collections', () => {
     });
 
     test('400 status when type field is missing', async () => {
-      const response = await server
+      await server
         .get('/api/collections/filters')
         .expect(400)
         .expect('Content-Type', /json/)

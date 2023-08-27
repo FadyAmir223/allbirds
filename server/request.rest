@@ -1,0 +1,248 @@
+@url = https://localhost:3000
+@product-name = mens-tree-runners
+# collections
+## collection
+### mens
+
+GET {{url}}/api/collections
+  ?type=shoes
+  &gender=mens
+  &pages=1
+  &limit=1
+
+### womens
+
+GET {{url}}/api/collections
+  ?type=shoes
+  &gender=womens
+  &pages=1
+  &limit=1
+
+### socks
+
+GET {{url}}/api/collections
+  ?type=socks
+  &pages=1
+  &limit=1
+
+
+## sale of collection
+### mens
+
+GET {{url}}/api/collections/sale
+  ?type=shoes
+  &gender=mens
+  &page=1
+  &limit=1
+
+### womens
+
+GET {{url}}/api/collections/sale
+  ?type=shoes
+  &gender=womens
+
+
+## filters of collection
+### mens
+
+GET {{url}}/api/collections/filters
+  ?type=shoes
+  &gender=mens
+
+### womens
+
+GET {{url}}/api/collections/filters
+  ?type=shoes
+  &gender=womens
+
+### socks
+
+GET {{url}}/api/collections/filters
+  ?type=socks
+
+
+# products
+### product
+
+GET {{url}}/api/products/{{product-name}}
+
+### product reviews
+
+GET {{url}}/api/products/{{product-name}}/reviews
+  ?page=1
+  &limit=1
+
+### add review
+
+POST {{url}}/api/products/{{product-name}}/reviews
+
+{
+  "score": 1,
+  "title": "fucking amazing",
+  "content": "the best in this sh1t world",
+  "customFields": [
+    { "title": "Typical Size", "value": "10" },
+    { "title": "Typical Width", "value": "Average" },
+    { "title": "Size Purchased", "value": "10" },
+    { "title": "Overall Fit", "value": "Just Right" },
+    { "title": "Activity Level", "value": "Walking, Traveling" }
+  ]
+}
+
+### remove review
+
+DELETE {{url}}/api/products/{{product-name}}/reviews/64e8d7a67425bfaeab10edf2
+
+# cart
+### cart
+
+GET {{url}}/api/cart
+
+### add cart itme
+
+POST {{url}}/api/cart/add
+
+{
+    "handle": "mens-tree-runners",
+    "editionId": 6660112482384,
+    "size": "10"
+}
+
+### remove cart item
+
+DELETE {{url}}/api/cart/remove
+
+{
+    "editionId": 6660112482384,
+    "size": "8"
+}
+
+### delete cart item
+
+DELETE {{url}}/api/cart/delete
+
+{
+    "editionId": 6660112482384,
+    "size": "8"
+}
+
+
+# auth
+### logout
+
+POST {{url}}/api/auth/logout
+
+
+## local
+### signup
+
+POST {{url}}/api/auth/local/signup
+
+{
+  "firstName": "fady",
+  "lastName": "amir",
+  "email": "fadyamir223@gmail.com",
+  "password": "P@ssw0rd",
+  "confirmPassword": "P@ssw0rd"
+}
+
+### login
+
+POST {{url}}/api/auth/local/login
+
+{
+  "username": "fadyamir223@gmail.com",
+  "password": "P@ssw0rd"
+}
+
+### verify email
+
+GET {{url}}/api/auth/verify/8f6d9ceb-18d6-4ea7-a703-21e64fc6208b
+
+
+## social
+### google
+
+GET {{url}}/api/auth/google
+
+### facebook
+
+GET {{url}}/api/auth/facebook
+
+
+## reset password
+### request reset password
+
+POST {{url}}/api/auth/password/request-reset-token
+
+{
+	"email": "fadyamir223@gmail.com"
+}
+
+### verify reset token
+
+POST {{url}}/api/auth/password/verify-reset-token
+
+{
+	"uid": "64d2919711e74406580f91ac",
+	"token": "adaf95fb-3523-4d0d-8f06-0b91116626eb"
+}
+
+### reset password
+
+POST {{url}}/api/auth/password/reset
+
+{
+	"uid": "64e40805ea45dc2092aeb3e4",
+	"token": "adaf95fb-3523-4d0d-8f06-0b91116626eb",
+	"password": "P@ssw0rd",
+	"confirmPassword": "P@ssw0rd"
+}
+
+# user
+## locations
+### location
+
+GET {{url}}/api/user/locations
+
+### add location
+
+POST {{url}}/api/user/locations
+
+{
+  "company": "company",
+  "address": "123 street",
+  "city": "city",
+  "country": "country",
+  "state": "state",
+  "zipCode": 12345,
+  "phone": "1111"
+}
+
+### remove location
+
+DELETE {{url}}/api/user/locations/64e74175a9a33f6697e1f38e
+
+### edit location
+
+PATCH {{url}}/api/user/locations/64e7417aa9a33f6697e1f391
+
+{
+  "state": "ctatfonia",
+  "zipCode": 9876,
+  "phone": "5555"
+}
+
+
+## orders
+###
+
+GET {{url}}/api/user/orders
+
+### order history
+
+GET {{url}}/api/user/orders/history
+
+### make order - bug: fix POST -> GET
+
+POST {{url}}/api/user/orders/x

@@ -4,8 +4,7 @@ import Filter from 'bad-words';
 
 import Product from './product.mongo.js';
 import User from '../user/user.mongo.js';
-import { IS_PRODUCTION, __dirname } from '../../utils/loadEnv.js';
-import mongoose from 'mongoose';
+import { __dirname } from '../../utils/loadEnv.js';
 // import products from '../../data/allbirds.json' assert { type: 'json' };
 
 async function saveProducts() {
@@ -348,7 +347,8 @@ async function getReviews(handle, skip = 0, limit = 3, page = 1) {
 
 async function addReview(handle, review, user) {
   try {
-    let { _id: userId, username, verified: verifiedBuyer } = user;
+    const { _id: userId, verified: verifiedBuyer } = user;
+    let { username } = user;
     const { score, customFields } = review;
     let { title, content } = review;
 
@@ -375,7 +375,7 @@ async function addReview(handle, review, user) {
         message: "you didn't order this size of the product",
       };
 
-    const [{ delivered, reviewed }] = _user.orders;
+    const [{ /* delivered, */ reviewed }] = _user.orders;
 
     // if (IS_PRODUCTION && !delivered)
     //   return { status: 400, message: "your order hasn't been delivered yet" };

@@ -21,8 +21,8 @@ const jestConfig: JestConfigWithTsJest = {
   globalSetup: '<rootDir>/src/test/globalSetup.ts',
   globalTeardown: '<rootDir>/src/test/globalTeardown.ts',
   setupFilesAfterEnv: ['<rootDir>/src/test/setupFile.ts'],
-  coverageReporters: ['text', 'html'],
   coverageDirectory: '<rootDir>/coverage',
+  coverageReporters: ['html'],
 };
 
 export default jestConfig;

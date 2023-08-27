@@ -21,16 +21,16 @@ app.use(
   })
 );
 
-// app.use(
-//   helmet({
-//     contentSecurityPolicy: {
-//       directives: {
-//         'default-src': ["'self'"],
-//         'img-src': ["'self'", 'blob:'], // blob: upload & *: other sites
-//       },
-//     },
-//   })
-// );
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        'default-src': ["'self'"],
+        'img-src': ["'self'", 'blob:'], // blob: upload & *: other sites
+      },
+    },
+  })
+);
 
 app.use(express.json());
 

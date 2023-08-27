@@ -42,7 +42,7 @@ async function httpsAddReview(req: Request, res: Response): Promise<Response> {
       .status(401)
       .json({ message: 'you must verify your account first' });
 
-  let { score, title, content, customFields } = req.body;
+  const { score, title, content, customFields } = req.body;
 
   if (!(score && title && content && customFields))
     return res.status(400).json({ message: 'some fields are empty' });

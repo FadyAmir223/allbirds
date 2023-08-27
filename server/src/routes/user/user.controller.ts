@@ -7,6 +7,7 @@ import {
   updateLocation,
   getOrders,
 } from '../../models/user/user.model.js';
+import { SERVER_URL } from '../../utils/loadEnv.js';
 
 async function htppsGetLocations(req: Request, res: Response) {
   const { status, message, locations } = await getLocations(req.user._id);
@@ -68,7 +69,7 @@ async function httpsUpdateLocation(
 }
 
 function httpsOrderCart(req: Request, res: Response) {
-  res.redirect(`/api/cart/orders?userId=${req.user._id}`);
+  res.redirect(`${SERVER_URL}/api/cart/orders?userId=${req.user._id}`);
 }
 
 async function httpsGetOrders(req: Request, res: Response) {

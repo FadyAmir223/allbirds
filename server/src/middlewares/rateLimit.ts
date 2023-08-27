@@ -36,7 +36,11 @@ async function resetPasswordRateLimitMiddleware(req, res, next) {
 
 async function loginRateLimitMiddleware(req, res, next) {
   try {
-    const email = req.body.username;
+    const { username, password } = req.body;
+    if (!(username && password))
+      return { status: 400, message: 'username or password are missing' };
+
+    const email = username.toLowerCase();
     const { ip } = req;
     const email_ip = req.body.username + '---' + ip;
 

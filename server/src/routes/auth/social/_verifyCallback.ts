@@ -6,7 +6,6 @@ import {
   createSocialUser,
 } from '../../../models/user/user.model.js';
 import { v4 as uuidv4 } from 'uuid';
-import { CLIENT_URL } from '../../../utils/loadEnv.js';
 
 async function verifyCallback(accessToken, refreshToken, profile, done) {
   const { displayName, provider } = profile;

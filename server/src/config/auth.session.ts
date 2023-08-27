@@ -3,7 +3,7 @@ import {
   IS_PRODUCTION,
   SESSION_KEY_1,
   SESSION_KEY_2,
-  CLIENT_DOMAIN,
+  // CLIENT_DOMAIN,
 } from '../utils/loadEnv.js';
 
 const userSessionConfig = {

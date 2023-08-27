@@ -6,7 +6,6 @@ import User from './user.mongo.js';
 import { getCart } from '../product/product.model.js';
 import { mailResetPassword, mailVerifyAccount } from '../../services/mail.js';
 import { CLIENT_URL } from '../../utils/loadEnv.js';
-import { isPasswordComplex } from '../../utils/authProtection.js';
 
 async function getUserById(id) {
   try {
@@ -14,7 +13,9 @@ async function getUserById(id) {
       id,
       'email social role verified security.userAgent'
     ).lean();
-  } catch {}
+  } catch {
+    return {};
+  }
 }
 
 async function getUserByEmail(email) {
@@ -23,7 +24,9 @@ async function getUserByEmail(email) {
       { email },
       'username email password social'
     ).lean();
-  } catch {}
+  } catch {
+    return {};
+  }
 }
 
 async function getLocalUser(_email) {
@@ -36,7 +39,9 @@ async function getLocalUser(_email) {
       'email password'
     );
     return { email, password, id };
-  } catch {}
+  } catch {
+    return {};
+  }
 }
 
 async function createLocalUser(username, email, password, userAgent, deviceId) {
@@ -94,7 +99,9 @@ async function createSocialUser(
     ).lean();
 
     return { id: user._id };
-  } catch {}
+  } catch {
+    return {};
+  }
 }
 
 async function addUserSecurity(userId, userAgent, deviceId) {
@@ -119,7 +126,9 @@ async function updateAccessToken(userId, accessToken) {
     return await User.findByIdAndUpdate(userId, {
       social: { accessToken },
     }).lean();
-  } catch {}
+  } catch {
+    return {};
+  }
 }
 
 async function getLocations(userId) {
@@ -349,7 +358,10 @@ async function verifyResetToken(uid, token) {
 async function resetPassword(uid, token, password) {
   try {
     const user = await User.findById(uid, 'resetPassword');
-    const { token: hashToken, expireDate } = user?.resetPassword;
+
+    if (!user) return { status: 404, message: 'user not found' };
+
+    const { token: hashToken, expireDate } = user.resetPassword;
     const tokenMatch = await bcrypt.compare(token, hashToken);
 
     const min_5 = Date.now() - 5 * 60 * 1000;
@@ -391,7 +403,9 @@ async function getUserTrustedDevices(email) {
       security: { trustedDevices },
     } = await User.findOne({ email }, 'security.trustedDevices').lean();
     return trustedDevices;
-  } catch {}
+  } catch {
+    return [];
+  }
 }
 
 export {
