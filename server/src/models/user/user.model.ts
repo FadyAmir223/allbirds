@@ -14,7 +14,7 @@ async function getUserById(id) {
       'email social role verified security.userAgent'
     ).lean();
   } catch {
-    return {};
+    return null;
   }
 }
 
@@ -25,7 +25,7 @@ async function getUserByEmail(email) {
       'username email password social'
     ).lean();
   } catch {
-    return {};
+    return null;
   }
 }
 
@@ -40,7 +40,7 @@ async function getLocalUser(_email) {
     );
     return { email, password, id };
   } catch {
-    return {};
+    return null;
   }
 }
 
@@ -100,7 +100,7 @@ async function createSocialUser(
 
     return { id: user._id };
   } catch {
-    return {};
+    return null;
   }
 }
 
@@ -127,7 +127,7 @@ async function updateAccessToken(userId, accessToken) {
       social: { accessToken },
     }).lean();
   } catch {
-    return {};
+    return null;
   }
 }
 

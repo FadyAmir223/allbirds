@@ -132,7 +132,6 @@ DELETE {{url}}/api/cart/delete
 
 POST {{url}}/api/auth/logout
 
-
 ## local
 ### signup
 
@@ -151,7 +150,7 @@ POST {{url}}/api/auth/local/signup
 POST {{url}}/api/auth/local/login
 
 {
-  "username": "fadyamir223@gmail.com",
+  "username": "fadymir223@gmail.com",
   "password": "P@ssw0rd"
 }
 
@@ -245,4 +244,4 @@ GET {{url}}/api/user/orders/history
 
 ### make order - bug: fix POST -> GET
 
-POST {{url}}/api/user/orders/x
+POST {{url}}/api/user/orders

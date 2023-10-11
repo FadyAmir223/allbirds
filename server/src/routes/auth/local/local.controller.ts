@@ -30,6 +30,7 @@ async function httpsSignup(req: Request, res: Response): Promise<Response> {
     return res.status(400).json({ message: 'password not complex enough' });
 
   const user = await getLocalUser(email);
+
   if (user) return res.status(409).json({ message: 'email already used' });
 
   const username = `${firstName} ${lastName}`;
@@ -82,14 +83,14 @@ passport.use(
             );
 
           await Promise.all(promises);
-        } catch {
+        } finally {
           return done(null, false);
         }
 
       try {
         await loginRateLimit_IP_Email.delete(email_ip);
       } finally {
-        done(null, user);
+        return done(null, user);
       }
     } catch (err) {
       return done(err);

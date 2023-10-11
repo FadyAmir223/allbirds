@@ -37,12 +37,15 @@ async function resetPasswordRateLimitMiddleware(req, res, next) {
 async function loginRateLimitMiddleware(req, res, next) {
   try {
     const { username, password } = req.body;
+
     if (!(username && password))
       return { status: 400, message: 'username or password are missing' };
 
-    const email = username.toLowerCase();
+    const email = req.body.username.toLowerCase();
     const { ip } = req;
-    const email_ip = req.body.username + '---' + ip;
+    const email_ip = email + '---' + ip;
+
+    // console.log('######', email, '######');
 
     const trustedDevices = await getUserTrustedDevices(email);
     const deviceId = req.cookies.deviceId;
