@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { RateLimiterMongo } from 'rate-limiter-flexible';
-import { IS_PRODUCTION } from '../utils/loadEnv.js';
+import { IS_PRODUCTION } from '../config/loadEnv.js';
 
 const storeClient = mongoose.connection;
 

@@ -1,6 +1,8 @@
 {
   "memory": true,
-  "ip": "127.0.0.1",
+  "user": "fezza",
+  "password": "jessy",
+  "dns": "database",
   "port": "27017",
-  "database": "allbirds"
+  "name": "allbirds-test"
 }

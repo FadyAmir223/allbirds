@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '../utils/loadEnv.js';
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '../config/loadEnv.js';
 import { updateAccessToken } from '../models/user/user.model.js';
 
 async function refreshTokenMiddleware(req, res, next) {

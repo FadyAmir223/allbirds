@@ -4,13 +4,13 @@ import mongoStore from 'connect-mongo';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
+  NODE_ENV,
   MONGO_URL,
   SESSION_KEY_1,
   SESSION_KEY_2,
   IS_PRODUCTION,
-  NODE_ENV,
-} from '../utils/loadEnv.js';
-import { dbName } from '../services/mongo.js';
+  DB_NAME,
+} from '../config/loadEnv.js';
 
 let store;
 
@@ -22,7 +22,7 @@ if (NODE_ENV === 'test') {
 } else
   store = mongoStore.create({
     mongoUrl: MONGO_URL,
-    dbName,
+    dbName: DB_NAME,
     collectionName: 'carts',
   });
 

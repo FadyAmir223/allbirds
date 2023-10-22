@@ -1,7 +1,4 @@
-node_modules
-.env*
-key.pem
-cert.pem
-dist
-todo.md
-coverage
+node_modules/
+dist/
+coverage/
+# .env*

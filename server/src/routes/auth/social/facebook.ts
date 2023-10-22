@@ -5,11 +5,11 @@ import passport from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 
 import {
-  CLIENT_URL,
+  CLIENT_DOMAIN,
   FACEBOOK_APP_ID,
   FACEBOOK_APP_SECRET,
   SERVER_URL,
-} from '../../../utils/loadEnv.js';
+} from '../../../config/loadEnv.js';
 import { verifyCallback, socialCallback } from './_verifyCallback.js';
 
 const AUTH_OPTIONS = {
@@ -29,8 +29,8 @@ facebookRoute.get('/', passport.authenticate('facebook'));
 facebookRoute.get(
   '/callback',
   passport.authenticate('facebook', {
-    // successRedirect: CLIENT_URL,
-    failureRedirect: CLIENT_URL + '/login',
+    // successRedirect: CLIENT_DOMAIN,
+    failureRedirect: CLIENT_DOMAIN + '/login',
     session: true,
   }),
   socialCallback

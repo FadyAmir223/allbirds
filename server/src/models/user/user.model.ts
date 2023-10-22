@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import User from './user.mongo.js';
 import { getCart } from '../product/product.model.js';
 import { mailResetPassword, mailVerifyAccount } from '../../services/mail.js';
-import { CLIENT_URL } from '../../utils/loadEnv.js';
+import { CLIENT_DOMAIN } from '../../config/loadEnv.js';
 
 async function getUserById(id) {
   try {
@@ -385,14 +385,14 @@ async function resetPassword(uid, token, password) {
 
 async function sendVerifyEmail(reciver) {
   const token = uuidv4();
-  const verificationUrl = `${CLIENT_URL}/verify?token=${token}`;
+  const verificationUrl = `${CLIENT_DOMAIN}/verify?token=${token}`;
   await mailVerifyAccount(reciver, verificationUrl);
   return token;
 }
 
 async function sendResetPasswordEmail(reciver) {
   const token = uuidv4();
-  const resetUrl = `${CLIENT_URL}/reset-password?uid=${reciver.id}&token=${token}`;
+  const resetUrl = `${CLIENT_DOMAIN}/reset-password?uid=${reciver.id}&token=${token}`;
   await mailResetPassword(reciver, resetUrl);
   return token;
 }

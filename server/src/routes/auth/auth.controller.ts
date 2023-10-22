@@ -16,7 +16,7 @@ async function htppsLogout(req: Request, res: Response) {
         .json({ logout: false, message: 'error during logout' });
 
     return res.status(200).json({ logout: true });
-    // return res.status(302).redirect(CLIENT_URL);
+    // return res.status(302).redirect(CLIENT_DOMAIN);
   });
 }
 

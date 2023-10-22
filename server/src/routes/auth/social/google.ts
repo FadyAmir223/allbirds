@@ -5,11 +5,11 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
 import {
-  CLIENT_URL,
+  CLIENT_DOMAIN,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   SERVER_URL,
-} from '../../../utils/loadEnv.js';
+} from '../../../config/loadEnv.js';
 import { verifyCallback, socialCallback } from './_verifyCallback.js';
 
 const AUTH_OPTIONS = {
@@ -35,8 +35,8 @@ googleRoute.get(
 googleRoute.get(
   '/callback',
   passport.authenticate('google', {
-    // successRedirect: CLIENT_URL,
-    failureRedirect: CLIENT_URL + '/login',
+    // successRedirect: CLIENT_DOMAIN,
+    failureRedirect: CLIENT_DOMAIN + '/login',
     session: true,
   }),
   socialCallback

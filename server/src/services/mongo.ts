@@ -1,11 +1,5 @@
 import mongoose from 'mongoose';
-
-import { MONGO_URL } from '../utils/loadEnv.js';
-
-// mongod --dbpath "G:/user tools/mongoDB/data"
-
-const dbName = 'allbirds';
-const DB_URL = `${MONGO_URL}/${dbName}`;
+import { MONGO_URL } from '../config/loadEnv.js';
 
 mongoose.connection.once('open', () => {
   console.log('mongoDB connection ready');
@@ -15,7 +9,7 @@ mongoose.connection.on('error', (err) => {
   console.error(err);
 });
 
-const mongoConnect = async (dbUrl: string = DB_URL) => {
+const mongoConnect = async (dbUrl: string = MONGO_URL) => {
   try {
     if (mongoose.connection.readyState !== 1) await mongoose.connect(dbUrl);
   } catch (err) {
@@ -31,4 +25,4 @@ const mongoDisconnect = async () => {
   }
 };
 
-export { DB_URL, dbName, mongoConnect, mongoDisconnect };
+export { mongoConnect, mongoDisconnect };

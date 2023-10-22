@@ -1,7 +1,8 @@
 # install
   pip install virtualenv
   python -m venv venv
-  venv\Scripts\activate  ~  deactivate
+  source venv/bin/activate
+    deactivate
   pip install scrapy
   pip install scrapy-playwright
   playwright install
@@ -20,15 +21,3 @@
       fetch('<url>')
       response.
         css()
-
-# block
-  user-agent
-  headers
-  ip
-  cookies
-  sessions
-
-# wsl
-  wsl
-  code /mnt/c/path/to/project
-  sudo apt install python3 python3-pip python3-venv

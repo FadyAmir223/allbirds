@@ -1,12 +1,4 @@
-node_modules
-server/public
-
-.git
+node_modules/
+Dockerfile*
 .gitignore
-
-dockerfile
-.dockerignore
-
-.env
-.env.development
-.env.production
+.env*

@@ -60,7 +60,7 @@ const Header = () => {
           </div>
           <div className="w-full">
             <img
-              src="/images/global/logo-padding.png"
+              src="/images/main-page/logo.png"
               alt="logo"
               className="h-9 m-auto"
             />

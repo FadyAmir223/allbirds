@@ -9,9 +9,10 @@ export default async function (globalConfig, projectConfig) {
     globalThis.__MONGOINSTANCE = instance;
     process.env.MONGO_URI = uri.slice(0, uri.lastIndexOf('/'));
   } else {
-    process.env.MONGO_URI = `mongodb://${config.ip}:${config.port}`;
+    process.env.MONGO_URI =
+      process.env.MONGO_URI = `mongodb://${config.user}:${config.password}${config.dns}:${config.port}/$${config.name}?authSource=admin`;
   }
 
-  await mongoose.connect(`${process.env.MONGO_URI}/${config.database}`);
+  await mongoose.connect(process.env.MONGO_URI);
   await mongoose.disconnect();
 }

@@ -1,5 +1,8 @@
-node_modules
-images
-venv
-setup
+node_modules/
+images/
+venv/
+template/
 *.pyc
+.env*
+
+todo/

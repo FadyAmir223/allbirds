@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    image: frontend-dev
+    container_name: frontend-dev
+    env_file:
+      - ./client/.env.development
+    ports:
+      - 5173:5173
+    volumes:
+      - ./client:/app
+      # - /app/node_modules
+    networks:
+      - dev-network
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    image: backend-dev
+    container_name: backend-dev
+    env_file:
+      - ./server/.env.development
+    environment:
+      - NODE_ENV=development
+    ports:
+      - 3000:3000
+    volumes:
+      - ./server:/app
+      # - /app/node_modules
+    networks:
+      - dev-network
+    
+  database:
+    container_name: database-dev
+    ports:
+      - 27017:27017
+    volumes:
+      - db-data-dev:/data/db
+    networks:
+      - dev-network
+
+  nginx:
+    container_name: nginx-dev
+    volumes:
+      - ./nginx/default.dev.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/fake-ssl:/etc/nginx/ssl:ro
+    networks:
+      - dev-network
+
+volumes:
+  db-data-dev:
+
+networks:
+  dev-network:
+    driver: bridge

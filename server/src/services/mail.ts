@@ -4,7 +4,7 @@ import {
   EMAIL_APP_PASSWORD,
   EMAIL_SENDER,
   IS_PRODUCTION,
-} from '../utils/loadEnv.js';
+} from '../config/loadEnv.js';
 
 async function sendEmail(receiver, subject, content) {
   if (!IS_PRODUCTION) return true;

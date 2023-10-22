@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  frontend:
+    env_file:
+      - ./client/.env
+    depends_on:
+      - backend
+
+  backend:
+    env_file:
+      - ./server/.env
+      - ./server/.env.mongo
+    depends_on:
+      - database
+
+  database:
+    image: mongo:7.0.2
+    env_file:
+      - ./server/.env.mongo
+
+  nginx:
+    image: nginx:1.24.0-alpine
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - frontend
+      - backend

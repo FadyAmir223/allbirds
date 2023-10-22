@@ -1,24 +1,19 @@
 {
-  "name": "allbirds",
+  "name": "project",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install-server": "cd server && npm i && cd ..",
-    "install-client": "cd client && npm i && cd ..",
-    "install": "npm run server-install && npm run client-install",
-    "server": "npm run dev --prefix server",
-    "client": "npm run dev --prefix client",
-    "dev": "npm-run-all --parallel server client",
-    "build": "npm run build --prefix client && npm run build --prefix server && npm run public --prefix build",
-    "build-cluster": "npm run build --prefix client && npm run cluster --prefix server",
-    "test": "npm test --prefix client && npm test --prefix server"
+    "client": "docker exec -it frontend-dev",
+    "server": "docker exec -it backend-dev",
+    "test:client": "npm run client npm run test",
+    "test:server": "npm run server npm run test",
+    "compose": "docker compose -f docker-compose.yml -f docker-compose.dev.yml",
+    "compose:prod": "docker compose -f docker-compose.yml -f docker-compose.prod.yml",
+    "dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d",
+    "prod": "docker stack deploy -c docker-compose.yml -c docker-compose.prod.yml my-app"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "cross-env": "^7.0.3",
-    "npm-run-all": "^4.1.5"
-  }
+  "license": "ISC"
 }

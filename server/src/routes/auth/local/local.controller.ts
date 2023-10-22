@@ -55,7 +55,7 @@ async function httpsSignup(req: Request, res: Response): Promise<Response> {
   req.login({ id }, (err) => {
     if (err) return res.status(500).json({ message: 'error during login' });
     res.status(status).json({ message });
-    // res.status(302).redirect(CLIENT_URL);
+    // res.status(302).redirect(CLIENT_DOMAIN);
   });
 }
 
