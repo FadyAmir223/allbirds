@@ -6,8 +6,7 @@
   "scripts": {
     "client": "docker exec -it frontend-dev",
     "server": "docker exec -it backend-dev",
-    "test:client": "npm run client npm run test",
-    "test:server": "npm run server npm run test",
+    "test:server": "npm test --prefix=server",
     "compose": "docker compose -f docker-compose.yml -f docker-compose.dev.yml",
     "compose:prod": "docker compose -f docker-compose.yml -f docker-compose.prod.yml",
     "dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d",
