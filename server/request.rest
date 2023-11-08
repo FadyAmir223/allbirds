@@ -78,8 +78,8 @@ POST {{url}}/api/products/{{product-name}}/reviews
 
 {
   "score": 1,
-  "title": "fucking amazing",
-  "content": "the best in this sh1t world",
+  "title": "very amazing",
+  "content": "the best in this world",
   "customFields": [
     { "title": "Typical Size", "value": "10" },
     { "title": "Typical Width", "value": "Average" },

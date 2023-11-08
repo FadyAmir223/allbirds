@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { MONGO_URL } from '../config/loadEnv.js';
+import { MONGO_URL } from '../config/env.js';
 
 mongoose.connection.once('open', () => {
   console.log('mongoDB connection ready');

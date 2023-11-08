@@ -7,7 +7,7 @@ import {
   updateLocation,
   getOrders,
 } from '../../models/user/user.model.js';
-import { SERVER_URL } from '../../config/loadEnv.js';
+import { SERVER_URL } from '../../config/env.js';
 
 async function htppsGetLocations(req: Request, res: Response) {
   const { status, message, locations } = await getLocations(req.user._id);

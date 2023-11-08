@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     screens: {
@@ -9,12 +8,12 @@ export default {
       lg: '976px',
       xl: '1440px',
     },
+    fontFamily: {
+      geograph: ['Geograph', 'Helvetica', 'Arial', 'sans-serif'],
+    },
     extend: {
-      fontFamily: {
-        sans: ['Roboto', 'sans-serif'],
-      },
       colors: {
-        // gray: '#'
+        gray: '#212A2F',
       },
     },
   },

@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import User from './user.mongo.js';
 import { getCart } from '../product/product.model.js';
 import { mailResetPassword, mailVerifyAccount } from '../../services/mail.js';
-import { CLIENT_DOMAIN } from '../../config/loadEnv.js';
+import { CLIENT_DOMAIN } from '../../config/env.js';
 
 async function getUserById(id) {
   try {

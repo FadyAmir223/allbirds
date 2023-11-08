@@ -6,7 +6,7 @@ import {
   removeCartItem,
 } from '../../models/product/product.model.js';
 import { orderCart } from '../../models/user/user.model.js';
-import { NODE_ENV } from '../../config/loadEnv.js';
+import { NODE_ENV } from '../../config/env.js';
 
 async function httpsGetCart(req: Request, res: Response) {
   const { items } = req.session;

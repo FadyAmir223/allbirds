@@ -9,7 +9,7 @@ import {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   SERVER_URL,
-} from '../../../config/loadEnv.js';
+} from '../../../config/env.js';
 import { verifyCallback, socialCallback } from './_verifyCallback.js';
 
 const AUTH_OPTIONS = {

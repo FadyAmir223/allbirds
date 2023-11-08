@@ -4,7 +4,7 @@ import Filter from 'bad-words';
 
 import Product from './product.mongo.js';
 import User from '../user/user.mongo.js';
-import { __dirname } from '../../config/loadEnv.js';
+import { __dirname } from '../../config/env.js';
 // import products from '../../data/allbirds.json' assert { type: 'json' };
 
 async function saveProducts() {

@@ -1,5 +1,5 @@
 import app from './app.js';
-import { SERVER_PORT, SERVER_URL } from './config/loadEnv.js';
+import { SERVER_PORT, SERVER_URL } from './config/env.js';
 import { saveProducts } from './models/product/product.model.js';
 import { mongoConnect } from './services/mongo.js';
 

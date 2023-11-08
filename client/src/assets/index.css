@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: GeoGraph;
+    font-weight: 400;
+    src: url(./assets/fonts/geograph-regular.woff2) format('woff');
+  }
+
+  @font-face {
+    font-family: GeoGraph;
+    font-weight: 500;
+    src: url(./assets/fonts/geograph-medium.woff2) format('woff');
+  }
+
+  @font-face {
+    font-family: GeoGraph;
+    font-weight: 700;
+    src: url(./assets/fonts/geograph-bold.woff2) format('woff');
+  }
+}

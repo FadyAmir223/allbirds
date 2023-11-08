@@ -10,7 +10,7 @@ import {
   SESSION_KEY_2,
   IS_PRODUCTION,
   DB_NAME,
-} from '../config/loadEnv.js';
+} from './env.js';
 
 let store;
 

@@ -9,7 +9,7 @@ import {
   FACEBOOK_APP_ID,
   FACEBOOK_APP_SECRET,
   SERVER_URL,
-} from '../../../config/loadEnv.js';
+} from '../../../config/env.js';
 import { verifyCallback, socialCallback } from './_verifyCallback.js';
 
 const AUTH_OPTIONS = {

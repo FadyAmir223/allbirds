@@ -3,7 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 
-import { CLIENT_DOMAIN, NODE_ENV } from './config/loadEnv.js';
+import { CLIENT_DOMAIN, NODE_ENV } from './config/env.js';
 import api from './routes/api.js';
 
 const app = express();

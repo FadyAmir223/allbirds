@@ -1,9 +1,5 @@
 import cookieSession from 'cookie-session';
-import {
-  IS_PRODUCTION,
-  SESSION_KEY_1,
-  SESSION_KEY_2,
-} from '../config/loadEnv.js';
+import { IS_PRODUCTION, SESSION_KEY_1, SESSION_KEY_2 } from './env.js';
 
 const userSessionConfig = {
   name: 'user',

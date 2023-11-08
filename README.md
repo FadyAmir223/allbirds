@@ -6,7 +6,7 @@
 ## development
 ```bash
 npm run dev
-npm run compose down
+npm run dev:down
 ```
 
 ## production test
