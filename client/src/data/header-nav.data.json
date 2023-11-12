@@ -1,0 +1,309 @@
+[
+  {
+    "categoryName": "men",
+    "sections": [
+      {
+        "title": { "text": "shoes", "url": "/collections/mens" },
+        "routes": [
+          { "text": "everyday sneakers", "url": "/collections/mens-runners" },
+          {
+            "text": "active shoes",
+            "url": "/collections/mens-running-shoes"
+          },
+          {
+            "text": "water-repellent sneakers",
+            "url": "/collections/mens-mizzles"
+          },
+          { "text": "slip-ons", "url": "/collections/mens-loungers" },
+          { "text": "slippers", "url": "/products/mens-dwellers" },
+          { "text": "hiking", "url": "/collections/mens-hiking-shoes" },
+          { "text": "high tops", "url": "/collections/mens-high-tops" },
+          { "text": "sale", "url": "/collections/sale-mens-shoes" },
+          { "text": "shop all", "url": "/collections/mens" }
+        ]
+      },
+      {
+        "title": {
+          "text": "best sellers",
+          "url": "/collections/mens-best-sellers"
+        },
+        "routes": [
+          { "text": "tree runner", "url": "/products/mens-tree-runners" },
+          { "text": "wool runner", "url": "/products/mens-wool-runners" },
+          {
+            "text": "wool runner mizzles",
+            "url": "/products/mens-wool-runner-mizzles"
+          },
+          {
+            "text": "wool runner-up mizzles",
+            "url": "/products/mens-wool-runner-up-mizzles"
+          },
+          { "text": "tree dasher 2", "url": "/products/mens-tree-dashers" },
+          { "text": "tree lounger", "url": "/products/mens-loungers" },
+          { "text": "shop all", "url": "/collections/mens" }
+        ]
+      },
+      {
+        "title": {
+          "text": "apparel & more",
+          "url": "/collections/mens-best-sellers"
+        },
+        "routes": [
+          { "text": "socks", "url": "/collections/mens-socks" },
+          { "text": "underwear", "url": "/collections/mens-underwear" },
+          { "text": "tees", "url": "/collections/mens-tops" },
+          {
+            "text": "sweatshirts & sweatpants",
+            "url": "/collections/mens-sweatshirts-and-sweatpants"
+          },
+          {
+            "text": "hats & scarves",
+            "url": "/collections/mens-hats-and-scraves"
+          },
+          { "text": "insoles", "url": "/collections/mens-insoles" },
+          { "text": "lace kits", "url": "/collections/mens-lace-kit" },
+          { "text": "gift cards", "url": "/collections/gift-cards" },
+          { "text": "sale", "url": "/collections/sale-mens-apperel" }
+        ]
+      }
+    ],
+    "featured": [
+      {
+        "text": "the new wool runner 2",
+        "imageUrl": "/images/main-page/header-nav/23Q4-WR2-Nav-Tile-Desktop-1125x324.jpg",
+        "url": "/producst/mens-wool-runner-2"
+      },
+      {
+        "text": "gifts for him",
+        "imageUrl": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Desktop-Men-1125x324.jpg",
+        "url": "/collections/gifts-for-men"
+      }
+    ]
+  },
+  {
+    "categoryName": "women",
+    "sections": [
+      {
+        "title": {
+          "text": "shoes",
+          "url": "/collections/womens"
+        },
+        "routes": [
+          {
+            "text": "everyday sneakers",
+            "url": "/collections/womens-runners"
+          },
+          {
+            "text": "active shoes",
+            "url": "/collections/womens-running-shoes"
+          },
+          {
+            "text": "water-repellent sneakers",
+            "url": "/collections/womens-mizzles"
+          },
+          { "text": "flats", "url": "/collections/womens-flats" },
+          { "text": "slip-ons", "url": "/collections/womens-loungers" },
+          { "text": "slippers", "url": "/products/womens-dwellers" },
+          { "text": "hiking", "url": "/collections/womens-hiking-shoes" },
+          { "text": "high tops", "url": "/collections/womens-high-tops" },
+          { "text": "sale", "url": "/collections/sale-womens-shoes" },
+          { "text": "shop all", "url": "/collections/womens" }
+        ]
+      },
+      {
+        "title": {
+          "text": "best sellers",
+          "url": "/collections/womens-best-sellers"
+        },
+        "routes": [
+          { "text": "tree runner", "url": "/products/womens-tree-runners" },
+          { "text": "tree brezzer", "url": "/products/womens-tree-brezzer" },
+          { "text": "wool runner", "url": "/products/womens-wool-runners" },
+          {
+            "text": "wool runner mizzles",
+            "url": "/products/womens-wool-runner-mizzles"
+          },
+          { "text": "wool loungers", "url": "/products/womens-wool-loungers" },
+          { "text": "tree lounger", "url": "/products/womens-tree-loungers" },
+          { "text": "shop all", "url": "/collections/womens" }
+        ]
+      },
+      {
+        "title": {
+          "text": "apparel & more",
+          "url": "/collections/womens-apparel"
+        },
+        "routes": [
+          { "text": "socks", "url": "/collections/womens-socks" },
+          { "text": "underwear", "url": "/collections/womens-underwear" },
+          { "text": "tees", "url": "/collections/womens-tops" },
+          {
+            "text": "sweatshirts & sweatpants",
+            "url": "/collections/womens-sweatshirts-and-sweatpants"
+          },
+          {
+            "text": "hats & scarves",
+            "url": "/collections/womens-hats-and-scraves"
+          },
+          { "text": "insoles", "url": "/collections/womens-insoles" },
+          { "text": "lace kits", "url": "/collections/womens-lace-kit" },
+          { "text": "gift cards", "url": "/collections/gift-cards" },
+          { "text": "sale", "url": "/collections/sale-womens-apperel" }
+        ]
+      }
+    ],
+    "featured": [
+      {
+        "text": "the new wool runner 2",
+        "imageUrl": "/images/main-page/header-nav/23Q4-WR2-Nav-Tile-Desktop-1125x324.jpg",
+        "url": "/producst/womens-wool-runner-2"
+      },
+      {
+        "text": "gifts for her",
+        "imageUrl": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Desktop-Women-1125x324.jpg",
+        "url": "/collections/gifts-for-women"
+      }
+    ]
+  },
+  {
+    "categoryName": "kids",
+    "sections": [
+      {
+        "title": {
+          "text": "little kids",
+          "url": "/collections/little-kids"
+        },
+        "routes": [
+          {
+            "text": "everyday sneakers",
+            "url": "/products/smallbirds-wool-runners-little-kids"
+          },
+          {
+            "text": "slip-ons",
+            "url": "/products/smallbirds-wool-loungers-little-kids"
+          },
+          {
+            "text": "accessories",
+            "url": "/products/smallbirds-pom-beanie-little-kids"
+          },
+          { "text": "sale", "url": "/collections/sale-little-kids" }
+        ]
+      },
+      {
+        "title": {
+          "text": "big kids",
+          "url": "/collections/big-kids"
+        },
+        "routes": [
+          {
+            "text": "everyday sneakers",
+            "url": "/products/smallbirds-wool-runners-big-kids"
+          },
+          {
+            "text": "slip-ons",
+            "url": "/products/smallbirds-wool-loungers-big-kids"
+          },
+          { "text": "sale", "url": "/collections/sale-big-kids" }
+        ]
+      }
+    ],
+    "featured": [
+      {
+        "text": "gifts for little kids",
+        "imageUrl": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Desktop-LittleKids-1125x324.jpg",
+        "url": "/collections/smallbirds-little-kids"
+      },
+      {
+        "text": "gifts for big kids",
+        "imageUrl": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Mobile-BigKids-1125x324.jpg",
+        "url": "/collections/smallbirds-big-kids"
+      }
+    ]
+  },
+  {
+    "categoryName": "sale",
+    "sections": [
+      {
+        "title": { "text": "men's sale", "url": "" },
+        "routes": [
+          { "text": "sale shoes", "url": "/collections/sale-mens-shoes" },
+          {
+            "text": "sale apparel & socks",
+            "url": "/collections/sale-mens-apparel"
+          }
+        ]
+      },
+      {
+        "title": { "text": "women's sale", "url": "" },
+        "routes": [
+          { "text": "sale shoes", "url": "/collections/sale-womens-shoes" },
+          {
+            "text": "sale apparel & socks",
+            "url": "/collections/sale-womens-apparel"
+          }
+        ]
+      },
+      {
+        "title": { "text": "kid's sale", "url": "" },
+        "routes": [
+          {
+            "text": "sale little kids",
+            "url": "/collections/sale-little-kids"
+          },
+          { "text": "sale big kids", "url": "/collections/sale-big-kids" }
+        ]
+      }
+    ],
+    "featured": [
+      {
+        "text": "men's sale",
+        "imageUrl": "/images/main-page/header-nav/Nav-Tile-M_Desktop_1125__324.jpg",
+        "url": "/collections/sale-mens-shoes"
+      },
+      {
+        "text": "women's sale",
+        "imageUrl": "/images/main-page/header-nav/Nav-Tile-W_Desktop_1125__324.jpg",
+        "url": "/collections/sale-womens-shoes"
+      }
+    ]
+  },
+  {
+    "categoryName": "sustainability",
+    "sections": [
+      {
+        "title": { "text": "initiatives", "url": "" },
+        "routes": [
+          {
+            "text": "our sustainability strategy",
+            "url": "/pages/sustainable-practices"
+          },
+          { "text": "m0.0nshot", "url": "/pages/moonshot-zero-carbon-shoes" },
+          { "text": "how we operate", "url": "/pages/how-we-operate" },
+          { "text": "carbon footprint", "url": "/pages/footprint" },
+          {
+            "text": "regenerative agriculture",
+            "url": "/pages/regenerative-agriculture"
+          },
+          {
+            "text": "renewable materials",
+            "url": "/pages/renewable-materials"
+          },
+          { "text": "carbon offsets", "url": "/pages/carbon-offset-projects" },
+          { "text": "responsible energy", "url": "/pages/responsible-energy" }
+        ]
+      }
+    ],
+    "featured": [
+      {
+        "text": "our sustainability strategy",
+        "imageUrl": "/images/main-page/header-nav/23Q2-Earth_Day-Site-Nav_Tile-1125x324.jpg",
+        "url": "/pages/sustainable-practices"
+      },
+      {
+        "text": "allbirds return marketplace",
+        "imageUrl": "/images/main-page/header-nav/ReRun-Site-NavTiles-Web.jpg",
+        "url": "/pages/rerun"
+      }
+    ]
+  }
+]

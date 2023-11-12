@@ -1,0 +1,5 @@
+{
+  "*.{ts,tsx}": "tsc-files --noEmit",
+  "*.{js,jsx,ts,tsx}": "eslint --report-unused-disable-directives --max-warnings 0",
+  "*.{js,jsx,ts,tsx,json,html,css}": "prettier --write --ignore-unknown"
+}

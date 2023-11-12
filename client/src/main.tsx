@@ -7,14 +7,16 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
 
 import App from './App';
+import Loading from './components/loading.component';
+import ErrorFallback from './components/error-fallback.component';
 
 import store from './store/store';
 import { queryClient } from './lib/react-query';
 import './assets/index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <ErrorBoundary fallback={<div>error</div>}>
-    <Suspense fallback={<div>loading...</div>}>
+  <ErrorBoundary fallback={<ErrorFallback />}>
+    <Suspense fallback={<Loading />}>
       <HelmetProvider>
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>

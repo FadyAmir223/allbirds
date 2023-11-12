@@ -1,5 +1,5 @@
 const ErrorFallback = () => {
-  return <div>ErrorFallback</div>;
+  return <div>something went wrong</div>;
 };
 
 export default ErrorFallback;
