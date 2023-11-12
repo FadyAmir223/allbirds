@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 const Checking = () => {
-  const [first, setFirst] = useState<number>('var')
+  const [first, setFirst] = useState<boolean>('var');
 
-  return <h1 className='mr-0'>{first}</h1>
-}
+  return <h1 className='mr-0'>{first}</h1>;
+};
 
-export default Checking
+export default Checking;
