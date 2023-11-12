@@ -10,7 +10,7 @@ const Cart = ({ handleNavClose }: CartProps) => {
   };
 
   return (
-    <button className="header-icons" onClick={handleCartToggle}>
+    <button className='header-icons' onClick={handleCartToggle}>
       <BsMinecartLoaded size={22} />
     </button>
   );

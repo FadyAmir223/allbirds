@@ -5,5 +5,5 @@ export const axios = Axios.create({ baseURL: API_URL });
 
 axios.interceptors.response.use(
   (response) => response.data,
-  (error) => error.message
+  (error) => error.message,
 );

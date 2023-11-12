@@ -1,47 +1,47 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { BiHelpCircle, BiSearch } from 'react-icons/bi'
-import { HiOutlineUser } from 'react-icons/hi'
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { BiHelpCircle, BiSearch } from 'react-icons/bi';
+import { HiOutlineUser } from 'react-icons/hi';
 
-import Cart from '@/components/cart.component'
-import ShopAd from '@/components/header/shopAd.component'
-import headerNavData from '@/data/header-nav.data.json'
+import Cart from '@/components/cart.component';
+import ShopAd from '@/components/header/shopAd.component';
+import headerNavData from '@/data/header-nav.data.json';
 
 const emptyCategory = {
   categoryName: '',
   sections: [{ title: { text: '', url: '' }, routes: [{ text: '', url: '' }] }],
   featured: [{ text: '', imageUrl: '', url: '' }],
-}
+};
 
 const Header = () => {
   const [nav, setNav] = useState({
     isOpen: false,
     category: emptyCategory,
-  })
+  });
 
   const handleNavClose = () => {
     if (nav.isOpen)
       setNav((prevNav) => ({
         ...prevNav,
         isOpen: false,
-      }))
-  }
+      }));
+  };
 
   const handleNavClick = (headerCategoryText: string) => {
     setNav((prevNav) => {
       const isOpen =
-        !prevNav.isOpen || headerCategoryText !== prevNav.category.categoryName
+        !prevNav.isOpen || headerCategoryText !== prevNav.category.categoryName;
 
       const category = isOpen
         ? headerNavData.find(
             (headerNavItem) =>
               headerNavItem.categoryName === headerCategoryText,
           ) || emptyCategory
-        : emptyCategory
+        : emptyCategory;
 
-      return { ...prevNav, isOpen, category }
-    })
-  }
+      return { ...prevNav, isOpen, category };
+    });
+  };
 
   return (
     <>
@@ -213,7 +213,7 @@ const Header = () => {
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

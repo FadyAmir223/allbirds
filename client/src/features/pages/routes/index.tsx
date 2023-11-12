@@ -6,9 +6,9 @@ const OurComitment = lazy(() => import('./our-comitment.route'));
 
 export const PagesRoute = () => {
   return (
-    <Route path="pages">
-      <Route path="search" element={<Search />} />
-      <Route path="our-commitment" element={<OurComitment />} />
+    <Route path='pages'>
+      <Route path='search' element={<Search />} />
+      <Route path='our-commitment' element={<OurComitment />} />
     </Route>
   );
 };

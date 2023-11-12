@@ -1,18 +1,18 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import Markdown from 'react-markdown'
-import { FaAngleRight } from 'react-icons/fa'
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import Markdown from 'react-markdown';
+import { FaAngleRight } from 'react-icons/fa';
 
 const ads = [
   'Less Stress. More Gifts. We’ve extended free returns until 1/22/24. [Shop Men](/collections/mens) | [Shop Women](/collections/womens)',
   'The New Wool Runner 2 Is Next-Gen Design With Next-Level Comfort. [Shop Men](/collections/mens) l [Shop Women](/collections/womens)',
   'Gift Cozy, Get Cozy: Wrap Up Foolproof Gifts For Everyone On Your List. [Shop Men](/collections/mens) | [Shop Women](/collections/womens)',
-]
+];
 
 interface MarkdownLinkProps {
-  className?: string
-  href?: string
-  children?: React.ReactNode
+  className?: string;
+  href?: string;
+  children?: React.ReactNode;
 }
 
 const MarkdownLink = ({
@@ -24,14 +24,14 @@ const MarkdownLink = ({
   <Link to={href || '/'} className={`hover:underline ${className}`} {...props}>
     {children}
   </Link>
-)
+);
 
 const ShopAd = () => {
-  const [currAd, setCurrAd] = useState(0)
+  const [currAd, setCurrAd] = useState(0);
 
   const handleNextAd = () => {
-    setCurrAd((prevAd) => (prevAd + 1) % ads.length)
-  }
+    setCurrAd((prevAd) => (prevAd + 1) % ads.length);
+  };
 
   return (
     <div className='bg-gray h-8 px-6 flex items-center'>
@@ -50,7 +50,7 @@ const ShopAd = () => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ShopAd
+export default ShopAd;

@@ -5,9 +5,9 @@ const Collections = lazy(() => import('./collection.route'));
 
 export const CollectionRoute = () => {
   return (
-    <Route path="collections">
-      <Route index element={<Navigate to="/" replace />} />
-      <Route path=":collectionName" element={<Collections />} />
+    <Route path='collections'>
+      <Route index element={<Navigate to='/' replace />} />
+      <Route path=':collectionName' element={<Collections />} />
     </Route>
   );
 };

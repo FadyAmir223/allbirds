@@ -9,10 +9,10 @@ import { loader as accountLoader } from '../services/account.loader';
 
 export const UserRoute = () => {
   return (
-    <Route path="account" element={<Outlet />}>
+    <Route path='account' element={<Outlet />}>
       <Route index loader={accountLoader} element={<Account />} />
-      <Route path="login" element={<Login />} />
-      <Route path="signup" element={<Signup />} />
+      <Route path='login' element={<Login />} />
+      <Route path='signup' element={<Signup />} />
     </Route>
   );
 };

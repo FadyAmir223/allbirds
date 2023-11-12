@@ -23,15 +23,15 @@ const App = () => {
     <RouterProvider
       router={createBrowserRouter(
         createRoutesFromElements(
-          <Route path="/" element={<Layout />} errorElement={<ErrorFallback />}>
-            <Route path="*" element={<NotFound />} />
+          <Route path='/' element={<Layout />} errorElement={<ErrorFallback />}>
+            <Route path='*' element={<NotFound />} />
             <Route index element={<Home />} />
             {CollectionRoute()}
             {ProductRoute()}
             {UserRoute()}
             {PagesRoute()}
-          </Route>
-        )
+          </Route>,
+        ),
       )}
     />
   );

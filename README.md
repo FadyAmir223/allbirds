@@ -43,3 +43,6 @@ requirements:
 ```bash
 npm run test --prefix=server
 ```
+
+## using husky for lint-staged
+git config core.hooksPath client/.husky

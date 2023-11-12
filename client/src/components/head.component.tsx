@@ -7,8 +7,8 @@ type HeadProps = {
 
 const Head = ({ title, description }: HeadProps) => {
   return (
-    <Helmet title={`${title} | allbirds`} defaultTitle="allbirds">
-      <meta name="description" content={description} />
+    <Helmet title={`${title} | allbirds`} defaultTitle='allbirds'>
+      <meta name='description' content={description} />
     </Helmet>
   );
 };
