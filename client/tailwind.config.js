@@ -3,10 +3,10 @@ export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     screens: {
-      sm: '480px',
-      md: '768px',
-      lg: '976px',
-      xl: '1380px',
+      sm: '450px',
+      md: '750px',
+      lg: '1050px',
+      xl: '1280px',
     },
     fontFamily: {
       geograph: ['Geograph', 'Helvetica', 'Arial', 'sans-serif'],
@@ -14,6 +14,9 @@ export default {
     extend: {
       colors: {
         gray: '#212A2F',
+        'light-gray': '#d3d4d5',
+        silver: '#f5f5f5',
+        red: '#AD1F00',
       },
     },
   },

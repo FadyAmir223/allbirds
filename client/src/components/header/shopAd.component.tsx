@@ -21,7 +21,7 @@ const MarkdownLink = ({
   className,
   ...props
 }: MarkdownLinkProps) => (
-  <Link to={href || '/'} className={`hover:underline ${className}`} {...props}>
+  <Link to={href || '/'} className={`underline ${className}`} {...props}>
     {children}
   </Link>
 );
@@ -34,21 +34,21 @@ const ShopAd = () => {
   };
 
   return (
-    <div className='bg-gray h-8 px-6 flex items-center'>
-      <div className='w-[61%] text-[9px] flex items-center justify-center mx-auto relative text-white'>
+    <div className='bg-gray h-8 px-6 text-[9.3px] flex items-center justify-center'>
+      <div className='mx-auto relative text-white'>
         <Markdown
           className='font-medium leading-[1.3] tracking-[0.3px]'
           components={{ a: MarkdownLink }}
         >
           {ads[currAd]}
         </Markdown>
-        <button
-          className='flex items-center absolute right-0'
-          onClick={handleNextAd}
-        >
-          <FaAngleRight size={13} />
-        </button>
       </div>
+      <button
+        className='flex items-center absolute right-6 scale-[130%] text-white'
+        onClick={handleNextAd}
+      >
+        <FaAngleRight />
+      </button>
     </div>
   );
 };

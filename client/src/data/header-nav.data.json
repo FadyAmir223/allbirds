@@ -70,13 +70,15 @@
     "featured": [
       {
         "text": "the new wool runner 2",
-        "imageUrl": "/images/main-page/header-nav/23Q4-WR2-Nav-Tile-Desktop-1125x324.jpg",
-        "url": "/producst/mens-wool-runner-2"
+        "url": "/producst/mens-wool-runner-2",
+        "imageUrl": "/images/main-page/header-nav/23Q4-WR2-Nav-Tile-Desktop-1125x324.webp",
+        "imageUrlMobile": "/images/main-page/header-nav/23Q4-Holiday_Ch2-Site-Nav_Tile_Mobile-Men-1125x1542.webp"
       },
       {
         "text": "gifts for him",
-        "imageUrl": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Desktop-Men-1125x324.jpg",
-        "url": "/collections/gifts-for-men"
+        "url": "/collections/gifts-for-men",
+        "imageUrl": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Desktop-Men-1125x324.webp",
+        "imageUrlMobile": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Mobile-Men-1125x1542.webp"
       }
     ]
   },
@@ -155,13 +157,15 @@
     "featured": [
       {
         "text": "the new wool runner 2",
-        "imageUrl": "/images/main-page/header-nav/23Q4-WR2-Nav-Tile-Desktop-1125x324.jpg",
-        "url": "/producst/womens-wool-runner-2"
+        "url": "/producst/womens-wool-runner-2",
+        "imageUrl": "/images/main-page/header-nav/23Q4-WR2-Nav-Tile-Desktop-1125x324.webp",
+        "imageUrlMobile": "/images/main-page/header-nav/23Q4-Holiday_Ch2-Site-Nav_Tile_Mobile-Women-1125x1542.webp"
       },
       {
         "text": "gifts for her",
-        "imageUrl": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Desktop-Women-1125x324.jpg",
-        "url": "/collections/gifts-for-women"
+        "url": "/collections/gifts-for-women",
+        "imageUrl": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Desktop-Women-1125x324.webp",
+        "imageUrlMobile": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Mobile-Women-1125x1542.webp"
       }
     ]
   },
@@ -210,13 +214,15 @@
     "featured": [
       {
         "text": "gifts for little kids",
-        "imageUrl": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Desktop-LittleKids-1125x324.jpg",
-        "url": "/collections/smallbirds-little-kids"
+        "url": "/collections/smallbirds-little-kids",
+        "imageUrl": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Desktop-LittleKids-1125x324.webp",
+        "imageUrlMobile": "/images/main-page/header-nav/23Q4-Holiday_Ch2-Site-Nav_Tile_Mobile-LittleKids-1125x1542.webp"
       },
       {
         "text": "gifts for big kids",
-        "imageUrl": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Mobile-BigKids-1125x324.jpg",
-        "url": "/collections/smallbirds-big-kids"
+        "url": "/collections/smallbirds-big-kids",
+        "imageUrl": "/images/main-page/header-nav/23Q4-Holiday_Ch1-Site-Nav_Tile_Mobile-BigKids-1125x324.webp",
+        "imageUrlMobile": "/images/main-page/header-nav/23Q4-Holiday_Ch2-Site-Nav_Tile_Mobile-BigKids-1125x1542.webp"
       }
     ]
   },
@@ -257,13 +263,15 @@
     "featured": [
       {
         "text": "men's sale",
-        "imageUrl": "/images/main-page/header-nav/Nav-Tile-M_Desktop_1125__324.jpg",
-        "url": "/collections/sale-mens-shoes"
+        "url": "/collections/sale-mens-shoes",
+        "imageUrl": "/images/main-page/header-nav/Nav-Tile-M_Desktop_1125__324.webp",
+        "imageUrlMobile": "/images/main-page/header-nav/23Q4-Holiday_Ch2-Site-Nav_Tile_Mobile-Men-1125x1542.webp"
       },
       {
         "text": "women's sale",
-        "imageUrl": "/images/main-page/header-nav/Nav-Tile-W_Desktop_1125__324.jpg",
-        "url": "/collections/sale-womens-shoes"
+        "url": "/collections/sale-womens-shoes",
+        "imageUrl": "/images/main-page/header-nav/Nav-Tile-W_Desktop_1125__324.webp",
+        "imageUrlMobile": "/images/main-page/header-nav/23Q4-Holiday_Ch2-Site-Nav_Tile_Mobile-Women-1125x1542.webp"
       }
     ]
   },
@@ -296,13 +304,15 @@
     "featured": [
       {
         "text": "our sustainability strategy",
-        "imageUrl": "/images/main-page/header-nav/23Q2-Earth_Day-Site-Nav_Tile-1125x324.jpg",
-        "url": "/pages/sustainable-practices"
+        "url": "/pages/sustainable-practices",
+        "imageUrl": "/images/main-page/header-nav/23Q2-Earth_Day-Site-Nav_Tile-1125x324.webp",
+        "imageUrlMobile": "/images/main-page/header-nav/23Q2-Earth_Day-Site-Nav_Tile-1125x1542.webp"
       },
       {
         "text": "allbirds return marketplace",
-        "imageUrl": "/images/main-page/header-nav/ReRun-Site-NavTiles-Web.jpg",
-        "url": "/pages/rerun"
+        "url": "/pages/rerun",
+        "imageUrl": "/images/main-page/header-nav/ReRun-Site-NavTiles-Web.webp",
+        "imageUrlMobile": "/images/main-page/header-nav/ReRun-Site-NavTiles-Mobile.webp"
       }
     ]
   }

@@ -33,11 +33,19 @@
   }
 
   .header-nav {
-    @apply min-w-[42px] min-h-[42px] cursor-pointer uppercase grid place-items-center text-[9.4px] leading-[1.75px] tracking-[1.7px] font-bold hover:underline;
+    @apply min-w-[42px] min-h-[42px] cursor-pointer uppercase grid place-items-center text-[9.4px] leading-[1.75px] tracking-[1.4px] font-bold hover:underline;
   }
 
   .header-icons {
     @apply cursor-pointer ml-3 block;
+  }
+
+  .allbirds-font {
+    @apply uppercase leading-[1.5] text-[12.7px] font-bold tracking-[2px];
+  }
+
+  .dropdown-mobile {
+    @apply allbirds-font text-[9px] px-7 py-4;
   }
 }
 

@@ -1,33 +1,74 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BiHelpCircle, BiSearch } from 'react-icons/bi';
 import { HiOutlineUser } from 'react-icons/hi';
+import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 
 import Cart from '@/components/cart.component';
 import ShopAd from '@/components/header/shopAd.component';
 import headerNavData from '@/data/header-nav.data.json';
 
+const headerLeftItems = [
+  { text: 'men', url: '' },
+  { text: 'women', url: '' },
+  { text: 'kids', url: '' },
+  { text: 'socks', url: '/products/socks' },
+  { text: 'sale', url: '' },
+];
+
+const headerRightItems = [
+  { text: 'sustainability', url: '' },
+  { text: 'return', url: '/pages/return' },
+];
+
+const headerIconItems = [
+  { text: '', url: 'pages/search', hiddenSm: true, icon: <BiSearch /> },
+  { text: 'account', url: 'account', hiddenSm: false, icon: <HiOutlineUser /> },
+  { text: 'help', url: 'pages/help', hiddenSm: false, icon: <BiHelpCircle /> },
+];
+
+const headerItemsMd = [
+  ...headerLeftItems,
+  ...headerRightItems,
+  ...headerIconItems,
+].filter((headerItem) => headerItem.text !== '');
+
 const emptyCategory = {
   categoryName: '',
   sections: [{ title: { text: '', url: '' }, routes: [{ text: '', url: '' }] }],
-  featured: [{ text: '', imageUrl: '', url: '' }],
+  featured: [{ text: '', url: '', imageUrl: '', imageUrlMobile: '' }],
+};
+
+type Nav = {
+  isOpen: boolean;
+  category: typeof emptyCategory;
+  subCategoryMobile: string;
+  tabMobile: 'left' | 'middle' | 'right';
 };
 
 const Header = () => {
-  const [nav, setNav] = useState({
+  const [nav, setNav] = useState<Nav>({
     isOpen: false,
     category: emptyCategory,
+    subCategoryMobile: '',
+    tabMobile: 'left',
   });
 
+  useEffect(() => {
+    if (!nav.isOpen) {
+      const timeout = setTimeout(() => {
+        setNav((prevNav) => ({ ...prevNav, tabMobile: 'left' }));
+      }, 250);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [nav.isOpen]);
+
   const handleNavClose = () => {
-    if (nav.isOpen)
-      setNav((prevNav) => ({
-        ...prevNav,
-        isOpen: false,
-      }));
+    if (nav.isOpen) setNav((prevNav) => ({ ...prevNav, isOpen: false }));
   };
 
-  const handleNavClick = (headerCategoryText: string) => {
+  const handleNavClickDesktop = (headerCategoryText: string) => {
     setNav((prevNav) => {
       const isOpen =
         !prevNav.isOpen || headerCategoryText !== prevNav.category.categoryName;
@@ -43,18 +84,44 @@ const Header = () => {
     });
   };
 
+  const handleToggleNavMobile = () => {
+    setNav((prevNav) => ({ ...prevNav, isOpen: !prevNav.isOpen }));
+  };
+
+  const handleNavClickMobile = (headerCategoryText: string) => {
+    setNav((prevNav) => {
+      const category =
+        headerNavData.find(
+          (headerNavItem) => headerNavItem.categoryName === headerCategoryText,
+        ) || emptyCategory;
+
+      return { ...prevNav, category, tabMobile: 'middle' };
+    });
+  };
+
+  const handleNavBackMobile = () => {
+    setNav((prevNav) => ({ ...prevNav, tabMobile: 'left' }));
+  };
+
+  const handleSubCategoryMobile = (subCategory: string) => {
+    setNav((prevNav) => ({
+      ...prevNav,
+      subCategoryMobile: subCategory,
+      tabMobile: 'right',
+    }));
+  };
+
+  const handleSubCategoryBackMobile = () => {
+    setNav((prevNav) => ({ ...prevNav, tabMobile: 'middle' }));
+  };
+
   return (
-    <>
+    <div>
       <ShopAd />
       <div className='relative'>
-        <nav className='px-6 py-1 flex items-center justify-between text-gray shadow-md'>
-          <ul className='flex gap-5'>
-            {[
-              { text: 'men', url: '' },
-              { text: 'women', url: '' },
-              { text: 'socks', url: '/products/socks' },
-              { text: 'sale', url: '' },
-            ].map((navCategory) => (
+        <nav className='px-6 py-[12px] lg:py-[4px] flex items-center justify-between text-gray shadow-md'>
+          <ul className='hidden lg:flex gap-5'>
+            {headerLeftItems.map((navCategory) => (
               <li
                 key={navCategory.text}
                 className={
@@ -74,9 +141,9 @@ const Header = () => {
                 ) : (
                   <button
                     className={`header-nav ${
-                      navCategory.text === 'sale' ? 'text-[#AD1F00]' : null
+                      navCategory.text === 'sale' ? 'text-red' : null
                     }`}
-                    onClick={() => handleNavClick(navCategory.text)}
+                    onClick={() => handleNavClickDesktop(navCategory.text)}
                   >
                     {navCategory.text}
                   </button>
@@ -84,6 +151,29 @@ const Header = () => {
               </li>
             ))}
           </ul>
+
+          <button
+            className='flex lg:hidden scale-125'
+            onClick={handleToggleNavMobile}
+          >
+            <div className='relative w-5 h-[15px] group scale-[80%]'>
+              <span
+                className={`absolute duration-100 ease-linear bg-black w-full h-[1.5px] left-0 ${
+                  nav.isOpen ? 'top-[6px] rotate-45' : ' top-0'
+                }`}
+              />
+              <span
+                className={`absolute duration-100 ease-linear bg-black w-full h-[2px] left-0 top-[6px] ${
+                  nav.isOpen ? 'hidden' : ''
+                }`}
+              />
+              <span
+                className={`absolute duration-100 ease-linear bg-black w-full h-[1.5px] left-0 ${
+                  nav.isOpen ? 'top-[6px] -rotate-45' : 'top-[13px]'
+                }`}
+              />
+            </div>
+          </button>
 
           <div className='w-[80px] box-border'>
             <Link to='/' onClick={handleNavClose}>
@@ -97,38 +187,42 @@ const Header = () => {
 
           <div className='flex'>
             <ul className='flex gap-[18px]'>
-              <li>
-                <button
-                  className='header-nav'
-                  onClick={() => handleNavClick('sustainability')}
-                >
-                  sustainability
-                </button>
-              </li>
-              <li>
-                <Link
-                  to='/pages/return'
-                  className='header-nav'
-                  onClick={handleNavClose}
-                >
-                  return
-                </Link>
-              </li>
+              {headerRightItems.map((navCategory) => (
+                <li className='hidden lg:block' key={navCategory.text}>
+                  {navCategory.url ? (
+                    <Link
+                      to='/pages/return'
+                      className='header-nav'
+                      onClick={handleNavClose}
+                    >
+                      {navCategory.text}
+                    </Link>
+                  ) : (
+                    <button
+                      className='header-nav'
+                      onClick={() => handleNavClickDesktop(navCategory.text)}
+                    >
+                      {navCategory.text}
+                    </button>
+                  )}
+                </li>
+              ))}
             </ul>
 
             <ul className='flex items-center'>
-              {[
-                { url: 'pages/search', icon: <BiSearch /> },
-                { url: 'account', icon: <HiOutlineUser /> },
-                { url: 'pages/help', icon: <BiHelpCircle /> },
-              ].map((iconElement) => (
-                <li>
+              {headerIconItems.map((iconItem) => (
+                <li
+                  className={`${iconItem.text ? 'hidden lg:block  ' : ''} ${
+                    iconItem.hiddenSm ? 'hidden md:block  ' : ''
+                  }`}
+                  key={iconItem.text}
+                >
                   <Link
-                    to={iconElement.url}
+                    to={iconItem.url}
                     className='header-icons scale-125'
                     onClick={handleNavClose}
                   >
-                    {iconElement.icon}
+                    {iconItem.icon}
                   </Link>
                 </li>
               ))}
@@ -141,11 +235,11 @@ const Header = () => {
         </nav>
 
         <div
-          className={`absolute z-50 overflow-hidden w-full ${
-            nav.isOpen ? 'h-96 duration-300' : 'h-0'
+          className={`absolute z-50 overflow-hidden w-full hidden lg:block ${
+            nav.isOpen ? 'h-96 duration-300 transition-[height]' : 'h-0'
           }`}
         >
-          <div className='pt-[78px] pb-6 px-[103px] bg-white grid grid-cols-5 gap-x-6'>
+          <div className='pt-[47px] pb-6 px-[103px] bg-white hidden lg:grid grid-cols-5 gap-x-6'>
             {nav.category.categoryName === 'sustainability' && <div />}
 
             {nav.category.sections.map((section) => (
@@ -153,14 +247,14 @@ const Header = () => {
                 {section.title.url ? (
                   <Link
                     to={section.title.url}
-                    className='uppercase hover:underline mb-[22px] block leading-[1.5] text-[12.7px] font-bold tracking-[2px]'
+                    className='allbirds-font mb-[22px] block hover:underline'
                     onClick={handleNavClose}
                   >
                     {section.title.text}
                   </Link>
                 ) : (
                   <h3
-                    className='uppercase mb-[22px] block leading-[1.5] text-[12.7px] font-bold tracking-[2px]'
+                    className='allbirds-font mb-[22px] block'
                     onClick={handleNavClose}
                   >
                     {section.title.text}
@@ -186,14 +280,12 @@ const Header = () => {
             ))}
 
             <div className='col-span-2'>
-              <h3 className='uppercase mb-[22px] leading-[1.5] text-[12.7px] font-bold tracking-[2px]'>
-                featured
-              </h3>
+              <h3 className='allbirds-font mb-[22px]'>featured</h3>
               {nav.category.featured.map((feature) => (
                 <ul key={feature.text}>
                   <li className='first-of-type:mb-6 relative group'>
                     <Link to={feature.url} onClick={handleNavClose}>
-                      <span className='absolute grid place-items-center w-full h-full uppercase leading-[1.5] text-[12.7px] font-bold tracking-[2px] group-hover:underline'>
+                      <span className='allbirds-font absolute grid place-items-center w-full h-full group-hover:underline text-white'>
                         {feature.text}
                       </span>
                       <img src={feature.imageUrl} alt='' />
@@ -207,12 +299,149 @@ const Header = () => {
 
         {nav.isOpen && (
           <button
-            className='fixed w-screen h-[calc(100vh-50px)] bg-black opacity-50 animate-[fade_250ms_linear]'
+            className='hidden lg:block relative w-screen h-[calc(100vh-50px)] bg-black opacity-50 animate-[fade_250ms_linear]'
             onClick={handleNavClose}
           />
         )}
+
+        <div
+          className={`absolute w-screen bg-white overflow-x-hidden lg:hidden duration-[250ms] ${
+            nav.isOpen ? 'h-[calc(100vh-45px-32px)]' : 'h-0'
+          }`}
+        >
+          <ul
+            className={`duration-[250ms] absolute w-full  pb-16 ${
+              nav.tabMobile === 'middle' || nav.tabMobile === 'right'
+                ? '-translate-x-full'
+                : 'translate-x-0'
+            }`}
+          >
+            {headerItemsMd.map((headerItem) => (
+              <li
+                className='border-b-[1px] border-b-light-gray'
+                key={headerItem.text}
+              >
+                {headerItem.url ? (
+                  <Link
+                    to={headerItem.url}
+                    className='dropdown-mobile block'
+                    onClick={handleNavClose}
+                  >
+                    {headerItem.text}
+                  </Link>
+                ) : (
+                  <button
+                    className='allbirds-font text-[9px] flex justify-between items-center w-full px-7 py-4'
+                    onClick={() => handleNavClickMobile(headerItem.text)}
+                  >
+                    <span
+                      className={headerItem.text === 'sale' ? 'text-red' : ''}
+                    >
+                      {headerItem.text}
+                    </span>
+                    <span className='scale-[140%]'>
+                      <FaAngleRight />
+                    </span>
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          <ul
+            className={`duration-[250ms] absolute w-full pb-16 ${
+              nav.tabMobile === 'right'
+                ? '-translate-x-full'
+                : nav.tabMobile === 'middle'
+                ? 'translate-x-0'
+                : 'translate-x-full'
+            }`}
+          >
+            <li className='border-b-[1px] border-b-light-gray'>
+              <button
+                className='dropdown-mobile bg-silver flex justify-center items-center w-full border-b-[1px] border-b-light-gray'
+                onClick={handleNavBackMobile}
+              >
+                <span className='absolute left-7 scale-[150%]'>
+                  <FaAngleLeft />
+                </span>
+                {nav.category.categoryName}
+              </button>
+            </li>
+
+            {nav.category.sections.map((section) => (
+              <li
+                key={section.title.text}
+                className='border-b-[1px] border-b-light-gray'
+              >
+                <button
+                  className='dropdown-mobile w-full flex justify-between items-center'
+                  onClick={() => handleSubCategoryMobile(section.title.text)}
+                >
+                  {section.title.text}
+                  <span className='scale-[140%]'>
+                    <FaAngleRight />
+                  </span>
+                </button>
+              </li>
+            ))}
+
+            <li>
+              <span className='dropdown-mobile block'>featured</span>
+              <div className='flex gap-[2.4px]'>
+                {nav.category.featured.map((feature) => (
+                  <Link
+                    key={feature.url}
+                    to={feature.url}
+                    onClick={handleNavClose}
+                  >
+                    <img src={feature.imageUrlMobile} alt='' />
+                    <p className='text-center capitalize font-semibold text-[11.5px] mt-1 text-gray'>
+                      {feature.text}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </li>
+          </ul>
+
+          <ul
+            className={`duration-[250ms] absolute w-full pb-16 ${
+              nav.tabMobile === 'right' ? 'translate-x-0' : 'translate-x-full'
+            }`}
+          >
+            <button
+              className='dropdown-mobile bg-silver flex justify-center items-center w-full border-b-[1px] border-b-light-gray'
+              onClick={handleSubCategoryBackMobile}
+            >
+              <span className='absolute left-7 scale-[150%]'>
+                <FaAngleLeft />
+              </span>
+              {nav.category.categoryName}
+            </button>
+
+            {nav.category.sections
+              .filter((section) => section.title.text === nav.subCategoryMobile)
+              .map((subCategory) =>
+                subCategory.routes.map((route) => (
+                  <li
+                    className='border-b-[1px] border-b-light-gray'
+                    key={route.text}
+                  >
+                    <Link
+                      to={route.url}
+                      className='text-[11px] px-7 py-4 block capitalize'
+                      onClick={handleNavClose}
+                    >
+                      {route.text}
+                    </Link>
+                  </li>
+                )),
+              )}
+          </ul>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
