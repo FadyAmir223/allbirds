@@ -16,6 +16,7 @@ export default {
         gray: '#212A2F',
         'gray-light': '#d3d4d5',
         'gray-dark': '#94999b',
+        'bule-dark': '#1a2226',
         silver: '#f5f5f5',
         'sliver-dark': '#4d5559',
         red: '#AD1F00',

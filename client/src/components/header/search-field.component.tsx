@@ -4,6 +4,7 @@ import { LiaAngleLeftSolid } from 'react-icons/lia';
 
 import LinkCustom from '@/components/link-custom.component';
 import Modal from '@/components/modal.component';
+import Overlay from '@/components/overlay.component';
 import SearchIcon from '@/assets/svg/search.svg?react';
 import { cn } from '@/utils/cn';
 
@@ -44,18 +45,10 @@ const SearchField = () => {
     return () => clearTimeout(timeout);
   }, [search.isMoving]);
 
-  const handleSearchOpen = () => {
+  const handleSearchToggle = () => {
     setSearch((prevSearch) => ({
       ...prevSearch,
-      isOpen: true,
-      isMoving: true,
-    }));
-  };
-
-  const handleSearchClose = () => {
-    setSearch((prevSearch) => ({
-      ...prevSearch,
-      isOpen: false,
+      isOpen: !prevSearch.isOpen,
       isMoving: true,
     }));
   };
@@ -67,7 +60,7 @@ const SearchField = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleSearchClose();
+    handleSearchToggle();
     navigate('/pages/search?' + search.query);
   };
 
@@ -75,7 +68,7 @@ const SearchField = () => {
     <>
       <button
         className='flex items-center w-full mt-3 bg-silver rounded-lg focus:outline-0 max-h-[26px] text-xs md:hidden'
-        onClick={handleSearchOpen}
+        onClick={handleSearchToggle}
       >
         <span className='px-2 py-[6px] scale-[80%]'>
           <SearchIcon />
@@ -84,11 +77,9 @@ const SearchField = () => {
       </button>
 
       <Modal>
-        <div
-          className={cn(
-            'md:hidden fixed top-0 left-0 w-screen h-screen animate-[fade_100ms_linear] z-50',
-            search.isOpen ? 'bg-white/75' : 'opacity-0 hidden',
-          )}
+        <Overlay
+          isOpen={search.isOpen}
+          className='md:hidden top-0 left-0 z-40'
         />
 
         <div
@@ -101,11 +92,11 @@ const SearchField = () => {
             },
           )}
         >
-          <div className=''>
+          <div>
             <div className='flex items-center gap-[14px] mb-6'>
               <button
                 className='cursor-pointer duration-[400ms] hover:-translate-x-1 scale-[120%]'
-                onClick={handleSearchClose}
+                onClick={handleSearchToggle}
               >
                 <LiaAngleLeftSolid />
               </button>
@@ -127,12 +118,12 @@ const SearchField = () => {
             </div>
 
             {recentSearches && (
-              <div className=''>
+              <div>
                 <p className='text-gray-dark uppercase text-[9.6px] tracking-[0.8px] pb-[6px]'>
                   recent searches
                 </p>
 
-                <ul className=''>
+                <ul>
                   {recentSearches.map((recentSearch) => (
                     <li
                       key={recentSearch}
@@ -142,7 +133,7 @@ const SearchField = () => {
                         to={`/pages/search${
                           recentSearch ? `?query=${recentSearch}` : ''
                         }`}
-                        onClick={handleSearchClose}
+                        onClick={handleSearchToggle}
                       >
                         {recentSearch}
                       </Link>
@@ -155,10 +146,11 @@ const SearchField = () => {
 
           <LinkCustom
             to={`/pages/search${search.query ? `?query=${search.query}` : ''}`}
-            text='see more'
             className='mx-auto'
-            onClick={handleSearchClose}
-          />
+            onClick={handleSearchToggle}
+          >
+            see more
+          </LinkCustom>
         </div>
       </Modal>
     </>

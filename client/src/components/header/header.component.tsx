@@ -4,10 +4,11 @@ import { BiHelpCircle, BiSearch } from 'react-icons/bi';
 import { HiOutlineUser } from 'react-icons/hi';
 import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 
-import Cart from '@/components/cart.component';
 import ShopAd from '@/components/header/shopAd.component';
+import SearchField from '@/components/header/search-field.component';
+import { Cart } from '@/features/cart';
+import Overlay from '@/components/overlay.component';
 import headerNavData from '@/data/header-nav.data.json';
-import SearchField from './search-field.component';
 import { cn } from '@/utils/cn';
 
 const headerLeftItems = [
@@ -226,7 +227,7 @@ const Header = () => {
                   >
                     <Link
                       to={iconItem.url}
-                      className='header-icons scale-125'
+                      className='ml-3 block scale-125'
                       onClick={handleNavClose}
                     >
                       {iconItem.icon}
@@ -246,7 +247,7 @@ const Header = () => {
         <div
           className={cn(
             'absolute z-50 overflow-hidden w-full hidden lg:block',
-            nav.isOpen ? 'h-96 duration-300 transition-[height]' : 'h-0',
+            nav.isOpen ? 'h-[355px] duration-300 transition-[height]' : 'h-0',
           )}
         >
           <div className='pt-[47px] pb-6 px-[103px] bg-white hidden lg:grid grid-cols-5 gap-x-6'>
@@ -307,12 +308,11 @@ const Header = () => {
           </div>
         </div>
 
-        {nav.isOpen && (
-          <button
-            className='hidden lg:block relative w-screen h-[calc(100vh-50px)] bg-white/75 animate-[fade_250ms_linear]'
-            onClick={handleNavClose}
-          />
-        )}
+        <Overlay
+          isOpen={nav.isOpen}
+          className='hidden lg:block relative h-[calc(100vh-50px)]'
+          onClick={handleNavClose}
+        />
 
         <div
           className={cn(
@@ -359,7 +359,6 @@ const Header = () => {
               </li>
             ))}
           </ul>
-
           <ul
             className={cn(
               'duration-[250ms] absolute w-full pb-16',
@@ -417,7 +416,6 @@ const Header = () => {
               </div>
             </li>
           </ul>
-
           <ul
             className={cn(
               'duration-[250ms] absolute w-full pb-16',
@@ -453,6 +451,7 @@ const Header = () => {
                 )),
               )}
           </ul>
+          O
         </div>
       </div>
     </div>

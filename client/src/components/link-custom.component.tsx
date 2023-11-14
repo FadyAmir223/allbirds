@@ -1,12 +1,7 @@
 import { cn } from '@/utils/cn';
 import { Link, LinkProps } from 'react-router-dom';
 
-type LinkCustomProps = LinkProps & {
-  to: string;
-  text: string;
-};
-
-const LinkCustom = ({ to, text, className, ...props }: LinkCustomProps) => {
+const LinkCustom = ({ to, className, children, ...props }: LinkProps) => {
   return (
     <Link
       to={to}
@@ -16,7 +11,7 @@ const LinkCustom = ({ to, text, className, ...props }: LinkCustomProps) => {
       )}
       {...props}
     >
-      {text}
+      {children}
     </Link>
   );
 };
