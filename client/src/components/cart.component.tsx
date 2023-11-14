@@ -1,4 +1,4 @@
-import { BsMinecartLoaded } from 'react-icons/bs';
+import CartIcon from '@/assets/svg/cart.svg?react';
 
 type CartProps = {
   handleNavClose: () => void;
@@ -10,8 +10,8 @@ const Cart = ({ handleNavClose }: CartProps) => {
   };
 
   return (
-    <button className='header-icons' onClick={handleCartToggle}>
-      <BsMinecartLoaded size={22} />
+    <button className='header-icons scale-75' onClick={handleCartToggle}>
+      <CartIcon />
     </button>
   );
 };

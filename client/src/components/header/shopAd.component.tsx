@@ -34,7 +34,7 @@ const ShopAd = () => {
   };
 
   return (
-    <div className='bg-gray h-8 px-6 text-[9.3px] flex items-center justify-center'>
+    <div className='bg-gray h-8 px-[15px] lg:px-6 text-[9.3px] flex items-center justify-center'>
       <div className='mx-auto relative text-white'>
         <Markdown
           className='font-medium leading-[1.3] tracking-[0.3px]'

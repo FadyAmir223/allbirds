@@ -7,6 +7,7 @@ import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 import Cart from '@/components/cart.component';
 import ShopAd from '@/components/header/shopAd.component';
 import headerNavData from '@/data/header-nav.data.json';
+import SearchField from './search-field.component';
 
 const headerLeftItems = [
   { text: 'men', url: '' },
@@ -119,87 +120,31 @@ const Header = () => {
     <div>
       <ShopAd />
       <div className='relative'>
-        <nav className='px-6 py-[12px] lg:py-[4px] flex items-center justify-between text-gray shadow-md'>
-          <ul className='hidden lg:flex gap-5'>
-            {headerLeftItems.map((navCategory) => (
-              <li
-                key={navCategory.text}
-                className={
-                  nav.category.categoryName === navCategory.text
-                    ? 'underline'
-                    : ''
-                }
-              >
-                {navCategory.url ? (
-                  <Link
-                    to='/products/socks'
-                    className='header-nav'
-                    onClick={handleNavClose}
-                  >
-                    socks
-                  </Link>
-                ) : (
-                  <button
-                    className={`header-nav ${
-                      navCategory.text === 'sale' ? 'text-red' : null
-                    }`}
-                    onClick={() => handleNavClickDesktop(navCategory.text)}
-                  >
-                    {navCategory.text}
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          <button
-            className='flex lg:hidden scale-125'
-            onClick={handleToggleNavMobile}
-          >
-            <div className='relative w-5 h-[15px] group scale-[80%]'>
-              <span
-                className={`absolute duration-100 ease-linear bg-black w-full h-[1.5px] left-0 ${
-                  nav.isOpen ? 'top-[6px] rotate-45' : ' top-0'
-                }`}
-              />
-              <span
-                className={`absolute duration-100 ease-linear bg-black w-full h-[2px] left-0 top-[6px] ${
-                  nav.isOpen ? 'hidden' : ''
-                }`}
-              />
-              <span
-                className={`absolute duration-100 ease-linear bg-black w-full h-[1.5px] left-0 ${
-                  nav.isOpen ? 'top-[6px] -rotate-45' : 'top-[13px]'
-                }`}
-              />
-            </div>
-          </button>
-
-          <div className='w-[80px] box-border'>
-            <Link to='/' onClick={handleNavClose}>
-              <img
-                src='/images/main-page/logo.webp'
-                alt='logo'
-                className='mx-auto'
-              />
-            </Link>
-          </div>
-
-          <div className='flex'>
-            <ul className='flex gap-[18px]'>
-              {headerRightItems.map((navCategory) => (
-                <li className='hidden lg:block' key={navCategory.text}>
+        <div className='px-[15px] lg:px-6 py-[9px] md:py-[12px] lg:py-[4px] shadow-md'>
+          <nav className='flex items-center justify-between text-gray'>
+            <ul className='hidden lg:flex gap-5'>
+              {headerLeftItems.map((navCategory) => (
+                <li
+                  key={navCategory.text}
+                  className={
+                    nav.category.categoryName === navCategory.text
+                      ? 'underline'
+                      : ''
+                  }
+                >
                   {navCategory.url ? (
                     <Link
-                      to='/pages/return'
+                      to='/products/socks'
                       className='header-nav'
                       onClick={handleNavClose}
                     >
-                      {navCategory.text}
+                      socks
                     </Link>
                   ) : (
                     <button
-                      className='header-nav'
+                      className={`header-nav ${
+                        navCategory.text === 'sale' ? 'text-red' : null
+                      }`}
                       onClick={() => handleNavClickDesktop(navCategory.text)}
                     >
                       {navCategory.text}
@@ -209,30 +154,89 @@ const Header = () => {
               ))}
             </ul>
 
-            <ul className='flex items-center'>
-              {headerIconItems.map((iconItem) => (
-                <li
-                  className={`${iconItem.text ? 'hidden lg:block  ' : ''} ${
-                    iconItem.hiddenSm ? 'hidden md:block  ' : ''
+            <button
+              className='flex lg:hidden scale-125'
+              onClick={handleToggleNavMobile}
+            >
+              <div className='relative w-5 h-[15px] group scale-[80%]'>
+                <span
+                  className={`absolute duration-100 ease-linear bg-black w-full h-[1.5px] left-0 ${
+                    nav.isOpen ? 'top-[6px] rotate-45' : ' top-0'
                   }`}
-                  key={iconItem.text}
-                >
-                  <Link
-                    to={iconItem.url}
-                    className='header-icons scale-125'
-                    onClick={handleNavClose}
-                  >
-                    {iconItem.icon}
-                  </Link>
-                </li>
-              ))}
+                />
+                <span
+                  className={`absolute duration-100 ease-linear bg-black w-full h-[2px] left-0 top-[6px] ${
+                    nav.isOpen ? 'hidden' : ''
+                  }`}
+                />
+                <span
+                  className={`absolute duration-100 ease-linear bg-black w-full h-[1.5px] left-0 ${
+                    nav.isOpen ? 'top-[6px] -rotate-45' : 'top-[13px]'
+                  }`}
+                />
+              </div>
+            </button>
 
-              <li>
-                <Cart handleNavClose={handleNavClose} />
-              </li>
-            </ul>
-          </div>
-        </nav>
+            <div className='w-[80px] box-border'>
+              <Link to='/' onClick={handleNavClose}>
+                <img
+                  src='/images/main-page/logo.webp'
+                  alt='logo'
+                  className='mx-auto'
+                />
+              </Link>
+            </div>
+
+            <div className='flex'>
+              <ul className='flex gap-[18px]'>
+                {headerRightItems.map((navCategory) => (
+                  <li className='hidden lg:block' key={navCategory.text}>
+                    {navCategory.url ? (
+                      <Link
+                        to='/pages/return'
+                        className='header-nav'
+                        onClick={handleNavClose}
+                      >
+                        {navCategory.text}
+                      </Link>
+                    ) : (
+                      <button
+                        className='header-nav'
+                        onClick={() => handleNavClickDesktop(navCategory.text)}
+                      >
+                        {navCategory.text}
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+
+              <ul className='flex items-center'>
+                {headerIconItems.map((iconItem) => (
+                  <li
+                    className={`${iconItem.text ? 'hidden lg:block  ' : ''} ${
+                      iconItem.hiddenSm ? 'hidden md:block  ' : ''
+                    }`}
+                    key={iconItem.text}
+                  >
+                    <Link
+                      to={iconItem.url}
+                      className='header-icons scale-125'
+                      onClick={handleNavClose}
+                    >
+                      {iconItem.icon}
+                    </Link>
+                  </li>
+                ))}
+
+                <li>
+                  <Cart handleNavClose={handleNavClose} />
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <SearchField />
+        </div>
 
         <div
           className={`absolute z-50 overflow-hidden w-full hidden lg:block ${
@@ -299,7 +303,7 @@ const Header = () => {
 
         {nav.isOpen && (
           <button
-            className='hidden lg:block relative w-screen h-[calc(100vh-50px)] bg-black opacity-50 animate-[fade_250ms_linear]'
+            className='hidden lg:block relative w-screen h-[calc(100vh-50px)] bg-white/75 animate-[fade_250ms_linear]'
             onClick={handleNavClose}
           />
         )}
@@ -318,7 +322,7 @@ const Header = () => {
           >
             {headerItemsMd.map((headerItem) => (
               <li
-                className='border-b-[1px] border-b-light-gray'
+                className='border-b-[1px] border-b-gray-light'
                 key={headerItem.text}
               >
                 {headerItem.url ? (
@@ -357,9 +361,9 @@ const Header = () => {
                 : 'translate-x-full'
             }`}
           >
-            <li className='border-b-[1px] border-b-light-gray'>
+            <li className='border-b-[1px] border-b-gray-light'>
               <button
-                className='dropdown-mobile bg-silver flex justify-center items-center w-full border-b-[1px] border-b-light-gray'
+                className='dropdown-mobile bg-silver flex justify-center items-center w-full border-b-[1px] border-b-gray-light'
                 onClick={handleNavBackMobile}
               >
                 <span className='absolute left-7 scale-[150%]'>
@@ -372,7 +376,7 @@ const Header = () => {
             {nav.category.sections.map((section) => (
               <li
                 key={section.title.text}
-                className='border-b-[1px] border-b-light-gray'
+                className='border-b-[1px] border-b-gray-light'
               >
                 <button
                   className='dropdown-mobile w-full flex justify-between items-center'
@@ -411,7 +415,7 @@ const Header = () => {
             }`}
           >
             <button
-              className='dropdown-mobile bg-silver flex justify-center items-center w-full border-b-[1px] border-b-light-gray'
+              className='dropdown-mobile bg-silver flex justify-center items-center w-full border-b-[1px] border-b-gray-light'
               onClick={handleSubCategoryBackMobile}
             >
               <span className='absolute left-7 scale-[150%]'>
@@ -425,7 +429,7 @@ const Header = () => {
               .map((subCategory) =>
                 subCategory.routes.map((route) => (
                   <li
-                    className='border-b-[1px] border-b-light-gray'
+                    className='border-b-[1px] border-b-gray-light'
                     key={route.text}
                   >
                     <Link

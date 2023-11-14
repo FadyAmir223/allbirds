@@ -14,8 +14,10 @@ export default {
     extend: {
       colors: {
         gray: '#212A2F',
-        'light-gray': '#d3d4d5',
+        'gray-light': '#d3d4d5',
+        'gray-dark': '#94999b',
         silver: '#f5f5f5',
+        'sliver-dark': '#4d5559',
         red: '#AD1F00',
       },
     },
