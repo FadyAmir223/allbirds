@@ -8,6 +8,7 @@ import Cart from '@/components/cart.component';
 import ShopAd from '@/components/header/shopAd.component';
 import headerNavData from '@/data/header-nav.data.json';
 import SearchField from './search-field.component';
+import { cn } from '@/utils/cn';
 
 const headerLeftItems = [
   { text: 'men', url: '' },
@@ -142,9 +143,9 @@ const Header = () => {
                     </Link>
                   ) : (
                     <button
-                      className={`header-nav ${
-                        navCategory.text === 'sale' ? 'text-red' : null
-                      }`}
+                      className={cn('header-nav', {
+                        'text-red': navCategory.text === 'sale',
+                      })}
                       onClick={() => handleNavClickDesktop(navCategory.text)}
                     >
                       {navCategory.text}
@@ -160,19 +161,22 @@ const Header = () => {
             >
               <div className='relative w-5 h-[15px] group scale-[80%]'>
                 <span
-                  className={`absolute duration-100 ease-linear bg-black w-full h-[1.5px] left-0 ${
-                    nav.isOpen ? 'top-[6px] rotate-45' : ' top-0'
-                  }`}
+                  className={cn(
+                    'absolute duration-100 ease-linear bg-black w-full h-[1.5px] left-0',
+                    nav.isOpen ? 'top-[6px] rotate-45' : ' top-0',
+                  )}
                 />
                 <span
-                  className={`absolute duration-100 ease-linear bg-black w-full h-[2px] left-0 top-[6px] ${
-                    nav.isOpen ? 'hidden' : ''
-                  }`}
+                  className={cn(
+                    'absolute duration-100 ease-linear bg-black w-full h-[2px] left-0 top-[6px]',
+                    { hidden: nav.isOpen },
+                  )}
                 />
                 <span
-                  className={`absolute duration-100 ease-linear bg-black w-full h-[1.5px] left-0 ${
-                    nav.isOpen ? 'top-[6px] -rotate-45' : 'top-[13px]'
-                  }`}
+                  className={cn(
+                    'absolute duration-100 ease-linear bg-black w-full h-[1.5px] left-0',
+                    nav.isOpen ? 'top-[6px] -rotate-45' : 'top-[13px]',
+                  )}
                 />
               </div>
             </button>
@@ -214,9 +218,10 @@ const Header = () => {
               <ul className='flex items-center'>
                 {headerIconItems.map((iconItem) => (
                   <li
-                    className={`${iconItem.text ? 'hidden lg:block  ' : ''} ${
-                      iconItem.hiddenSm ? 'hidden md:block  ' : ''
-                    }`}
+                    className={cn({
+                      'hidden lg:block': iconItem.text,
+                      'hidden md:block': iconItem.hiddenSm,
+                    })}
                     key={iconItem.text}
                   >
                     <Link
@@ -239,9 +244,10 @@ const Header = () => {
         </div>
 
         <div
-          className={`absolute z-50 overflow-hidden w-full hidden lg:block ${
-            nav.isOpen ? 'h-96 duration-300 transition-[height]' : 'h-0'
-          }`}
+          className={cn(
+            'absolute z-50 overflow-hidden w-full hidden lg:block',
+            nav.isOpen ? 'h-96 duration-300 transition-[height]' : 'h-0',
+          )}
         >
           <div className='pt-[47px] pb-6 px-[103px] bg-white hidden lg:grid grid-cols-5 gap-x-6'>
             {nav.category.categoryName === 'sustainability' && <div />}
@@ -309,16 +315,18 @@ const Header = () => {
         )}
 
         <div
-          className={`absolute w-screen bg-white overflow-x-hidden lg:hidden duration-[250ms] ${
-            nav.isOpen ? 'h-[calc(100vh-45px-32px)]' : 'h-0'
-          }`}
+          className={cn(
+            'absolute w-screen bg-white overflow-x-hidden lg:hidden duration-[250ms]',
+            nav.isOpen ? 'h-[calc(100vh-45px-32px)]' : 'h-0',
+          )}
         >
           <ul
-            className={`duration-[250ms] absolute w-full  pb-16 ${
+            className={cn(
+              'duration-[250ms] absolute w-full pb-16',
               nav.tabMobile === 'middle' || nav.tabMobile === 'right'
                 ? '-translate-x-full'
-                : 'translate-x-0'
-            }`}
+                : 'translate-x-0',
+            )}
           >
             {headerItemsMd.map((headerItem) => (
               <li
@@ -353,13 +361,14 @@ const Header = () => {
           </ul>
 
           <ul
-            className={`duration-[250ms] absolute w-full pb-16 ${
+            className={cn(
+              'duration-[250ms] absolute w-full pb-16',
               nav.tabMobile === 'right'
                 ? '-translate-x-full'
                 : nav.tabMobile === 'middle'
                 ? 'translate-x-0'
-                : 'translate-x-full'
-            }`}
+                : 'translate-x-full',
+            )}
           >
             <li className='border-b-[1px] border-b-gray-light'>
               <button
@@ -410,9 +419,10 @@ const Header = () => {
           </ul>
 
           <ul
-            className={`duration-[250ms] absolute w-full pb-16 ${
-              nav.tabMobile === 'right' ? 'translate-x-0' : 'translate-x-full'
-            }`}
+            className={cn(
+              'duration-[250ms] absolute w-full pb-16',
+              nav.tabMobile === 'right' ? 'translate-x-0' : 'translate-x-full',
+            )}
           >
             <button
               className='dropdown-mobile bg-silver flex justify-center items-center w-full border-b-[1px] border-b-gray-light'

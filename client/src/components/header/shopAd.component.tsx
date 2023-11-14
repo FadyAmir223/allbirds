@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Markdown from 'react-markdown';
 import { FaAngleRight } from 'react-icons/fa';
+import { cn } from '@/utils/cn';
 
 const ads = [
   'Less Stress. More Gifts. We’ve extended free returns until 1/22/24. [Shop Men](/collections/mens) | [Shop Women](/collections/womens)',
@@ -21,7 +22,7 @@ const MarkdownLink = ({
   className,
   ...props
 }: MarkdownLinkProps) => (
-  <Link to={href || '/'} className={`underline ${className}`} {...props}>
+  <Link to={href || '/'} className={cn('underline', className)} {...props}>
     {children}
   </Link>
 );

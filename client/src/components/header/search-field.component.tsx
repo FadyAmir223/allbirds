@@ -1,14 +1,16 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { LiaAngleLeftSolid } from 'react-icons/lia';
 
 import LinkCustom from '@/components/link-custom.component';
-import SearchIcon from '@/assets/svg/search.svg?react';
 import Modal from '@/components/modal.component';
+import SearchIcon from '@/assets/svg/search.svg?react';
 import { cn } from '@/utils/cn';
 
 // TODO: GET/POST /api/recent-search
-const recentSeraches = ['sale', 'tree', 'slippers', 'mizzles'];
+// TODO: search functionality
+
+const recentSearches = ['sale', 'tree runners', 'slippers', 'mizzles'];
 
 const SearchField = () => {
   const [search, setSearch] = useState({
@@ -19,9 +21,11 @@ const SearchField = () => {
 
   const [, setSearchParams] = useSearchParams();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setSearchParams({ query: search.query });
+      if (search.query) setSearchParams({ query: search.query });
     }, 700);
 
     return () => clearTimeout(timeout);
@@ -61,6 +65,12 @@ const SearchField = () => {
     setSearch((prevSearch) => ({ ...prevSearch, [name]: value }));
   };
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSearchClose();
+    navigate('/pages/search?' + search.query);
+  };
+
   return (
     <>
       <button
@@ -83,7 +93,7 @@ const SearchField = () => {
 
         <div
           className={cn(
-            'md:hidden fixed top-0 left-0 w-screen h-screen animate-[fade_250ms_linear] bg-white px-[20px] py-[10px] flex flex-col justify-between duration-[250ms] transition-transform z-50',
+            'md:hidden fixed top-0 left-0 w-screen h-screen animate-[fade_250ms_linear] bg-white px-[20px] py-[10px] flex flex-col justify-between z-50 duration-[250ms] transition-transform',
             {
               'translate-y-full opacity-0': !search.isOpen && !search.isMoving,
               'translate-y-0': search.isOpen && search.isMoving,
@@ -99,31 +109,43 @@ const SearchField = () => {
               >
                 <LiaAngleLeftSolid />
               </button>
+
               <div className='bg-silver w-full rounded-lg'>
-                <input
-                  type='text'
-                  name='query'
-                  placeholder='Enter Search Term'
-                  className='bg-transparent text-xs focus:outline-0 px-5 py-[11px]  w-full tracking-[0.06em]'
-                  value={search.query}
-                  onChange={handleQueryChange}
-                />
+                <form onSubmit={handleSubmit}>
+                  <input
+                    autoFocus
+                    autoComplete='off'
+                    type='text'
+                    name='query'
+                    placeholder='Enter Search Term'
+                    className='bg-transparent text-xs focus:outline-0 px-5 py-[11px]  w-full tracking-[0.06em]'
+                    value={search.query}
+                    onChange={handleQueryChange}
+                  />
+                </form>
               </div>
             </div>
 
-            {recentSeraches && (
+            {recentSearches && (
               <div className=''>
                 <p className='text-gray-dark uppercase text-[9.6px] tracking-[0.8px] pb-[6px]'>
                   recent searches
                 </p>
 
                 <ul className=''>
-                  {recentSeraches.map((recentSerach) => (
+                  {recentSearches.map((recentSearch) => (
                     <li
-                      key={recentSerach}
+                      key={recentSearch}
                       className='pb-[6px] text-[13px] leading-[18px]'
                     >
-                      {recentSerach}
+                      <Link
+                        to={`/pages/search${
+                          recentSearch ? `?query=${recentSearch}` : ''
+                        }`}
+                        onClick={handleSearchClose}
+                      >
+                        {recentSearch}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -131,7 +153,12 @@ const SearchField = () => {
             )}
           </div>
 
-          <LinkCustom to='/pages/search' text='see more' className='mx-auto' />
+          <LinkCustom
+            to={`/pages/search${search.query ? `?query=${search.query}` : ''}`}
+            text='see more'
+            className='mx-auto'
+            onClick={handleSearchClose}
+          />
         </div>
       </Modal>
     </>
