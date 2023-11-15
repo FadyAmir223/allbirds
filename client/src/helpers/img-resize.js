@@ -5,7 +5,7 @@ import path from 'path';
 import sharp from 'sharp';
 
 const inputDir =
-  '/home/fezza/Desktop/allbirds/client/public/images/main-page/header-nav';
+  '/home/fezza/Desktop/allbirds/client/public/images/main-page/favorites';
 const outputDir = `${inputDir}/../output`;
 const quality = 70;
 

@@ -73,7 +73,7 @@ const SearchField = () => {
         <span className='px-2 py-[6px] scale-[80%]'>
           <SearchIcon />
         </span>
-        <span className='capitalize text-sliver-dark'>enter search term</span>
+        <span className='capitalize text-silver-dark'>enter search term</span>
       </button>
 
       <Modal>
@@ -84,7 +84,7 @@ const SearchField = () => {
 
         <div
           className={cn(
-            'md:hidden fixed top-0 left-0 w-screen h-screen animate-[fade_250ms_linear] bg-white px-[20px] py-[10px] flex flex-col justify-between z-50 duration-[250ms] transition-transform',
+            'md:hidden fixed top-0 left-0 w-screen h-[100dvh] animate-[fade_250ms_linear] bg-white px-[20px] py-[10px] flex flex-col justify-between z-50 duration-[250ms] transition-transform',
             {
               'translate-y-full opacity-0': !search.isOpen && !search.isMoving,
               'translate-y-0': search.isOpen && search.isMoving,

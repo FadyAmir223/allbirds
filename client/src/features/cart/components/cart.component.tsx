@@ -49,8 +49,8 @@ export const Cart = ({ handleNavClose }: CartProps) => {
 
         <div
           className={cn(
-            'absolute h-screen w-full md:w-[395px] bg-white top-0 right-0 z-50 duration-[250ms] p-4',
-            cart.isOpen ? 'right-0' : '-right-[395px]',
+            'absolute h-[100dvh] w-full md:w-[395px] bg-white top-0 right-0 z-50 duration-[250ms] p-4',
+            cart.isOpen ? '' : 'translate-x-full',
           )}
         >
           <div className='relative text-center border-b-4 border-b-silver pb-2'>
@@ -85,6 +85,7 @@ export const Cart = ({ handleNavClose }: CartProps) => {
                     <LinkCustom
                       to={shopItem.url}
                       className='block w-full bg-white hover:bg-bule-dark hover:text-white duration-150'
+                      onClick={() => dispatch(toggle())}
                     >
                       {shopItem.title}
                     </LinkCustom>
