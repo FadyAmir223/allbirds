@@ -1,0 +1,71 @@
+[
+  {
+    "text": "for everyday",
+    "items": [
+      {
+        "imgUrl": "/images/main-page/favorites/23Q4-WR2-Carousel-Card-1110x1110.webp",
+        "miniImgUrl": "/images/main-page/mini-art/Weather.webp",
+        "title": "wool runner 2",
+        "description": "Step Into Next-Gen Comfort"
+      },
+      {
+        "imgUrl": "/images/main-page/favorites/23Q4-Holiday_Ch1-Site-Category_Category_Card-1110x1110-2.webp",
+        "miniImgUrl": "/images/main-page/mini-art/Weather.webp",
+        "title": "wool runner-up mizzle",
+        "description": "wet weather high top"
+      },
+      {
+        "imgUrl": "/images/main-page/favorites/23Q4-Holiday_Ch1-Site-Category_Category_Card-1110x1110-1 (2).webp",
+        "miniImgUrl": "/images/main-page/mini-art/Tree.webp",
+        "title": "tree runner",
+        "description": "breezy, everyday sneaker"
+      }
+    ]
+  },
+  {
+    "text": "for travel",
+    "items": [
+      {
+        "imgUrl": "/images/main-page/favorites/23Q4-Holiday_Ch1-Site-Category_Category_Card-1110x1110-1 (1).webp",
+        "miniImgUrl": "/images/main-page/mini-art/Tree.webp",
+        "title": "tree dasher 2",
+        "description": "comfy, breezy, everyday runs"
+      },
+      {
+        "imgUrl": "/images/main-page/favorites/23Q4-Holiday_Ch1-Site-Category_Category_Card-1110x1110-2 (1).webp",
+        "miniImgUrl": "/images/main-page/mini-art/Weather.webp",
+        "title": "wool dasher mizzle",
+        "description": "comfy, water-repellent, everyday runs"
+      },
+      {
+        "imgUrl": "/images/main-page/favorites/23Q4-Holiday_Ch1-Site-Category_Category_Card-1110x1110-3.webp",
+        "miniImgUrl": "/images/main-page/mini-art/Tree.webp",
+        "title": "tree flyer 2",
+        "description": "comfortable, springy active shoe"
+      }
+    ]
+  },
+  {
+    "text": "for lounging",
+    "items": [
+      {
+        "imgUrl": "/images/main-page/favorites/23Q4-Holiday_Ch1-Site-Category_Category_Card-1110x1110-1.webp",
+        "miniImgUrl": "/images/main-page/mini-art/Weather.webp",
+        "title": "wool dweller",
+        "description": "cozy slipper"
+      },
+      {
+        "imgUrl": "/images/main-page/favorites/23Q4-Holiday_Ch1-Site-Category_Category_Card-1110x1110-4.webp",
+        "miniImgUrl": "/images/main-page/mini-art/Weather.webp",
+        "title": "wool lounger",
+        "description": "cozy slip-on"
+      },
+      {
+        "imgUrl": "/images/main-page/favorites/23Q4-Holiday_Ch1-Site-Category_Category_Card-1110x1110-3 (2).webp",
+        "miniImgUrl": "/images/main-page/mini-art/fluff_pdp_icon.webp",
+        "title": "wool lounger fluff",
+        "description": "cozy feel, fluffy material"
+      }
+    ]
+  }
+]
