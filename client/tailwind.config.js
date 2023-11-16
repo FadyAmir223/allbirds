@@ -20,6 +20,8 @@ export default {
         silver: '#f5f5f5',
         'sliver-dark': '#4d5559',
         red: '#AD1F00',
+        'red-dark': '#b65151',
+        brown: '#f8f7f5',
       },
     },
   },

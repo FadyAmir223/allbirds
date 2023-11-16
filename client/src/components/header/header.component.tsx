@@ -50,6 +50,7 @@ type Nav = {
 };
 
 const Header = () => {
+  const [isAdHidden, setAdHidden] = useState(false);
   const [nav, setNav] = useState<Nav>({
     isOpen: false,
     category: emptyCategory,
@@ -57,16 +58,13 @@ const Header = () => {
     tabMobile: 'left',
   });
 
-  const [hidden, setHidden] = useState(false);
-
-  const handleScroll = () => {
-    const threshold = 100;
-    setHidden(scrollY > threshold);
+  const handleAdHide = () => {
+    setAdHidden(scrollY > 100);
   };
 
   useEffect(() => {
-    addEventListener('scroll', handleScroll);
-    return () => removeEventListener('scroll', handleScroll);
+    addEventListener('scroll', handleAdHide);
+    return () => removeEventListener('scroll', handleAdHide);
   }, []);
 
   useEffect(() => {
@@ -140,7 +138,7 @@ const Header = () => {
       className={cn(
         'fixed z-50 bg-white w-full duration-[400ms] transition-transform',
         {
-          '-translate-y-8': hidden,
+          '-translate-y-8': isAdHidden,
         },
       )}
     >
@@ -342,7 +340,7 @@ const Header = () => {
           className={cn(
             'absolute w-screen bg-white overflow-x-hidden lg:hidden duration-[250ms]',
             nav.isOpen
-              ? hidden
+              ? isAdHidden
                 ? 'h-[calc(100vh-45px)]'
                 : 'h-[calc(100vh-45px-32px)]'
               : 'h-0',

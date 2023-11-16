@@ -1,32 +1,58 @@
 import { useState } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper as SwiperType } from 'swiper/types';
+import 'swiper/css';
 
-import { cn } from '@/utils/cn';
 import GiftCard from './gift-card.component';
+import { cn } from '@/utils/cn';
 import gifts from '../data/gifts.json';
 import screenSize from '@/data/screen-size.json';
 
+const SECTION_SIZE = 3;
+const imagesPerSlide = screenSize.sm > innerWidth ? 1 : 2;
+const totalGifts = gifts.flatMap((gift) => gift.items).length;
+
+/*
+  it causes unnecessary re-render on slide change
+  it can be avioded if used 'swiper' navigation & pagination modules
+*/
+
 const BestSellingGifts = () => {
+  console.log('x');
+
   const [gift, setGift] = useState({
     section: 0,
     card: 0,
-    total: gifts.flatMap((figt) => figt.items).length,
+    total: totalGifts,
   });
 
-  const imgSize = (innerWidth - 8 * 2) / (screenSize.sm > innerWidth ? 1 : 2);
+  const [swiper, setSwiper] = useState<SwiperType | null>(null);
 
-  const handleGiftSection = (idx: number) => {
+  const handleSectionChange = (idx: number) => {
+    const cardIdx = idx * SECTION_SIZE;
     setGift((prevGift) => ({
       ...prevGift,
       section: idx,
-      card: idx * 3,
+      card: cardIdx,
     }));
+    swiper?.slideTo(cardIdx);
   };
 
   const handleGiftChange = (direction: 1 | -1) => {
     setGift((prevGift) => ({
       ...prevGift,
       card: prevGift.card + direction,
+      section: Math.ceil((gift.card + 1) / SECTION_SIZE) - 1,
+    }));
+    swiper?.slideTo(gift.card + direction);
+  };
+
+  const handleSlideChange = (swiper: SwiperType) => {
+    setGift((prevGift) => ({
+      ...prevGift,
+      card: swiper.realIndex,
+      section: Math.ceil((gift.card + 1) / SECTION_SIZE) - 1,
     }));
   };
 
@@ -50,7 +76,7 @@ const BestSellingGifts = () => {
                 className={cn(
                   'allbirds-font p-3 border-b-2 border-b-transparent w-44 tracking-[1px]',
                 )}
-                onClick={() => handleGiftSection(idx)}
+                onClick={() => handleSectionChange(idx)}
               >
                 {gift.text}
               </button>
@@ -64,47 +90,49 @@ const BestSellingGifts = () => {
           ))}
         </div>
 
-        <div className=' md:hidden relative'>
-          <div
-            className='whitespace-nowrap flex gap-x-2 duration-500 '
-            style={{ translate: `-${gift.card * (imgSize + 8)}px` }}
+        <div className='md:hidden relative'>
+          <Swiper
+            spaceBetween={8}
+            slidesPerView={imagesPerSlide}
+            onSlideChange={handleSlideChange}
+            onSwiper={setSwiper}
           >
-            {gifts.map((gift) =>
-              gift.items.map((giftItem) => (
-                <GiftCard
-                  key={giftItem.title}
-                  {...giftItem}
-                  style={{ minWidth: imgSize }}
-                />
-              )),
-            )}
-          </div>
+            <div className='whitespace-nowrap flex gap-x-2 duration-500'>
+              {gifts.map((gift) =>
+                gift.items.map((giftItem) => (
+                  <SwiperSlide>
+                    <GiftCard key={giftItem.title} {...giftItem} />
+                  </SwiperSlide>
+                )),
+              )}
+            </div>
 
-          <button
-            className={cn(
-              'absolute right-0 top-1/2 -translate-y-1/2 rounded-full bg-gray text-gray-light grid place-items-center w-10 h-10',
-              { hidden: gift.card > gift.total - 3 },
-            )}
-            onClick={() => handleGiftChange(1)}
-            disabled={gift.card > gift.total - 3}
-          >
-            <span className='scale-150'>
-              <FaAngleRight />
-            </span>
-          </button>
+            <button
+              className={cn(
+                'absolute right-0 top-1/2 -translate-y-1/2 rounded-full bg-gray text-gray-light grid place-items-center w-10 h-10 z-10',
+                { hidden: gift.card > gift.total - 3 },
+              )}
+              onClick={() => handleGiftChange(1)}
+              disabled={gift.card > gift.total - 3}
+            >
+              <span className='scale-150'>
+                <FaAngleRight />
+              </span>
+            </button>
 
-          <button
-            className={cn(
-              'absolute left-0 top-1/2 -translate-y-1/2 rounded-full bg-gray text-gray-light grid place-items-center w-10 h-10',
-              { hidden: gift.card === 0 },
-            )}
-            onClick={() => handleGiftChange(-1)}
-            disabled={gift.card === 0}
-          >
-            <span className='scale-150'>
-              <FaAngleLeft />
-            </span>
-          </button>
+            <button
+              className={cn(
+                'absolute left-0 top-1/2 -translate-y-1/2 rounded-full bg-gray text-gray-light grid place-items-center w-10 h-10 z-10',
+                { hidden: gift.card === 0 },
+              )}
+              onClick={() => handleGiftChange(-1)}
+              disabled={gift.card === 0}
+            >
+              <span className='scale-150'>
+                <FaAngleLeft />
+              </span>
+            </button>
+          </Swiper>
         </div>
       </div>
     </section>

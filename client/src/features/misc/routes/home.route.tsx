@@ -1,6 +1,7 @@
 import Hero from '../components/hero.component';
 import BestSellingGifts from '../components/best-selling-gifts.component';
 import SaleAd from '../components/sale-ad.component';
+import EmailServiceForm from '../components/email-service-form.component';
 
 export const Home = () => {
   return (
@@ -32,6 +33,7 @@ export const Home = () => {
           },
         ]}
       />
+      <EmailServiceForm />
     </main>
   );
 };

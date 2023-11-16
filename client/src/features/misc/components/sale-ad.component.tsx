@@ -50,7 +50,7 @@ const SaleAd = ({
               to={heroLink.url}
               className='w-full py-[10px]'
               hover
-              type='invert'
+              styleType='invert'
             >
               {heroLink.text}
             </LinkCustom>
