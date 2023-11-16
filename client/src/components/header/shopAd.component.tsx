@@ -1,8 +1,17 @@
-import { useState } from 'react';
+import { useState, MouseEvent, HTMLAttributes } from 'react';
 import { Link } from 'react-router-dom';
 import Markdown from 'react-markdown';
 import { FaAngleRight } from 'react-icons/fa';
+
 import { cn } from '@/utils/cn';
+
+type MarkdownLinkProps = HTMLAttributes<HTMLAnchorElement> & {
+  href?: string;
+};
+
+type ShopAdProps = {
+  onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
+};
 
 const ads = [
   'Less Stress. More Gifts. We’ve extended free returns until 1/22/24. [Shop Men](/collections/mens) | [Shop Women](/collections/womens)',
@@ -10,16 +19,10 @@ const ads = [
   'Gift Cozy, Get Cozy: Wrap Up Foolproof Gifts For Everyone On Your List. [Shop Men](/collections/mens) | [Shop Women](/collections/womens)',
 ];
 
-interface MarkdownLinkProps {
-  className?: string;
-  href?: string;
-  children?: React.ReactNode;
-}
-
 const MarkdownLink = ({
-  href,
   children,
   className,
+  href,
   ...props
 }: MarkdownLinkProps) => (
   <Link to={href || '/'} className={cn('underline', className)} {...props}>
@@ -27,7 +30,7 @@ const MarkdownLink = ({
   </Link>
 );
 
-const ShopAd = () => {
+const ShopAd = ({ onClick }: ShopAdProps) => {
   const [currAd, setCurrAd] = useState(0);
 
   const handleNextAd = () => {
@@ -39,7 +42,9 @@ const ShopAd = () => {
       <div className='mx-auto relative text-white'>
         <Markdown
           className='font-medium leading-[1.3] tracking-[0.3px]'
-          components={{ a: MarkdownLink }}
+          components={{
+            a: (props) => <MarkdownLink {...props} onClick={onClick} />,
+          }}
         >
           {ads[currAd]}
         </Markdown>

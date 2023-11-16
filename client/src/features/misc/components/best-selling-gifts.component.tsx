@@ -31,7 +31,7 @@ const BestSellingGifts = () => {
   };
 
   return (
-    <section className='px-6'>
+    <section className='px-6 pb-9'>
       <div className='lg:px-9'>
         <h2 className='capitalize font-bold text-[26px] text-center mb-2'>
           our best-selling gifts
@@ -40,7 +40,7 @@ const BestSellingGifts = () => {
         <div className='border-b-2 border-gray-light flex justify-center mb-8'>
           <div className='flex justify-center relative'>
             <span
-              className='absolute -bottom-[2px] w-44 bg-black left-0 h-[2px] duration-150'
+              className='absolute -bottom-[2px] w-44 bg-black left-0 h-[2px] duration-[250ms]'
               style={{ translate: `${100 * gift.section}%` }}
             />
 

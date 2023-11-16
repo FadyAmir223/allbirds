@@ -67,7 +67,8 @@ const Hero = () => {
                 <LinkCustom
                   key={heroLink.text}
                   to={heroLink.url}
-                  className='py-[10px] bg-white hover:bg-gray border-transparent hover:border-2 hover:border-gray duration-100 w-1/2'
+                  className='py-[10px] w-1/2 border-transparent hover:border-2 hover:border-gray'
+                  hover
                 >
                   {heroLink.text}
                 </LinkCustom>

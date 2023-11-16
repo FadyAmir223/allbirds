@@ -22,7 +22,7 @@ const GiftCard = ({
   return (
     <div
       className={cn(
-        'group shadow-lg shadow-gray overflow-hidden group',
+        'group shadow-lg shadow-gray-light overflow-hidden group',
         className,
       )}
       {...props}
@@ -42,7 +42,8 @@ const GiftCard = ({
               <LinkCustom
                 key={heroLink.text}
                 to={heroLink.url}
-                className='z-30 py-[10px] bg-white hover:bg-gray border-none duration-100 block relative w-full'
+                className='z-30 py-[10px] border-none block relative w-full'
+                hover
               >
                 {heroLink.text}
               </LinkCustom>

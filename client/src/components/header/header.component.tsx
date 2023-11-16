@@ -57,6 +57,18 @@ const Header = () => {
     tabMobile: 'left',
   });
 
+  const [hidden, setHidden] = useState(false);
+
+  const handleScroll = () => {
+    const threshold = 100;
+    setHidden(scrollY > threshold);
+  };
+
+  useEffect(() => {
+    addEventListener('scroll', handleScroll);
+    return () => removeEventListener('scroll', handleScroll);
+  }, []);
+
   useEffect(() => {
     if (!nav.isOpen) {
       const timeout = setTimeout(() => {
@@ -68,7 +80,12 @@ const Header = () => {
   }, [nav.isOpen]);
 
   const handleNavClose = () => {
-    if (nav.isOpen) setNav((prevNav) => ({ ...prevNav, isOpen: false }));
+    if (nav.isOpen)
+      setNav((prevNav) => ({
+        ...prevNav,
+        isOpen: false,
+        category: emptyCategory,
+      }));
   };
 
   const handleNavClickDesktop = (headerCategoryText: string) => {
@@ -119,9 +136,16 @@ const Header = () => {
   };
 
   return (
-    <div>
-      <ShopAd />
-      <div className='relative'>
+    <header
+      className={cn(
+        'fixed z-50 bg-white w-full duration-[400ms] transition-transform',
+        {
+          '-translate-y-8': hidden,
+        },
+      )}
+    >
+      <ShopAd onClick={handleNavClose} />
+      <div className=''>
         <div className='px-[15px] lg:px-6 py-[9px] md:py-[12px] lg:py-[4px] shadow-md'>
           <nav className='flex items-center justify-between text-gray'>
             <ul className='hidden lg:flex gap-5'>
@@ -317,7 +341,11 @@ const Header = () => {
         <div
           className={cn(
             'absolute w-screen bg-white overflow-x-hidden lg:hidden duration-[250ms]',
-            nav.isOpen ? 'h-[calc(100vh-45px-32px)]' : 'h-0',
+            nav.isOpen
+              ? hidden
+                ? 'h-[calc(100vh-45px)]'
+                : 'h-[calc(100vh-45px-32px)]'
+              : 'h-0',
           )}
         >
           <ul
@@ -454,7 +482,7 @@ const Header = () => {
           O
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
