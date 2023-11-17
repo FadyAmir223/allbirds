@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import approachData from '../data/approach.json';
 
-const Approach = () => {
+export const Approach = () => {
   return (
     <section className='px-6 py-10 text-gray'>
       <h2 className='text-2xl font-bold mb-4 capitalize sm:text-center md:text-left'>
@@ -24,5 +24,3 @@ const Approach = () => {
     </section>
   );
 };
-
-export default Approach;

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 const Collections = () => {
   const { collectionName } = useParams();
 
-  return <div>{collectionName}</div>;
+  return <section className='pt'>{collectionName}</section>;
 };
 
 export default Collections;

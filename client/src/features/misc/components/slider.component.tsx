@@ -32,7 +32,7 @@ const SECTION_SIZE = 3;
 const imagesPerSlide =
   innerWidth < screenSize.sm ? 1 : innerWidth < screenSize.md ? 2 : 3;
 
-const Slider = ({
+export const Slider = ({
   title,
   sectionDesctop = 'off',
   cardAppendix = 'off',
@@ -68,7 +68,7 @@ const Slider = ({
   };
 
   return (
-    <section className='px-6 pb-9'>
+    <section className='px-6 pb-9 overflow-x-hidden'>
       <div className='lg:px-9'>
         <h2
           className={cn(
@@ -156,5 +156,3 @@ const Slider = ({
     </section>
   );
 };
-
-export default Slider;

@@ -1,11 +1,11 @@
 import Hero from '../components/hero.component';
-import Slider from '../components/slider.component';
+import { Slider } from '../components/slider.component';
 import SaleAd from '../components/sale-ad.component';
 import EmailServiceForm from '../components/email-service-form.component';
 import gifts from '../data/gifts.json';
 import shopCollections from '../data/shop-collections.json';
 import stories from '../data/stories.json';
-import Approach from '../components/approach.component';
+import { Approach } from '../components/approach.component';
 
 export const Home = () => {
   return (
