@@ -1,0 +1,35 @@
+{
+  "title": "",
+  "slides": [
+    {
+      "url": "/collections/best-for-cold-weather-womens",
+      "imgUrl": "/home/fezza/Desktop/allbirds/client/public/images/main-page/shop-collections/23Q3-FallLookbook-Category-Carousel-Tile-WP.webp",
+      "title": "the cold weather shop",
+      "desc": "cozy up to our warmest styles that will keep your feet happy all season long."
+    },
+    {
+      "url": "/collections/best-for-wet-weather-mens",
+      "imgUrl": "/home/fezza/Desktop/allbirds/client/public/images/main-page/shop-collections/23Q3-Mizzle-Category-Carousel-Tile-02.webp",
+      "title": "the mizzle collection",
+      "desc": "stay dry with our comfy, cozy, rain-ready shoes"
+    },
+    {
+      "url": "/collections/mens-new-arrivals",
+      "imgUrl": "/home/fezza/Desktop/allbirds/client/public/images/main-page/shop-collections/CR-Q4-Flow1-Carousel-Card_Main.webp",
+      "title": "new arrivals",
+      "desc": "the latest styles and limited edition colors that you can only find here (while they last, that is)."
+    },
+    {
+      "url": "/collections/gifts-under-100",
+      "imgUrl": "/home/fezza/Desktop/allbirds/client/public/images/main-page/shop-collections/23Q3-FallLookbook-Category-Carousel-Tile-WR.webp",
+      "title": "gifts under 100$",
+      "desc": "can't go wrong picks at prices on everyone's nice list"
+    },
+    {
+      "url": "/collections/gifts-for-men",
+      "imgUrl": "/home/fezza/Desktop/allbirds/client/public/images/main-page/shop-collections/SP23_Lookbook_Collection_Carousel_Best_for_Adventure.webp",
+      "title": "gifts for him",
+      "desc": "because you aren't mindreader, but a list of easy, comfortable things will help you shop like one."
+    }
+  ]
+}
