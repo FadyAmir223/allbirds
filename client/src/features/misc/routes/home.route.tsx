@@ -2,17 +2,21 @@ import Hero from '../components/hero.component';
 import Slider from '../components/slider.component';
 import SaleAd from '../components/sale-ad.component';
 import EmailServiceForm from '../components/email-service-form.component';
+import gifts from '../data/gifts.json';
+import shopCollections from '../data/shop-collections.json';
+import stories from '../data/stories.json';
+import Approach from '../components/approach.component';
 
 export const Home = () => {
   return (
     <main className='lg:pt-7'>
       <Hero />
 
-      {/* best selling gifts */}
       <Slider
         title='our best-selling gifts'
         sectionDesctop='on'
         cardAppendix='on'
+        slides={gifts}
       />
 
       {/* stay dry */}
@@ -34,8 +38,7 @@ export const Home = () => {
         paragraphText='With cushy soles and a zen color palette that makes your feet say ahhh.'
       />
 
-      {/* collections */}
-      <Slider title='shop the collections' />
+      <Slider title='shop the collections' slides={shopCollections} />
 
       {/* updates less carbon */}
       <SaleAd
@@ -51,14 +54,10 @@ export const Home = () => {
         ]}
       />
 
-      {/* stories */}
-      <Slider title='stories' />
+      <Slider title='stories' slides={stories} />
 
       <EmailServiceForm />
-
-      {/* <Approach /> */}
-
-      {/* <Footer /> */}
+      <Approach />
     </main>
   );
 };

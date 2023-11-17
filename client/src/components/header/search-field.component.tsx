@@ -11,9 +11,13 @@ import { cn } from '@/utils/cn';
 // TODO: GET/POST /api/recent-search
 // TODO: search functionality
 
+type SearchFieldProps = {
+  isOpen: boolean;
+};
+
 const recentSearches = ['sale', 'tree runners', 'slippers', 'mizzles'];
 
-const SearchField = () => {
+const SearchField = ({ isOpen }: SearchFieldProps) => {
   const [search, setSearch] = useState({
     isOpen: false,
     isMoving: false,
@@ -39,6 +43,7 @@ const SearchField = () => {
       setSearch((prevSearch) => ({
         ...prevSearch,
         isMoving: false,
+        query: '',
       }));
     }, 250);
 
@@ -67,7 +72,10 @@ const SearchField = () => {
   return (
     <>
       <button
-        className='flex items-center w-full mt-3 bg-silver rounded-lg focus:outline-0 max-h-[26px] text-xs md:hidden'
+        className={cn(
+          'flex items-center w-full mt-3 bg-silver rounded-lg focus:outline-0 max-h-[26px] text-xs md:hidden',
+          { invisible: isOpen },
+        )}
         onClick={handleSearchToggle}
       >
         <span className='px-2 py-[6px] scale-[80%]'>

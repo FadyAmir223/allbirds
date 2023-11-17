@@ -14,7 +14,7 @@ const featuredLinks = [
 
 const Hero = () => {
   return (
-    <section className='lg:px-6 h-[calc(80dvh-50px-32px)] mb-16'>
+    <section className='lg:px-6 h-[calc(80dvh-50px-32px)] mb-24 pt-[calc(32px+82px)]'>
       <ul className='lg:hidden flex bg-silver text-silver-dark whitespace-nowrap'>
         {featuredLinks.map((featuredLink) => (
           <li key={featuredLink.text} className=''>
@@ -32,14 +32,14 @@ const Hero = () => {
         <img
           src='/images/main-page/hero/Q323-Mizzle-Hero-Desktop.webp'
           alt=''
-          className='h-full block'
-          // hidden md:
+          className='h-full hidden md:block'
         />
-        {/* <img
-        src='/images/main-page/hero/Q323-Mizzle-Hero-Mobile.webp'
-        alt=''
-        className='block md:hidden'
-      /> */}
+
+        <img
+          src='/images/main-page/hero/Q323-Mizzle-Hero-Mobile.webp'
+          alt=''
+          className='block md:hidden h-64 w-full object-cover'
+        />
 
         <div className='hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 bg-white py-14 pr-14'>
           <h4 className={cn('allbirds-font mb-4 font-semibold text-gray')}>
@@ -62,13 +62,13 @@ const Hero = () => {
               </h1>
               <p className='text-sm'>the black friday event starts now</p>
             </div>
-            <div className='absolute bottom-0 flex justify-center gap-4 left-1/2 -translate-x-1/2 w-[384px]'>
+            <div className='absolute bottom-0 flex justify-center gap-4 left-1/2 -translate-x-1/2 w-[300px] sm:w-[340px] lg:w-[384px]'>
               {heroLinks.map((heroLink) => (
                 <LinkCustom
                   key={heroLink.text}
                   to={heroLink.url}
-                  className='py-[10px] w-1/2 border-transparent hover:border-2 hover:border-gray'
-                  hover
+                  styleType='invert'
+                  className='py-[7px] lg:py-[10px] w-1/2 border-transparent hover:border-2 hover:border-gray'
                 >
                   {heroLink.text}
                 </LinkCustom>

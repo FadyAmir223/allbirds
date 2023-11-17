@@ -26,7 +26,7 @@ const EmailServiceForm = () => {
 
   return (
     <section className='px-6 py-9 bg-brown text-gray' onClick={handleErrorHide}>
-      <div className='w-2/3 mb-8 text-center mx-auto'>
+      <div className='w-full sm:w-2/3 mb-8 text-center mx-auto'>
         <h3 className='capitalize text-2xl mb-5 font-bold'>want first dips?</h3>
         <p className='text-sm'>
           Join our email list and be the first to know about new limited edition
@@ -35,7 +35,7 @@ const EmailServiceForm = () => {
       </div>
 
       <div className='mb-2 flex justify-center mx-auto'>
-        <div className='w-1/2' id='email-service'>
+        <div className='w-full sm:w-1/2' id='email-service'>
           <form
             className='flex gap-y-3 md:gap-y-0 md:gap-x-3 flex-col md:flex-row'
             ref={formEl}
@@ -54,7 +54,6 @@ const EmailServiceForm = () => {
               )}
             />
             <LinkCustom
-              hover
               type='submit'
               element='button'
               className='w-full md:w-auto'

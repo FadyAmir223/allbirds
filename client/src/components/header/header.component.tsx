@@ -8,8 +8,8 @@ import ShopAd from '@/components/header/shopAd.component';
 import SearchField from '@/components/header/search-field.component';
 import { Cart } from '@/features/cart';
 import Overlay from '@/components/overlay.component';
-import headerNavData from '@/data/header-nav.data.json';
 import { cn } from '@/utils/cn';
+import headerNavData from '@/data/header.json';
 
 const headerLeftItems = [
   { text: 'men', url: '' },
@@ -263,7 +263,7 @@ const Header = () => {
               </ul>
             </div>
           </nav>
-          <SearchField />
+          <SearchField isOpen={nav.isOpen} />
         </div>
 
         <div

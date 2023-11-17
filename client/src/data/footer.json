@@ -1,0 +1,68 @@
+{
+  "sections": [
+    {
+      "heading": "Help",
+      "links": [
+        { "text": "1-888-963-8944", "url": "tel:18889638944" },
+        { "text": "1-814-251-9966 (Text)", "url": "sms:18142519966" },
+        { "text": "help@allbirds.com", "url": "mailto:help@allbirds.com" },
+        { "text": "Returns/Exchanges", "url": "/pages/returns-exchanges" },
+        { "text": "FAQ/Contact Us", "url": "/pages/help" },
+        { "text": "Afterpay", "url": "/pages/afterpay" }
+      ]
+    },
+    {
+      "heading": "Shop",
+      "links": [
+        { "text": "Men's Shoes", "url": "/collections/mens" },
+        { "text": "Women's Shoes", "url": "/collections/womens" },
+        { "text": "Men's Apparel", "url": "/collections/mens-apparel" },
+        { "text": "Women's Apparel", "url": "/collections/womens-apparel" },
+        { "text": "Socks", "url": "/collections/trino-socks" },
+        {
+          "text": "Shoe Finder",
+          "url": "/pages/style-quiz",
+          "target": "_blank"
+        },
+        { "text": "Gift Cards", "url": "/collections/gift-cards" },
+        {
+          "text": "Refer a Friend",
+          "url": "/pages/refer-a-friend",
+          "target": "_blank"
+        },
+        {
+          "text": "Download Our App",
+          "url": "https://allbirds.app.link/e/AweOhG1itbb",
+          "target": "_blank"
+        }
+      ]
+    },
+    {
+      "heading": "Company",
+      "links": [
+        { "text": "Our Stores", "url": "https://stores.allbirds.com" },
+        { "text": "Our Story", "url": "/pages/our-story" },
+        { "text": "Our Materials", "url": "/pages/our-materials-wool" },
+        { "text": "Sustainability", "url": "/pages/sustainable-practices" },
+        { "text": "Investors", "url": "https://ir.allbirds.com/" },
+        { "text": "Shoe Care", "url": "/pages/shoe-care" },
+        { "text": "Partnerships", "url": "/pages/partnerships" },
+        { "text": "Product Testing", "url": "/pages/product-testing" },
+        { "text": "Affiliates", "url": "/pages/affiliates" },
+        {
+          "text": "Bulk Orders",
+          "url": "https://www.allbirds.com/pages/bulk-ordering"
+        },
+        { "text": "Careers", "url": "/pages/careers" },
+        { "text": "Press", "url": "/pages/press" },
+        {
+          "text": "Allbirds Responsible Disclosure Program",
+          "url": "https://cdn.shopify.com/s/files/1/1104/4168/files/Security_Vulnerability_Disclosure_Policy_FINAL.pdf?v=1699405184",
+          "target": "_blank"
+        },
+        { "text": "Community Offers", "url": "/pages/community-offers" },
+        { "text": "The Perch", "url": "/pages/the-perch" }
+      ]
+    }
+  ]
+}

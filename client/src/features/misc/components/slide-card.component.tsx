@@ -1,18 +1,14 @@
 import { HTMLAttributes } from 'react';
 
 import LinkCustom from '@/components/link-custom.component';
-import heroLinks from '../data/men-women-url.json';
 import { cn } from '@/utils/cn';
+import heroLinks from '../data/men-women-url.json';
+import { Card } from './slider.component';
 
-type GiftCardProps = HTMLAttributes<HTMLDivElement> & {
-  imgUrl: string;
-  miniImgUrl: string;
-  title: string;
-  description: string;
-  appendix: 'on' | 'off';
-};
+type SlideCardProps = HTMLAttributes<HTMLDivElement> &
+  Card & { appendix: 'on' | 'off' };
 
-const GiftCard = ({
+const SlideCard = ({
   imgUrl,
   miniImgUrl,
   title,
@@ -20,7 +16,7 @@ const GiftCard = ({
   appendix,
   className,
   ...props
-}: GiftCardProps) => {
+}: SlideCardProps) => {
   return (
     <div
       className={cn(
@@ -47,7 +43,6 @@ const GiftCard = ({
                     key={heroLink.text}
                     to={heroLink.url}
                     className='z-30 py-[10px] border-none block relative w-full'
-                    hover
                   >
                     {heroLink.text}
                   </LinkCustom>
@@ -88,4 +83,4 @@ const GiftCard = ({
   );
 };
 
-export default GiftCard;
+export default SlideCard;

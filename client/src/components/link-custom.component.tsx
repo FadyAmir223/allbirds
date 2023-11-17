@@ -4,7 +4,6 @@ import { Link, LinkProps } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 
 type ExtraProps = {
-  hover?: boolean;
   styleType?: 'normal' | 'invert';
   element?: 'link' | 'button';
 };
@@ -13,7 +12,6 @@ type LinkCustomProps = (ButtonHTMLAttributes<HTMLButtonElement> | LinkProps) &
   ExtraProps;
 
 const LinkCustom = ({
-  hover = false,
   styleType = 'normal',
   element = 'link',
   className,
@@ -21,12 +19,11 @@ const LinkCustom = ({
   ...props
 }: LinkCustomProps) => {
   const style = cn(
-    'py-2 px-[18px] bg-gray focus:outline-0 rounded-sm uppercase text-center border-2 border-gray text-xs font-semibold tracking-[1.5px] w-fit',
+    'py-2 px-[18px] bg-gray text-white focus:outline-0 rounded-sm uppercase text-center border-2 border-gray text-xs font-semibold tracking-[1.5px] w-fit duration-100',
     {
-      'duration-100': hover,
-      'bg-white hover:bg-gray hover:text-white':
-        hover && styleType === 'normal',
-      'bg-gray hover:bg-white hover:text-gray': hover && styleType === 'invert',
+      'hover:bg-white hover:text-gray': styleType === 'normal',
+      'bg-white text-gray hover:bg-gray hover:text-white':
+        styleType === 'invert',
     },
     className,
   );

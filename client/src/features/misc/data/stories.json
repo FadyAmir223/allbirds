@@ -1,0 +1,25 @@
+[
+  {
+    "text": "",
+    "items": [
+      {
+        "url": "/pages/rerun",
+        "imgUrl": "/images/main-page/stories/ReRun-Site-StoryCard.webp",
+        "title": "Allbirds ReRun™",
+        "description": "Introducing our resale marketplace where you can shop slightly imperfect and gently used products, extending their life and lowering our impact on the planet."
+      },
+      {
+        "url": "/pages/sustainable-practices",
+        "imgUrl": "/images/main-page/stories/23Q2-Earth_Day-Site-Story-Carousel_Card-1110x1110.webp",
+        "title": "2022 Flight Status Report",
+        "description": "Our version of a sustainability report is here, highlighting our progress across a variety of areas in 2022."
+      },
+      {
+        "url": "/pages/our-story",
+        "imgUrl": "/images/main-page/stories/Our_Story.webp",
+        "title": "We're A Certified B Corp",
+        "description": "From the very beginning, the environment has been a stakeholder here."
+      }
+    ]
+  }
+]

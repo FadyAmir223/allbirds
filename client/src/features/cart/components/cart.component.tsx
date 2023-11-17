@@ -84,6 +84,7 @@ export const Cart = ({ handleNavClose }: CartProps) => {
                   <li key={shopItem.url} className='w-full'>
                     <LinkCustom
                       to={shopItem.url}
+                      styleType='invert'
                       className='block w-full'
                       onClick={() => dispatch(toggle())}
                     >
