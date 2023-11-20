@@ -1,8 +1,8 @@
-import { HTMLAttributes } from 'react';
+import { ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '@/utils/cn';
 
-type OverlayProps = HTMLAttributes<HTMLButtonElement> & {
+type OverlayProps = ComponentPropsWithoutRef<'button'> & {
   isOpen: boolean;
 };
 

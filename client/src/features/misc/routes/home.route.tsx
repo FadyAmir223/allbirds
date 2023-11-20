@@ -14,8 +14,8 @@ export const Home = () => {
 
       <Slider
         title='our best-selling gifts'
-        sectionDesctop='on'
-        cardAppendix='on'
+        sectionDesctop={true}
+        cardAppendix={true}
         slides={gifts}
       />
 

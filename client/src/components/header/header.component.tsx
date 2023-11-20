@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BiHelpCircle, BiSearch } from 'react-icons/bi';
 import { HiOutlineUser } from 'react-icons/hi';
@@ -53,14 +53,14 @@ const Header = () => {
   const [isAdHidden, setAdHidden] = useState(false);
   const [nav, setNav] = useState<Nav>({
     isOpen: false,
-    category: emptyCategory,
+    category: headerNavData[0],
     subCategoryMobile: '',
     tabMobile: 'left',
   });
 
-  const handleAdHide = () => {
-    setAdHidden(scrollY > 100);
-  };
+  const divEl = useRef<HTMLDivElement | null>(null);
+
+  const handleAdHide = () => setAdHidden(scrollY > 100);
 
   useEffect(() => {
     addEventListener('scroll', handleAdHide);
@@ -82,11 +82,10 @@ const Header = () => {
       setNav((prevNav) => ({
         ...prevNav,
         isOpen: false,
-        category: emptyCategory,
       }));
   };
 
-  const handleNavClickDesktop = (headerCategoryText: string) => {
+  const handleNavClickDesktop = (headerCategoryText: string) =>
     setNav((prevNav) => {
       const isOpen =
         !prevNav.isOpen || headerCategoryText !== prevNav.category.categoryName;
@@ -96,17 +95,15 @@ const Header = () => {
             (headerNavItem) =>
               headerNavItem.categoryName === headerCategoryText,
           ) || emptyCategory
-        : emptyCategory;
+        : prevNav.category;
 
       return { ...prevNav, isOpen, category };
     });
-  };
 
-  const handleToggleNavMobile = () => {
+  const handleToggleNavMobile = () =>
     setNav((prevNav) => ({ ...prevNav, isOpen: !prevNav.isOpen }));
-  };
 
-  const handleNavClickMobile = (headerCategoryText: string) => {
+  const handleNavClickMobile = (headerCategoryText: string) =>
     setNav((prevNav) => {
       const category =
         headerNavData.find(
@@ -115,23 +112,19 @@ const Header = () => {
 
       return { ...prevNav, category, tabMobile: 'middle' };
     });
-  };
 
-  const handleNavBackMobile = () => {
+  const handleNavBackMobile = () =>
     setNav((prevNav) => ({ ...prevNav, tabMobile: 'left' }));
-  };
 
-  const handleSubCategoryMobile = (subCategory: string) => {
+  const handleSubCategoryMobile = (subCategory: string) =>
     setNav((prevNav) => ({
       ...prevNav,
       subCategoryMobile: subCategory,
       tabMobile: 'right',
     }));
-  };
 
-  const handleSubCategoryBackMobile = () => {
+  const handleSubCategoryBackMobile = () =>
     setNav((prevNav) => ({ ...prevNav, tabMobile: 'middle' }));
-  };
 
   return (
     <>
@@ -144,18 +137,18 @@ const Header = () => {
         )}
       >
         <ShopAd onClick={handleNavClose} />
-        <div className=''>
+        <div>
           <div className='px-[15px] lg:px-6 py-[9px] md:py-[12px] lg:py-[4px] shadow-md'>
             <nav className='flex items-center justify-between text-gray'>
               <ul className='hidden lg:flex gap-5'>
                 {headerLeftItems.map((navCategory) => (
                   <li
                     key={navCategory.text}
-                    className={
-                      nav.category.categoryName === navCategory.text
-                        ? 'underline'
-                        : ''
-                    }
+                    className={cn({
+                      underline:
+                        nav.isOpen &&
+                        nav.category.categoryName === navCategory.text,
+                    })}
                   >
                     {navCategory.url ? (
                       <Link
@@ -271,9 +264,12 @@ const Header = () => {
 
           <div
             className={cn(
-              'absolute z-50 overflow-hidden w-full hidden lg:block',
-              nav.isOpen ? 'h-[355px] duration-300 transition-[height]' : 'h-0',
+              'absolute z-50 overflow-hidden w-full hidden lg:block duration-300 transition-[height]',
             )}
+            ref={divEl}
+            style={{
+              height: nav.isOpen ? divEl.current?.scrollHeight : 0 + 'px',
+            }}
           >
             <div className='pt-[47px] pb-6 px-[103px] bg-white hidden lg:grid grid-cols-5 gap-x-6'>
               {nav.category.categoryName === 'sustainability' && <div />}

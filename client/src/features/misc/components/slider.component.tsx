@@ -23,8 +23,8 @@ type SectionDesktop = {
 
 type SliderProps = {
   title: string;
-  sectionDesctop?: 'on' | 'off';
-  cardAppendix?: 'on' | 'off';
+  sectionDesctop?: boolean;
+  cardAppendix?: boolean;
   slides: SectionDesktop[];
 };
 
@@ -34,8 +34,8 @@ const imagesPerSlide =
 
 export const Slider = ({
   title,
-  sectionDesctop = 'off',
-  cardAppendix = 'off',
+  sectionDesctop = false,
+  cardAppendix = false,
   slides,
 }: SliderProps) => {
   const slidesFlat = slides.flatMap((slide) => slide.items);
@@ -73,15 +73,13 @@ export const Slider = ({
         <h2
           className={cn(
             'capitalize font-bold mb-2',
-            sectionDesctop === 'on'
-              ? 'text-[26px] text-center'
-              : 'text-xl mb-6',
+            sectionDesctop ? 'text-[26px] text-center' : 'text-xl mb-6',
           )}
         >
           {title}
         </h2>
 
-        {sectionDesctop === 'on' && (
+        {sectionDesctop && (
           <>
             <div className='border-b-2 border-gray-light flex justify-center mb-8'>
               <div className='flex justify-center relative'>
@@ -117,9 +115,7 @@ export const Slider = ({
           </>
         )}
 
-        <div
-          className={cn('relative', { 'md:hidden': sectionDesctop === 'on' })}
-        >
+        <div className={cn('relative', { 'md:hidden': sectionDesctop })}>
           <Swiper
             spaceBetween={8}
             slidesPerView={imagesPerSlide}
@@ -129,7 +125,7 @@ export const Slider = ({
             <div className='whitespace-nowrap'>
               {slidesFlat.map((slide) => (
                 <SwiperSlide key={slide.title}>
-                  {cardAppendix === 'off' ? (
+                  {!cardAppendix ? (
                     <Link to='/'>
                       <SlideCard {...slide} appendix={cardAppendix} />
                     </Link>
@@ -142,7 +138,7 @@ export const Slider = ({
 
             <div
               className={cn({
-                'hidden md:block': cardAppendix === 'off',
+                'hidden md:block': !cardAppendix,
               })}
             >
               <SlideNavButtons

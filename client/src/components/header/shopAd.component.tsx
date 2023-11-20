@@ -1,11 +1,11 @@
-import { useState, MouseEvent, HTMLAttributes } from 'react';
+import { useState, MouseEvent, ComponentPropsWithoutRef } from 'react';
 import { Link } from 'react-router-dom';
 import Markdown from 'react-markdown';
 import { FaAngleRight } from 'react-icons/fa';
 
 import { cn } from '@/utils/cn';
 
-type MarkdownLinkProps = HTMLAttributes<HTMLAnchorElement> & {
+type MarkdownLinkProps = ComponentPropsWithoutRef<'a'> & {
   href?: string;
 };
 

@@ -17,7 +17,7 @@ const Hero = () => {
     <section className='lg:px-6 h-[calc(80dvh-50px-32px)] mb-24 overflow-x-hidden'>
       <ul className='lg:hidden flex bg-silver text-silver-dark whitespace-nowrap'>
         {featuredLinks.map((featuredLink) => (
-          <li key={featuredLink.text} className=''>
+          <li key={featuredLink.text}>
             <Link
               to={featuredLink.url}
               className={cn('allbirds-font tracking-[1px] px-3 py-2 block')}
@@ -55,7 +55,7 @@ const Hero = () => {
         </div>
 
         <div className='absolute top-1/3 left-0 w-full h-2/5 max-w-7xl '>
-          <div className=''>
+          <div>
             <div className='capitalize text-white text-center font-bold'>
               <h1 className='mb-3 sm:text-2xl md:text-3xl lg:text-4xl'>
                 up to 50% off must-gift styles

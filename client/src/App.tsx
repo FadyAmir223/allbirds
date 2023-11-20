@@ -11,7 +11,6 @@ import { CollectionRoute } from '@/features/collections';
 import { ProductRoute } from '@/features/products';
 import { PagesRoute } from '@/features/pages';
 import ErrorFallback from '@/components/error-fallback.component';
-
 import { lazyImport } from '@/utils/lazy-import';
 
 const mistFactory = () => import('@/features/misc');

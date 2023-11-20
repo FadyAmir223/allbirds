@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes } from 'react';
+import { ComponentPropsWithoutRef } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
 import { cn } from '@/utils/cn';
@@ -8,7 +8,7 @@ type ExtraProps = {
   element?: 'link' | 'button';
 };
 
-type LinkCustomProps = (ButtonHTMLAttributes<HTMLButtonElement> | LinkProps) &
+type LinkCustomProps = (ComponentPropsWithoutRef<'button'> | LinkProps) &
   ExtraProps;
 
 const LinkCustom = ({
@@ -35,7 +35,7 @@ const LinkCustom = ({
   ) : (
     <button
       className={style}
-      {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}
+      {...(props as ComponentPropsWithoutRef<'button'>)}
     >
       {children}
     </button>

@@ -95,7 +95,7 @@ export const Cart = ({ handleNavClose }: CartProps) => {
               </ul>
             </div>
           ) : (
-            <div className=''></div>
+            <div></div>
           )}
         </div>
       </Modal>

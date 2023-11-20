@@ -1,12 +1,12 @@
-import { HTMLAttributes } from 'react';
+import { ComponentPropsWithoutRef } from 'react';
 
 import LinkCustom from '@/components/link-custom.component';
 import { cn } from '@/utils/cn';
 import heroLinks from '../data/men-women-url.json';
 import { Card } from './slider.component';
 
-type SlideCardProps = HTMLAttributes<HTMLDivElement> &
-  Card & { appendix: 'on' | 'off' };
+type SlideCardProps = ComponentPropsWithoutRef<'div'> &
+  Card & { appendix: boolean };
 
 const SlideCard = ({
   imgUrl,
@@ -32,7 +32,7 @@ const SlideCard = ({
           className='absolute top-0 left-0 w-full h-full object-cover duration-500 transition-transform group-hover:scale-[105%]'
           loading='lazy'
         />
-        {appendix === 'on' && (
+        {appendix && (
           <>
             <div className='absolute top-0 left-0 w-full h-full transition-opacity duration-500 ease-out bg-gray opacity-0 group-hover/overlay:opacity-40 hidden md:block' />
 
@@ -56,7 +56,7 @@ const SlideCard = ({
         <h4 className='capitalize font-bold text-[14px] tracking-wide'>
           {title}
         </h4>
-        {appendix === 'on' && (
+        {appendix && (
           <>
             <div className='flex gap-x-2 items-center  border-t-[1px] border-t-gray-light pt-[10px] mt-[10px]'>
               <img src={miniImgUrl} alt='' className='w-6' />
