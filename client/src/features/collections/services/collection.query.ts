@@ -12,7 +12,7 @@ export type CollectionKeysType = {
 
 const collectionKeys = {
   all: ['collections'],
-  type: ({ type, page = 1, limit = 6 }: CollectionKeysType) => [
+  type: ({ type, page = 1, limit = 20 }: CollectionKeysType) => [
     ...collectionKeys.all,
     { type, page, limit },
   ],

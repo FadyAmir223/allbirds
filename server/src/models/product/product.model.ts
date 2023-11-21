@@ -23,7 +23,7 @@ async function saveProducts() {
           update: { $set: product },
           upsert: true,
         },
-      }))
+      })),
     );
   } catch (err) {
     console.error('error upserting products:', err);
@@ -48,6 +48,8 @@ async function getCollection(type, gender, skip, limit) {
           handle: 1,
           price: 1,
           sizes: 1,
+          material: 1,
+          bestFor: 1,
           editions: {
             $map: {
               input: '$editions',
@@ -306,7 +308,7 @@ async function getProduct(handle) {
   try {
     const product = await Product.findOne(
       { handle },
-      '-__v -recommendations._id -material_features._id -dropdown._id -editions._id -reviews'
+      '-__v -recommendations._id -material_features._id -dropdown._id -editions._id -reviews',
     ).lean();
 
     if (!product) return { status: 404, message: 'product not found' };
@@ -327,7 +329,7 @@ async function getReviews(handle, skip = 0, limit = 3, page = 1) {
         'reviews.count': 1,
         'reviews.rating': 1,
         'reviews.reviews': { $slice: [skip, limit] },
-      }
+      },
     ).lean();
 
     if (!reviews)
@@ -366,7 +368,7 @@ async function addReview(handle, review, user) {
         'orders.handle': handle,
         'orders.size': sizePurchased,
       },
-      { 'orders.$': 1, username: 1 }
+      { 'orders.$': 1, username: 1 },
     ).lean();
 
     if (!_user?.orders || _user?.orders.length === 0)
@@ -418,7 +420,7 @@ async function addReview(handle, review, user) {
         $set: { 'reviews.rating': newRating },
         $push: { 'reviews.reviews': { $each: [newReview], $position: 0 } },
       },
-      { new: true }
+      { new: true },
     );
 
     if (!productAcknowledged) throw new Error();
@@ -432,7 +434,7 @@ async function addReview(handle, review, user) {
     userToUpdate.save();
 
     const { status, pagination, rating, reviews, message } = await getReviews(
-      handle
+      handle,
     );
 
     return {
@@ -463,7 +465,7 @@ async function removeReview(handle, reviewId, userId) {
         $pull: { 'reviews.reviews': { _id: reviewId } },
         $inc: { 'reviews.count': -1 },
         $set: { 'reviews.rating': newRating },
-      }
+      },
     );
 
     if (!acknowledged) throw new Error();
@@ -472,7 +474,7 @@ async function removeReview(handle, reviewId, userId) {
       return { status: 400, message: 'invalid review id' };
 
     const { status, pagination, rating, reviews, message } = await getReviews(
-      handle
+      handle,
     );
 
     return { status, pagination, rating, reviews, message };
@@ -531,8 +533,8 @@ async function getCart(items) {
                   },
                 },
               },
-            ])
-        )
+            ]),
+        ),
       )
     ).flat();
     return { status: 200, cart };
@@ -546,14 +548,14 @@ async function addCartItem(items, { handle, editionId, size }) {
     if (!items) items = [];
 
     const existingItem = items.find(
-      (item) => item.editionId === editionId && item.size === size
+      (item) => item.editionId === editionId && item.size === size,
     );
 
     if (existingItem) existingItem.amount++;
     else {
       const product = await Product.findOne(
         { handle, 'editions.products.id': editionId },
-        '-_id editions.products.$'
+        '-_id editions.products.$',
       ).lean();
 
       if (!product) return { status: 404, message: "prdouct doesn't exist" };
@@ -605,7 +607,7 @@ async function removeCartItem(items, { editionId, size }, _delete = false) {
 
     if (_delete || matchedItem.amount === 1)
       items = items.filter(
-        (item) => !(item.editionId === editionId && item.size === size)
+        (item) => !(item.editionId === editionId && item.size === size),
       );
     else items[matchedIdx].amount--;
 

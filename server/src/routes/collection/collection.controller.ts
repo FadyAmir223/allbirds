@@ -8,14 +8,14 @@ import { getPagination } from '../../utils/query.js';
 
 async function httpsGetCollection(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<Response> {
   return await getACollection(req, res, false);
 }
 
 async function httpsGetCollectionSale(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<Response> {
   return await getACollection(req, res, true);
 }
@@ -41,7 +41,7 @@ async function getACollection(req, res, isSale = false) {
 
 async function httpsGetCollectionFilters(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<Response> {
   const { type, gender } = req.query;
 

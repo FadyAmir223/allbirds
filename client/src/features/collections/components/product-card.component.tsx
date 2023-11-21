@@ -2,14 +2,16 @@ import { useRef, useState, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
-import SizeButton from '@/components/product/size-button.component';
+import SideButton from '@/components/product/size-button.component';
 import ColorButton from '@/components/product/color-button.component';
 import { cn } from '@/utils/cn';
 import screenSize from '@/data/screen-size.json';
 import { Product } from '../types/collection.type';
+import { type SelectedFilters } from '..';
 
 type ProductCardProps = {
   product: Product;
+  selectedFilters: SelectedFilters;
 };
 
 const isSmall = innerWidth > screenSize.sm && innerWidth < screenSize.md;
@@ -41,15 +43,29 @@ const getMaxSections = (productsLength: number) => {
   return sections;
 };
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product, selectedFilters }: ProductCardProps) => {
   const [nav, setNav] = useState({ index: 0, section: 0 });
   const [isQuickAddOpen, setQuickAddOpen] = useState(false);
+  const divEl = useRef<HTMLDivElement | null>(null);
 
-  const products = product.editions.flatMap((edition) => edition.products);
+  const products = product.editions
+    .flatMap((edition) => edition.products)
+    .filter((product) => {
+      const bySize =
+        !product.sizesSoldOut.some(
+          (sizeSoldOut) => selectedFilters.sizes?.includes(sizeSoldOut),
+        ) ?? true;
+
+      const byHue =
+        selectedFilters.hues?.some((hue) => product.hues.includes(hue)) ?? true;
+
+      return bySize && byHue;
+    });
+
+  if (products.length === 0) return <></>;
+
   const currProduct = products[nav.index];
   const MaxSections = getMaxSections(products.length - 1);
-
-  const divEl = useRef<HTMLDivElement | null>(null);
 
   const section = {
     first: nav.section === 0,
@@ -80,7 +96,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const handleToggleQuickAdd = () => setQuickAddOpen(!isQuickAddOpen);
 
   return (
-    <div className='text-gray relative bg-blue group bg-white h-fit'>
+    <div className='text-gray relative bg-blue group bg-white'>
       <div className='hidden md:block absolute w-[calc(100%+32px)] h-[calc(100%+32px)] -top-4 -left-4 group-hover:shadow-2xl group-hover:shadow-gray z-10' />
 
       <div className='relative pb-[100%]'>
@@ -160,13 +176,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
         )}
       </div>
 
-      <div className='box-content pb-4 pl-4 -translate-x-4 pr-4 hidden md:group-hover:block absolute w-full top-full z-20 bg-white group-hover:shadow-2xl group-hover:shadow-gray'>
+      <div className='box-content pb-4 pl-4 -translate-x-4 pr-4 hidden md:group-hover:block absolute w-full z-20 bg-white group-hover:shadow-2xl group-hover:shadow-gray'>
         <p className='font-semibold text-[11px] mt-2 uppercase mb-1'>
           quick add
         </p>
         <div className='grid grid-cols-4 md:grid-cols-6 gap-[6px]'>
           {product.sizes.map((size) => (
-            <SizeButton key={size} size={size} product={currProduct} />
+            <SideButton key={size} size={size} product={currProduct} />
           ))}
         </div>
       </div>
@@ -198,7 +214,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           >
             <div className='grid grid-cols-5 sm:grid-cols-7 md:sm:grid-cols-9 gap-[6px] w-full mt-1'>
               {product.sizes.map((size) => (
-                <SizeButton
+                <SideButton
                   key={size}
                   size={size}
                   product={currProduct}

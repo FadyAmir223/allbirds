@@ -13,6 +13,8 @@ export type Product = {
   name: string;
   price: number;
   sizes: string[];
+  bestFor: string[];
+  material: string;
   editions: {
     edition: string;
     products: EditionProduct[];

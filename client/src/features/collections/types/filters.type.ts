@@ -6,3 +6,7 @@ export type Filters = {
     hues: string[];
   };
 };
+
+export type FilterKey = keyof Filters['filters'];
+export type FilterValues = string[] | undefined;
+export type SelectedFilters = { [key in FilterKey]: FilterValues };
