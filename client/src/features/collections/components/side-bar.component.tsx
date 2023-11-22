@@ -5,6 +5,7 @@ import { RiCloseLine } from 'react-icons/ri';
 import SizeButton from '@/components/product/size-button.component';
 import Checkbox from './checkbox.component';
 import Drawer from '@/components/drawer.component';
+import { cn } from '@/utils/cn';
 import { type FilterKey, type Filters } from '..';
 
 type SideBarProps = {
@@ -14,6 +15,7 @@ type SideBarProps = {
   };
   delimiter: string;
   isFilterOpen: boolean;
+  hasGender: boolean;
   handleFilterMobileToggle: () => void;
 };
 
@@ -60,9 +62,17 @@ const SideBarFilters = ({
   filters,
   selectedFilters,
   delimiter,
+  hasGender,
   drawer = false,
 }: SideBarFiltersProps) => {
   const [, setSearchParams] = useSearchParams();
+
+  const hasFilters = !Object.values(selectedFilters).every(
+    (value) => value === undefined,
+  );
+
+  if (!hasGender)
+    filters.sizes = filters.sizes.map((size) => size.split('.')[0]);
 
   const handleFilterBy = (key: string, value: string) => {
     setSearchParams((prevSearchParams) => {
@@ -93,11 +103,11 @@ const SideBarFilters = ({
   };
 
   return (
-    <aside className='mt-16 pl-4'>
+    <aside className={cn({ 'mt-16 pl-4': drawer })}>
       <div className='border-b border-b-gray mt-2 mb-3 pb-2'>
         <div className='flex items-center pb-2 mb-3'>
           <p className='text-[15px] font-bold'>Filter By:</p>
-          {drawer && (
+          {drawer && hasFilters && (
             <button
               className='underline mx-14 text-[#e8e6e3]'
               onClick={clearFilterBy}
@@ -133,18 +143,23 @@ const SideBarFilters = ({
           Most of our shoes only come in full sizes. If you’re a half size,
           select your nearest whole size too.
         </p>
-        <ul className='grid grid-cols-6 gap-2'>
-          {filters.sizes
-            .filter((size) => Number(size))
-            .map((size) => (
-              <SizeButton
-                key={size}
-                size={size}
-                selected={selectedFilters?.sizes?.includes(size)}
-                className='text-[10px]'
-                onClick={() => handleFilterBy('sizes', size)}
-              />
-            ))}
+        <ul
+          className={cn(
+            'grid gap-2',
+            hasGender ? 'grid-cols-6' : 'grid-cols-2',
+          )}
+        >
+          {filters.sizes.map((size) => (
+            <SizeButton
+              key={size}
+              size={size}
+              selected={selectedFilters.sizes?.includes(size)}
+              className={cn(
+                hasGender ? 'text-[10px]' : 'uppercase font-bold text-[16px]',
+              )}
+              onClick={() => handleFilterBy('sizes', size)}
+            />
+          ))}
         </ul>
       </div>
 

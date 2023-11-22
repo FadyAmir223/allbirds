@@ -16,7 +16,7 @@ const headerLeftItems = [
   { text: 'men', url: '' },
   { text: 'women', url: '' },
   { text: 'kids', url: '' },
-  { text: 'socks', url: '/products/socks' },
+  { text: 'socks', url: '/collections/socks' },
   { text: 'sale', url: '' },
 ];
 
@@ -155,11 +155,11 @@ const Header = () => {
                   >
                     {navCategory.url ? (
                       <Link
-                        to='/products/socks'
+                        to={navCategory.url}
                         className='header-nav'
                         onClick={handleNavClose}
                       >
-                        socks
+                        {navCategory.text}
                       </Link>
                     ) : (
                       <button

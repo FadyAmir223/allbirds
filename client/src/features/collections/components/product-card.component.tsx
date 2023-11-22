@@ -11,6 +11,7 @@ import { type SelectedFilters } from '..';
 
 type ProductCardProps = {
   product: Product;
+  hasGender: boolean;
   selectedFilters: SelectedFilters;
 };
 
@@ -43,10 +44,17 @@ const getMaxSections = (productsLength: number) => {
   return sections;
 };
 
-const ProductCard = ({ product, selectedFilters }: ProductCardProps) => {
+const ProductCard = ({
+  product,
+  hasGender,
+  selectedFilters,
+}: ProductCardProps) => {
   const [nav, setNav] = useState({ index: 0, section: 0 });
   const [isQuickAddOpen, setQuickAddOpen] = useState(false);
   const divEl = useRef<HTMLDivElement | null>(null);
+
+  if (!hasGender)
+    product.sizes = product.sizes.map((size) => size.split('.')[0]);
 
   const products = product.editions
     .flatMap((edition) => edition.products)
@@ -96,7 +104,7 @@ const ProductCard = ({ product, selectedFilters }: ProductCardProps) => {
   const handleToggleQuickAdd = () => setQuickAddOpen(!isQuickAddOpen);
 
   return (
-    <div className='text-gray relative bg-blue group bg-white'>
+    <div className='text-gray relative bg-blue group bg-white h-fit'>
       <div className='hidden md:block absolute w-[calc(100%+32px)] h-[calc(100%+32px)] -top-4 -left-4 group-hover:shadow-2xl group-hover:shadow-gray z-10' />
 
       <div className='relative pb-[100%]'>
@@ -180,7 +188,12 @@ const ProductCard = ({ product, selectedFilters }: ProductCardProps) => {
         <p className='font-semibold text-[11px] mt-2 uppercase mb-1'>
           quick add
         </p>
-        <div className='grid grid-cols-4 md:grid-cols-6 gap-[6px]'>
+        <div
+          className={cn(
+            'grid gap-[6px]',
+            hasGender ? ' grid-cols-4 md:grid-cols-6' : 'grid-cols-4',
+          )}
+        >
           {product.sizes.map((size) => (
             <SideButton key={size} size={size} product={currProduct} />
           ))}
@@ -212,13 +225,22 @@ const ProductCard = ({ product, selectedFilters }: ProductCardProps) => {
               height: isQuickAddOpen ? divEl.current?.scrollHeight : 0 + 'px',
             }}
           >
-            <div className='grid grid-cols-5 sm:grid-cols-7 md:sm:grid-cols-9 gap-[6px] w-full mt-1'>
+            <div
+              className={cn(
+                'grid gap-[6px] w-full mt-1',
+                hasGender
+                  ? 'grid-cols-5 sm:grid-cols-7 md:sm:grid-cols-9'
+                  : 'grid-cols-4',
+              )}
+            >
               {product.sizes.map((size) => (
                 <SideButton
                   key={size}
                   size={size}
                   product={currProduct}
-                  className='text-[9.8px]'
+                  className={cn(
+                    hasGender ? 'text-[9.8px]' : 'uppercase text-sm',
+                  )}
                 />
               ))}
             </div>

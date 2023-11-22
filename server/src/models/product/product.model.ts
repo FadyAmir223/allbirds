@@ -282,27 +282,25 @@ async function getCollectionFilters(type, gender) {
     material.sort();
     hues.sort();
 
+    const filteredSizes =
+      type && gender ? sizes.filter((i) => Number(i)) : sizes;
+
     const extractNumber = (str) => +str.match(/[-+]?\d+(\.\d+)?/)[0];
     const isNumber = (str) => !isNaN(parseFloat(str));
-    const startWithW = (str) => str.startsWith('w');
 
-    sizes.sort((a, b) => {
+    filteredSizes.sort((a, b) => {
       const aIsNumber = isNumber(a);
       const bIsNumber = isNumber(b);
 
-      switch (true) {
-        case (aIsNumber && bIsNumber) || (!aIsNumber && !bIsNumber):
-          return extractNumber(a) - extractNumber(b);
-        case startWithW(a) && !startWithW(b):
-          return 1;
-        case !startWithW(a) && startWithW(b):
-          return -1;
-        default:
-          return a.localeCompare(b);
-      }
+      return (aIsNumber && bIsNumber) || (!aIsNumber && !bIsNumber)
+        ? extractNumber(a) - extractNumber(b)
+        : a.localeCompare(b);
     });
 
-    return { status: 200, filters: { sizes, bestFor, material, hues } };
+    return {
+      status: 200,
+      filters: { sizes: filteredSizes, bestFor, material, hues },
+    };
   } catch {
     return { status: 500, message: 'unable to get filters' };
   }

@@ -12,6 +12,7 @@ export const composeUri = (queryKey: QueryKey): string => {
 
 export const composeQueryies = (queryObjec: object) => {
   return Object.entries(queryObjec)
+    .filter(([, value]) => value !== null && value !== undefined)
     .map(([param, value]) => `${param}=${value}`)
     .join('&');
 };

@@ -33,6 +33,11 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
       );
       promises.push(suggestionsP);
     }
+  } else {
+    const suggestionsP = queryClient.ensureQueryData(
+      collectionQuery({ ...ensureType('mens'), limit: 5 }),
+    );
+    promises.push(suggestionsP);
   }
 
   const responses = (await Promise.all(promises)) as [
@@ -43,11 +48,11 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
   const [collection, filters] = responses;
 
-  if (!suggestions) suggestions = responses[2];
+  if (responses.length === 3) suggestions = responses[2];
 
   const suggestionSlides = refactorCollectionsToSlides([
     collection,
-    suggestions,
+    suggestions as Collection,
   ]);
 
   return [collection, filters, suggestionSlides];

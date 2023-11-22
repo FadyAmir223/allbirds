@@ -37,6 +37,7 @@ const Collections = () => {
   const params = useParams();
   const type = params.type || '';
   const ensuredType = ensureType(type);
+  const hasGender = ensuredType.gender !== undefined;
 
   const [initCollection, initFilters, initSuggestionSlides] =
     useLoaderData() as [Collection, Filters, SectionDesktop[]];
@@ -50,6 +51,9 @@ const Collections = () => {
 
   const { filters } = filter || {};
   if (!collection || !filters) return;
+
+  if (!hasGender)
+    filters.sizes = filters.sizes.map((size) => size.split('.')[0]);
 
   const selectedFilters: SelectedFilters = {} as Record<
     FilterKey,
@@ -72,7 +76,7 @@ const Collections = () => {
   });
 
   const otherGender =
-    ensuredType.gender && (type === genders[0].type ? genders[1] : genders[0]);
+    hasGender && (type === genders[0].type ? genders[1] : genders[0]);
 
   const handleFilterMobileToggle = () => setFilterOpen(!isFilterOpen);
 
@@ -84,24 +88,25 @@ const Collections = () => {
           selectedFilters={selectedFilters}
           delimiter={delimiter}
           isFilterOpen={isFilterOpen}
+          hasGender={hasGender}
           handleFilterMobileToggle={handleFilterMobileToggle}
         />
 
         {filteredCollection.length !== 0 ? (
           <section className='flex-grow self-start'>
-            {otherGender && (
-              <div className='flex justify-between px-4 mb-4'>
-                <button
-                  className='lg:hidden flex items-center rounded-full border border-gray-light hover:border-silver-dark duration-[250ms] text-[9.5px] uppercase tracking-[0.7px] px-3.5 py-[3px]'
-                  onClick={handleFilterMobileToggle}
-                >
-                  <span className=''>filters</span>
-                  <span className='pl-2 flex flex-col items-center gap-1'>
-                    <span className='w-5 h-[1px] bg-gray relative before:absolute before:rounded-full before:w-[3px] before:h-[3px] before:border before:border-gray before:left-1/4 before:top-[-1px]' />
-                    <span className='w-5 h-[1px] bg-gray relative before:absolute before:rounded-full before:w-[3px] before:h-[3px] before:border before:border-gray before:right-1/4 before:top-[-1px]' />
-                  </span>
-                </button>
+            <div className='flex justify-between px-4 mb-4'>
+              <button
+                className='lg:hidden flex items-center rounded-full border border-gray-light hover:border-silver-dark duration-[250ms] text-[9.5px] uppercase tracking-[0.7px] px-3.5 py-[3px]'
+                onClick={handleFilterMobileToggle}
+              >
+                <span className=''>filters</span>
+                <span className='pl-2 flex flex-col items-center gap-1'>
+                  <span className='w-5 h-[1px] bg-gray relative before:absolute before:rounded-full before:w-[3px] before:h-[3px] before:border before:border-gray before:left-1/4 before:top-[-1px]' />
+                  <span className='w-5 h-[1px] bg-gray relative before:absolute before:rounded-full before:w-[3px] before:h-[3px] before:border before:border-gray before:right-1/4 before:top-[-1px]' />
+                </span>
+              </button>
 
+              {otherGender && (
                 <span className='flex items-center rounded-full border border-gray text-[9.5px] uppercase tracking-[0.7px] lg:ml-auto'>
                   {genders.map((gender) =>
                     type === gender.type ? (
@@ -122,14 +127,15 @@ const Collections = () => {
                     ),
                   )}
                 </span>
-              </div>
-            )}
+              )}
+            </div>
 
             <article className='grid grid-cols-2 md:grid-cols-3 gap-4 p-4 bg-silver-2 md:bg-transparent'>
               {filteredCollection.map((product) => (
                 <ProductCard
                   key={product._id}
                   product={product}
+                  hasGender={hasGender}
                   selectedFilters={selectedFilters}
                 />
               ))}
