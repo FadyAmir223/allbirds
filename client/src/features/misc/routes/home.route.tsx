@@ -1,13 +1,17 @@
+import { useLoaderData } from 'react-router-dom';
+
 import Hero from '../components/hero.component';
-import { Slider } from '../components/slider.component';
 import SaleAd from '../components/sale-ad.component';
+import { Approach } from '../components/approach.component';
 import EmailServiceForm from '../components/email-service-form.component';
+import { type SectionDesktop, Slider } from '../components/slider.component';
 import gifts from '../data/gifts.json';
 import shopCollections from '../data/shop-collections.json';
 import stories from '../data/stories.json';
-import { Approach } from '../components/approach.component';
 
 export const Home = () => {
+  const saleProducts = useLoaderData() as SectionDesktop[];
+
   return (
     <main className='lg:pt-7'>
       <Hero />
@@ -27,8 +31,7 @@ export const Home = () => {
         paragraphText='Save 20% on our best-selling warm, water-repellent styles.'
       />
 
-      {/* TODO: use /api/collections/sale */}
-      {/* <Slider title='now on sale' /> */}
+      <Slider title='now on sale' slides={saleProducts} />
 
       {/* keep calm & travel on */}
       <SaleAd

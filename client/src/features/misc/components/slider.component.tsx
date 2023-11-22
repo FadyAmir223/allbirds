@@ -14,10 +14,11 @@ export type Card = {
   miniImgUrl?: string;
   title: string;
   description: string;
+  url?: string;
 };
 
-type SectionDesktop = {
-  text: string;
+export type SectionDesktop = {
+  text?: string;
   items: Card[];
 };
 
@@ -26,10 +27,11 @@ type SliderProps = {
   sectionDesctop?: boolean;
   cardAppendix?: boolean;
   slides: SectionDesktop[];
+  imagesPerSlide?: number;
 };
 
 const SECTION_SIZE = 3;
-const imagesPerSlide =
+const IMAGES_PER_SLIDE =
   innerWidth < screenSize.sm ? 1 : innerWidth < screenSize.md ? 2 : 3;
 
 export const Slider = ({
@@ -37,6 +39,7 @@ export const Slider = ({
   sectionDesctop = false,
   cardAppendix = false,
   slides,
+  imagesPerSlide = IMAGES_PER_SLIDE,
 }: SliderProps) => {
   const slidesFlat = slides.flatMap((slide) => slide.items);
   const totalSlides = slidesFlat.length;
@@ -121,12 +124,13 @@ export const Slider = ({
             slidesPerView={imagesPerSlide}
             onSlideChange={handleSlideChange}
             onSwiper={setSwiper}
+            className='overflow-visible'
           >
             <div className='whitespace-nowrap'>
               {slidesFlat.map((slide) => (
                 <SwiperSlide key={slide.title}>
                   {!cardAppendix ? (
-                    <Link to='/'>
+                    <Link to={slide.url || ''}>
                       <SlideCard {...slide} appendix={cardAppendix} />
                     </Link>
                   ) : (

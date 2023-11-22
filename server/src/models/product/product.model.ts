@@ -138,6 +138,8 @@ async function getCollectionSale(type, gender, skip, limit) {
           name: 1,
           price: 1,
           sizes: 1,
+          material: 1,
+          bestFor: 1,
           editions: {
             $filter: {
               input: '$editions',
@@ -153,6 +155,8 @@ async function getCollectionSale(type, gender, skip, limit) {
           name: 1,
           price: 1,
           sizes: 1,
+          material: 1,
+          bestFor: 1,
           editions: {
             $map: {
               input: '$editions',

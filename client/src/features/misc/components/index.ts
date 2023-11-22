@@ -1,2 +1,2 @@
 export { Approach } from './approach.component';
-export { Slider } from './slider.component';
+export * from './slider.component';

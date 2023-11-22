@@ -53,9 +53,14 @@ const SlideCard = ({
         )}
       </div>
       <div className='px-6 py-3 text-gray'>
-        <h4 className='capitalize font-bold text-[14px] tracking-wide'>
+        <h4 className='capitalize font-bold text-[14px] tracking-wide whitespace-nowrap'>
           {title}
         </h4>
+        {!appendix && (
+          <p className='leading-[1.4] text-[12px] tracking-[0.3px] whitespace-nowrap'>
+            {description}
+          </p>
+        )}
         {appendix && (
           <>
             <div className='flex gap-x-2 items-center  border-t-[1px] border-t-gray-light pt-[10px] mt-[10px]'>

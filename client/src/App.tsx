@@ -6,11 +6,12 @@ import {
 } from 'react-router-dom';
 
 import Layout from '@/components/layout.component';
+import ErrorFallback from '@/components/error-fallback.component';
 import { UserRoute } from '@/features/auth';
 import { CollectionRoute } from '@/features/collections';
 import { ProductRoute } from '@/features/products';
 import { PagesRoute } from '@/features/pages';
-import ErrorFallback from '@/components/error-fallback.component';
+import { loader as homeLoader } from './features/misc';
 import { lazyImport } from '@/utils/lazy-import';
 
 const mistFactory = () => import('@/features/misc');
@@ -24,7 +25,7 @@ const App = () => {
         createRoutesFromElements(
           <Route path='/' element={<Layout />} errorElement={<ErrorFallback />}>
             <Route path='*' element={<NotFound />} />
-            <Route index element={<Home />} />
+            <Route index element={<Home />} loader={homeLoader} />
             {CollectionRoute()}
             {ProductRoute()}
             {UserRoute()}
