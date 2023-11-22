@@ -10,6 +10,7 @@ import { Cart } from '@/features/cart';
 import Overlay from '@/components/overlay.component';
 import { cn } from '@/utils/cn';
 import headerNavData from '@/data/header.json';
+import { useScroll } from '@/hooks/useScroll';
 
 const headerLeftItems = [
   { text: 'men', url: '' },
@@ -61,6 +62,8 @@ const Header = () => {
   const divEl = useRef<HTMLDivElement | null>(null);
 
   const handleAdHide = () => setAdHidden(scrollY > 100);
+
+  useScroll(nav.isOpen);
 
   useEffect(() => {
     addEventListener('scroll', handleAdHide);

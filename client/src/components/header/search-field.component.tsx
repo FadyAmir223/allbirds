@@ -7,6 +7,7 @@ import Modal from '@/components/modal.component';
 import Overlay from '@/components/overlay.component';
 import SearchIcon from '@/assets/svg/search.svg?react';
 import { cn } from '@/utils/cn';
+import { useScroll } from '@/hooks/useScroll';
 
 // TODO: GET/POST /api/recent-search
 // TODO: search functionality
@@ -27,6 +28,8 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
   const [, setSearchParams] = useSearchParams();
 
   const navigate = useNavigate();
+
+  useScroll(search.isOpen);
 
   useEffect(() => {
     const timeout = setTimeout(() => {

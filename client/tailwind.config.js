@@ -20,7 +20,7 @@ export default {
         'bule-dark': '#1a2226',
         silver: '#f5f5f5',
         'silver-2': '#f9f9f9',
-        'sliver-dark': '#4d5559',
+        'silver-dark': '#4d5559',
         red: '#AD1F00',
         'red-dark': '#b65151',
         brown: '#f8f7f5',

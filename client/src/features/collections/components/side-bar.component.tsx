@@ -1,8 +1,10 @@
 import { Link, useSearchParams } from 'react-router-dom';
+import { FaArrowRightLong } from 'react-icons/fa6';
 import { RiCloseLine } from 'react-icons/ri';
 
 import SizeButton from '@/components/product/size-button.component';
 import Checkbox from './checkbox.component';
+import Drawer from '@/components/drawer.component';
 import { type FilterKey, type Filters } from '..';
 
 type SideBarProps = {
@@ -11,6 +13,37 @@ type SideBarProps = {
     [key in FilterKey]: string[] | undefined;
   };
   delimiter: string;
+  isFilterOpen: boolean;
+  handleFilterMobileToggle: () => void;
+};
+
+const SideBar = ({
+  isFilterOpen,
+  handleFilterMobileToggle,
+  ...props
+}: SideBarProps) => {
+  return (
+    <>
+      <aside className='hidden lg:block p-4 w-[265px] text-gray self-start'>
+        <Link to='/' className='text-[10px] font-semibold'>
+          Home /
+        </Link>
+        <SideBarFilters {...props} />
+      </aside>
+
+      <Drawer isOpen={isFilterOpen} handleClose={handleFilterMobileToggle}>
+        <div className='fixed px-6 py-3 top-0 w-full border-b border-b-gray bg-white z-10'>
+          <button
+            className='scale-150 duration-[400ms] hover:translate-x-2'
+            onClick={handleFilterMobileToggle}
+          >
+            <FaArrowRightLong />
+          </button>
+        </div>
+        <SideBarFilters drawer {...props} />
+      </Drawer>
+    </>
+  );
 };
 
 const checkboxFilters: { label: string; filterType: FilterKey }[] = [
@@ -18,7 +51,17 @@ const checkboxFilters: { label: string; filterType: FilterKey }[] = [
   { label: 'material', filterType: 'material' },
 ];
 
-const SideBar = ({ filters, selectedFilters, delimiter }: SideBarProps) => {
+type SideBarFiltersProps = Omit<
+  SideBarProps,
+  'isFilterOpen' | 'handleFilterMobileToggle'
+> & { drawer?: boolean };
+
+const SideBarFilters = ({
+  filters,
+  selectedFilters,
+  delimiter,
+  drawer = false,
+}: SideBarFiltersProps) => {
   const [, setSearchParams] = useSearchParams();
 
   const handleFilterBy = (key: string, value: string) => {
@@ -40,25 +83,40 @@ const SideBar = ({ filters, selectedFilters, delimiter }: SideBarProps) => {
     });
   };
 
-  return (
-    <aside className='hidden lg:block p-4 w-[265px] text-gray self-start'>
-      <Link to='/' className='text-[10px] font-semibold'>
-        Home /
-      </Link>
+  const clearFilterBy = () => {
+    setSearchParams((prevSearchParams) => {
+      Object.keys(selectedFilters).map((selectedFilter) => {
+        prevSearchParams.delete(selectedFilter);
+      });
+      return prevSearchParams;
+    });
+  };
 
+  return (
+    <aside className='mt-16 pl-4'>
       <div className='border-b border-b-gray mt-2 mb-3 pb-2'>
-        <p className='pb-2 mb-3 text-[15px] font-bold'>Filter By:</p>
+        <div className='flex items-center pb-2 mb-3'>
+          <p className='text-[15px] font-bold'>Filter By:</p>
+          {drawer && (
+            <button
+              className='underline mx-14 text-[#e8e6e3]'
+              onClick={clearFilterBy}
+            >
+              clear All
+            </button>
+          )}
+        </div>
         <div className='flex gap-1 flex-wrap'>
           {Object.entries(selectedFilters).map(
             ([filterKey, filterList]) =>
               filterList?.map((filterValue) => (
                 <button
                   key={filterValue}
-                  className='text-[12px] pl-[7px] pr-[4px] py-[3px] rounded-full flex items-center gap-2 border border-gray-light hover:border-sliver-dark duration-[250ms]'
+                  className='text-[12px] pl-[7px] pr-[4px] py-[3px] rounded-full flex items-center gap-2 border border-gray-light hover:border-silver-dark duration-[250ms]'
                   onClick={() => handleFilterBy(filterKey, filterValue)}
                 >
                   <p className='capitalize whitespace-nowrap'>{filterValue}</p>
-                  <span className='bg-sliver-dark rounded-full text-white p-[2px]'>
+                  <span className='bg-silver-dark rounded-full text-white p-[2px]'>
                     <RiCloseLine />
                   </span>
                 </button>
@@ -67,7 +125,7 @@ const SideBar = ({ filters, selectedFilters, delimiter }: SideBarProps) => {
         </div>
       </div>
 
-      <div className='border-b border-b-gray mt-2 mb-3 pb-2'>
+      <div className='border-b border-b-gray mt-2 mb-3 pb-2 pr-4'>
         <h5 className='uppercase font-bold text-sm tracking-[1px] mb-2'>
           sizes
         </h5>
@@ -100,7 +158,7 @@ const SideBar = ({ filters, selectedFilters, delimiter }: SideBarProps) => {
               <Checkbox
                 key={tag}
                 tag={tag}
-                checked={selectedFilters[filterType]?.includes(tag)}
+                checked={selectedFilters[filterType]?.includes(tag) ?? false}
                 onChange={() => handleFilterBy(filterType, tag)}
               />
             ))}
@@ -116,7 +174,7 @@ const SideBar = ({ filters, selectedFilters, delimiter }: SideBarProps) => {
               key={hue}
               tag={hue}
               isColor
-              checked={selectedFilters.hues?.includes(hue)}
+              checked={selectedFilters.hues?.includes(hue) ?? false}
               onChange={() => handleFilterBy('hues', hue)}
             />
           ))}
