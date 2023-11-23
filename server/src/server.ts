@@ -7,7 +7,5 @@ import { mongoConnect } from './services/mongo.js';
   await mongoConnect();
   await saveProducts();
 
-  app.listen(SERVER_PORT, () => {
-    console.log(SERVER_URL);
-  });
+  app.listen(SERVER_PORT, () => console.log(SERVER_URL));
 })();

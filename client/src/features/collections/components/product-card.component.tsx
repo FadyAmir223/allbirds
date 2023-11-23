@@ -56,7 +56,7 @@ const ProductCard = ({
   if (!hasGender)
     product.sizes = product.sizes.map((size) => size.split('.')[0]);
 
-  const products = product.editions
+  const editions = product.editions
     .flatMap((edition) => edition.products)
     .filter((product) => {
       const bySize =
@@ -70,10 +70,10 @@ const ProductCard = ({
       return bySize && byHue;
     });
 
-  if (products.length === 0) return <></>;
+  if (editions.length === 0) return <></>;
 
-  const currProduct = products[nav.index];
-  const MaxSections = getMaxSections(products.length - 1);
+  const currProduct = editions[nav.index];
+  const MaxSections = getMaxSections(editions.length - 1);
 
   const section = {
     first: nav.section === 0,
@@ -102,6 +102,22 @@ const ProductCard = ({
     setNav({ index: nav.index, section: nav.section + direction });
 
   const handleToggleQuickAdd = () => setQuickAddOpen(!isQuickAddOpen);
+
+  const handleAddToCart = (size: string) => {
+    const edition = editions[nav.index];
+
+    console.log({
+      amount: 1,
+      editionId: edition.id,
+      size,
+      handle: product.handle,
+      name: product.name,
+      price: product.price,
+      salePrice: edition.salePrice,
+      colorName: edition.colorName,
+      image: edition.image,
+    });
+  };
 
   return (
     <div className='text-gray relative bg-blue group bg-white h-fit'>
@@ -146,8 +162,9 @@ const ProductCard = ({
             </span>
           </button>
         )}
-        {products.slice(slice.min, slice.max).map((product, idx) => (
-          <Fragment key={product.id}>
+
+        {editions.slice(slice.min, slice.max).map((edition, idx) => (
+          <Fragment key={edition.id}>
             <button
               className='bg-silver z-10 hidden md:block'
               onClick={() => handleIndexChange(idx)}
@@ -155,7 +172,7 @@ const ProductCard = ({
             >
               <div className='relative pb-[100%]'>
                 <img
-                  src={product.image}
+                  src={edition.image}
                   alt=''
                   className='absolute top-0 left-0 w-full h-full object-cover'
                 />
@@ -163,7 +180,7 @@ const ProductCard = ({
             </button>
 
             <ColorButton
-              hues={product.colors}
+              hues={edition.colors}
               className='block md:hidden z-10'
               style={style}
               onClick={() => handleIndexChange(idx)}
@@ -195,7 +212,12 @@ const ProductCard = ({
           )}
         >
           {product.sizes.map((size) => (
-            <SideButton key={size} size={size} product={currProduct} />
+            <SideButton
+              key={size}
+              size={size}
+              product={currProduct}
+              onClick={() => handleAddToCart(size)}
+            />
           ))}
         </div>
       </div>

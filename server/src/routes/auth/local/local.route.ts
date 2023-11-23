@@ -15,7 +15,7 @@ localRoute.post(
   '/signup',
   checkLoggedOut,
   createAccountRateLimitMiddleware,
-  httpsSignup
+  httpsSignup,
 );
 
 localRoute.post(
@@ -23,7 +23,7 @@ localRoute.post(
   checkLoggedOut,
   loginRateLimitMiddleware,
   passport.authenticate('local'),
-  socialCallback
+  socialCallback,
 );
 
 export default localRoute;

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 import User from './user.mongo.js';
 import { getCart } from '../product/product.model.js';
@@ -11,7 +11,7 @@ async function getUserById(id) {
   try {
     return await User.findById(
       id,
-      'email social role verified security.userAgent'
+      'email social role verified security.userAgent',
     ).lean();
   } catch {
     return null;
@@ -22,7 +22,7 @@ async function getUserByEmail(email) {
   try {
     return await User.findOne(
       { email },
-      'username email password social'
+      'username email password social',
     ).lean();
   } catch {
     return null;
@@ -36,7 +36,7 @@ async function getLocalUser(_email) {
         email: _email,
         'social.provider': { $exists: false },
       },
-      'email password'
+      'email password',
     );
     return { email, password, id };
   } catch {
@@ -81,7 +81,7 @@ async function createSocialUser(
   email,
   provider,
   accessToken,
-  refreshToken
+  refreshToken,
 ) {
   try {
     const role = email === 'fadyamir223@gmail.com' ? 'admin' : undefined;
@@ -95,7 +95,7 @@ async function createSocialUser(
         verified: true,
         social: { provider, accessToken, refreshToken },
       },
-      { upsert: true, new: true, fields: { _id: 1 } }
+      { upsert: true, new: true, fields: { _id: 1 } },
     ).lean();
 
     return { id: user._id };
@@ -113,7 +113,7 @@ async function addUserSecurity(userId, userAgent, deviceId) {
           'security.userAgent': userAgent,
           'security.trustedDevices': deviceId,
         },
-      }
+      },
     );
     return acknowledged;
   } catch {
@@ -146,7 +146,7 @@ async function addLocation(userId, location) {
     const { locations } = await User.findByIdAndUpdate(
       userId,
       { $push: { locations: location } },
-      { new: true }
+      { new: true },
     ).lean();
 
     if (!locations) return { status: 404, message: 'user not found' };
@@ -161,7 +161,7 @@ async function removeLocation(userId, locationId) {
     const { locations } = await User.findByIdAndUpdate(
       userId,
       { $pull: { locations: { _id: locationId } } },
-      { new: true }
+      { new: true },
     ).lean();
 
     if (!locations) return { status: 404, message: 'user not found' };
@@ -182,7 +182,7 @@ async function updateLocation(userId, locationId, fields) {
         'locations._id': new mongoose.Types.ObjectId(locationId),
       },
       { $set: { ..._fields } },
-      { new: true }
+      { new: true },
     ).lean();
 
     if (!locations) return { status: 404, message: 'user not found' };
@@ -218,7 +218,7 @@ async function orderCart(userId, items) {
         (order) =>
           String(order.handle) === handle &&
           order.editionId === editionId &&
-          order.size === size
+          order.size === size,
       );
 
       if (existingOrder) existingOrder.amount += amount;
@@ -288,7 +288,7 @@ async function verifyUser(verifyToken) {
   try {
     const { acknowledged, modifiedCount } = await User.updateOne(
       { verifyToken },
-      { $set: { verified: true, verifyToken: '' } }
+      { $set: { verified: true, verifyToken: '' } },
     );
 
     const verified = acknowledged && modifiedCount !== 0;
@@ -309,7 +309,7 @@ async function requestResetPassword(email) {
         email,
         'social.provider': { $exists: false },
       },
-      '_id username verified social'
+      '_id username verified social',
     );
 
     const { id, username, verified } = user;

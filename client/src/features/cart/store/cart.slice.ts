@@ -1,10 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { Cart } from '../types/cart.type';
+
 type InitialState = {
   amount: number;
   isOpen: boolean;
   totalPrice: number;
-  items: string[]; // TODO: product type
+  items: Cart[];
 };
 
 const initialState: InitialState = {

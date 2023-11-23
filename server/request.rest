@@ -244,4 +244,4 @@ GET {{url}}/api/user/orders/history
 
 ### make order - bug: fix POST -> GET
 
-POST {{url}}/api/user/orders
+GET {{url}}/api/user/orders

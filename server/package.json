@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"tsc -w\" \"nodemon ./dist/server.js\"",
+    "dev": "tsc && concurrently \"tsc -w\" \"nodemon ./dist/server.js\"",
     "test": "NODE_OPTIONS=--experimental-vm-modules NODE_ENV=test npx jest --coverage --maxWorkers=4 --detectOpenHandles --forceExit"
   },
   "keywords": [],
@@ -14,7 +14,7 @@
   "dependencies": {
     "axios": "^1.5.1",
     "bad-words": "^3.0.4",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "concurrently": "^8.2.2",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.6",

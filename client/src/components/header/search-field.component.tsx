@@ -1,22 +1,24 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { useSearchParams, useNavigate, Link } from 'react-router-dom';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import {
+  useSearchParams,
+  useNavigate,
+  Link,
+  useLocation,
+} from 'react-router-dom';
 import { LiaAngleLeftSolid } from 'react-icons/lia';
 
 import LinkCustom from '@/components/link-custom.component';
 import Modal from '@/components/modal.component';
 import Overlay from '@/components/overlay.component';
-import SearchIcon from '@/assets/svg/search.svg?react';
-import { cn } from '@/utils/cn';
 import { useScroll } from '@/hooks/useScroll';
-
-// TODO: GET/POST /api/recent-search
-// TODO: search functionality
+import { cn } from '@/utils/cn';
+import SearchIcon from '@/assets/svg/search.svg?react';
 
 type SearchFieldProps = {
   isOpen: boolean;
 };
 
-const recentSearches = ['sale', 'tree runners', 'slippers', 'mizzles'];
+const queryName = 'query';
 
 const SearchField = ({ isOpen }: SearchFieldProps) => {
   const [search, setSearch] = useState({
@@ -25,51 +27,72 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
     query: '',
   });
 
-  const [, setSearchParams] = useSearchParams();
-
-  const navigate = useNavigate();
-
   useScroll(search.isOpen);
+  const navigate = useNavigate();
+  const [, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const elInput = useRef<HTMLInputElement | null>(null);
+
+  const recentQueries = JSON.parse(
+    localStorage.getItem(queryName) || '[]',
+  ) as string[];
 
   useEffect(() => {
+    if (search.isOpen) elInput.current?.focus();
+  }, [search.isOpen]);
+
+  useEffect(() => {
+    // TODO: POST /api/search  { query }
+
     const timeout = setTimeout(() => {
-      if (search.query) setSearchParams({ query: search.query });
-    }, 700);
+      if (search.query) {
+        const newQueries = [
+          search.query,
+          ...recentQueries.filter((query) => query !== search.query),
+        ].slice(0, 5);
+
+        localStorage.setItem(queryName, JSON.stringify(newQueries));
+      }
+
+      setSearchParams(
+        (prevSearchParams) => {
+          search.query
+            ? prevSearchParams.set(queryName, search.query)
+            : prevSearchParams.delete(queryName);
+
+          return prevSearchParams;
+        },
+        { replace: true },
+      );
+    }, 600);
 
     return () => clearTimeout(timeout);
-  }, [search.query, setSearchParams]);
+  }, [search.query]); // eslint-disable-line
 
   useEffect(() => {
     if (!search.isMoving) return;
 
     const timeout = setTimeout(() => {
-      setSearch((prevSearch) => ({
-        ...prevSearch,
-        isMoving: false,
-        query: '',
-      }));
+      const query = location.pathname === '/pages/search' ? search.query : '';
+      setSearch({ ...search, isMoving: false, query });
     }, 250);
 
     return () => clearTimeout(timeout);
-  }, [search.isMoving]);
+  }, [search.isMoving]); // eslint-disable-line
 
   const handleSearchToggle = () => {
-    setSearch((prevSearch) => ({
-      ...prevSearch,
-      isOpen: !prevSearch.isOpen,
-      isMoving: true,
-    }));
+    setSearch({ ...search, isOpen: !search.isOpen, isMoving: true });
   };
 
   const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setSearch((prevSearch) => ({ ...prevSearch, [name]: value }));
+    setSearch({ ...search, [name]: value });
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleSearchToggle();
-    navigate('/pages/search?' + search.query);
+    navigate(`/pages/search?${queryName}=${search.query.replace(' ', '+')}`);
   };
 
   return (
@@ -115,10 +138,10 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
               <div className='bg-silver w-full rounded-lg'>
                 <form onSubmit={handleSubmit}>
                   <input
-                    autoFocus
+                    ref={elInput}
                     autoComplete='off'
                     type='text'
-                    name='query'
+                    name={queryName}
                     placeholder='Enter Search Term'
                     className='bg-transparent text-xs focus:outline-0 px-5 py-[11px]  w-full tracking-[0.06em]'
                     value={search.query}
@@ -128,25 +151,27 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
               </div>
             </div>
 
-            {recentSearches && (
+            {recentQueries && (
               <div>
                 <p className='text-gray-dark uppercase text-[9.6px] tracking-[0.8px] pb-[6px]'>
                   recent searches
                 </p>
 
                 <ul>
-                  {recentSearches.map((recentSearch) => (
+                  {recentQueries.map((recentQuery) => (
                     <li
-                      key={recentSearch}
+                      key={recentQuery}
                       className='pb-[6px] text-[13px] leading-[18px]'
                     >
                       <Link
                         to={`/pages/search${
-                          recentSearch ? `?query=${recentSearch}` : ''
+                          recentQuery
+                            ? `?${queryName}=${recentQuery.replace(' ', '+')}`
+                            : ''
                         }`}
                         onClick={handleSearchToggle}
                       >
-                        {recentSearch}
+                        {recentQuery}
                       </Link>
                     </li>
                   ))}
@@ -156,7 +181,9 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
           </div>
 
           <LinkCustom
-            to={`/pages/search${search.query ? `?query=${search.query}` : ''}`}
+            to={`/pages/search${
+              search.query ? `?query=${search.query.replace(' ', '+')}` : ''
+            }`}
             className='mx-auto'
             onClick={handleSearchToggle}
           >

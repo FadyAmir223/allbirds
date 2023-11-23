@@ -75,31 +75,37 @@ const SideBarFilters = ({
     filters.sizes = filters.sizes.map((size) => size.split('.')[0]);
 
   const handleFilterBy = (key: string, value: string) => {
-    setSearchParams((prevSearchParams) => {
-      const queryValue = prevSearchParams.get(key);
+    setSearchParams(
+      (prevSearchParams) => {
+        const queryValue = prevSearchParams.get(key);
 
-      const values = queryValue?.split(delimiter) || [];
-      const index = values.indexOf(value);
-      index === -1 ? values.push(value) : values.splice(index, 1);
+        const values = queryValue?.split(delimiter) || [];
+        const index = values.indexOf(value);
+        index === -1 ? values.push(value) : values.splice(index, 1);
 
-      if (!isNaN(Number(values[0]))) values.sort((a, b) => +a - +b);
-      const stringValues = values?.join(delimiter);
+        if (!isNaN(Number(values[0]))) values.sort((a, b) => +a - +b);
+        const stringValues = values?.join(delimiter);
 
-      stringValues
-        ? prevSearchParams.set(key, stringValues)
-        : prevSearchParams.delete(key);
+        stringValues
+          ? prevSearchParams.set(key, stringValues)
+          : prevSearchParams.delete(key);
 
-      return prevSearchParams;
-    });
+        return prevSearchParams;
+      },
+      { replace: true },
+    );
   };
 
   const clearFilterBy = () => {
-    setSearchParams((prevSearchParams) => {
-      Object.keys(selectedFilters).map((selectedFilter) => {
-        prevSearchParams.delete(selectedFilter);
-      });
-      return prevSearchParams;
-    });
+    setSearchParams(
+      (prevSearchParams) => {
+        Object.keys(selectedFilters).map((selectedFilter) => {
+          prevSearchParams.delete(selectedFilter);
+        });
+        return prevSearchParams;
+      },
+      { replace: true },
+    );
   };
 
   return (

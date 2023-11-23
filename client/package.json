@@ -49,6 +49,6 @@
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vite-plugin-html": "^3.2.0",
-    "vite-plugin-svgr": "^4.1.0"
+    "vite-plugin-svgr": "^4.2.0"
   }
 }

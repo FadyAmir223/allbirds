@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import passport from 'passport';
 import { Strategy } from 'passport-local';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
@@ -34,7 +34,7 @@ async function httpsSignup(req: Request, res: Response): Promise<Response> {
   if (user) return res.status(409).json({ message: 'email already used' });
 
   const username = `${firstName} ${lastName}`;
-  const hashPassword = await bcrypt.hash(password, 10);
+  const hashPassword = await bcrypt.hashSync(password, 10);
 
   const userAgent = req.headers['user-agent'];
 
@@ -49,7 +49,7 @@ async function httpsSignup(req: Request, res: Response): Promise<Response> {
     email,
     hashPassword,
     userAgent,
-    deviceId
+    deviceId,
   );
 
   req.login({ id }, (err) => {
@@ -79,7 +79,7 @@ passport.use(
           if (isDeviceTrusted === 'false')
             promises.push(
               loginRateLimit_IP.consume(ip),
-              loginRateLimit_Email.consume(email)
+              loginRateLimit_Email.consume(email),
             );
 
           await Promise.all(promises);
@@ -95,7 +95,7 @@ passport.use(
     } catch (err) {
       return done(err);
     }
-  })
+  }),
 );
 
 export { httpsSignup };

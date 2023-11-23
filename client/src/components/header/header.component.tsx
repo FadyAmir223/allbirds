@@ -6,11 +6,11 @@ import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 
 import ShopAd from '@/components/header/shopAd.component';
 import SearchField from '@/components/header/search-field.component';
-import { Cart } from '@/features/cart';
 import Overlay from '@/components/overlay.component';
+import { Cart } from '@/features/cart';
+import { useScroll } from '@/hooks/useScroll';
 import { cn } from '@/utils/cn';
 import headerNavData from '@/data/header.json';
-import { useScroll } from '@/hooks/useScroll';
 
 const headerLeftItems = [
   { text: 'men', url: '' },
