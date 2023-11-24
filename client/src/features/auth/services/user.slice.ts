@@ -1,10 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-type InitialState = {
+type UserInitialState = {
   user: string | null;
 };
 
-const initialState: InitialState = {
+const initialState: UserInitialState = {
   user: null,
 };
 
@@ -20,3 +20,4 @@ const userSlice = createSlice({
 
 export const { setCurrent } = userSlice.actions;
 export const userReducer = userSlice.reducer;
+export type { UserInitialState };

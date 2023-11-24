@@ -5,9 +5,9 @@ import {
   getCollectionFilters,
   getCollectionSale,
 } from './collection.api';
-import { type Collection } from '../types/collection.type';
-import { type Filters } from '../types/filters.type';
-import { type CollectionGender } from '..';
+import type { Collection } from '../types/collection.type';
+import type { Filters } from '../types/filters.type';
+import type { CollectionGender } from '..';
 
 export type CollectionMainQueries = {
   type: string;

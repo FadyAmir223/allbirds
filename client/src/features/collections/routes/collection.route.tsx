@@ -15,12 +15,12 @@ import {
   collectionFiltersQuery,
 } from '../services/collection.query';
 import { ensureType } from '../utils/ensureType';
-import { type Collection } from '../types/collection.type';
-import {
-  type FilterValues,
-  type FilterKey,
-  type Filters,
-  type SelectedFilters,
+import type { Collection } from '../types/collection.type';
+import type {
+  FilterValues,
+  FilterKey,
+  Filters,
+  SelectedFilters,
 } from '../types/filters.type';
 
 const delimiter = '_';

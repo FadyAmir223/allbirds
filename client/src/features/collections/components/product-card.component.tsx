@@ -4,10 +4,12 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
 import SideButton from '@/components/product/size-button.component';
 import ColorButton from '@/components/product/color-button.component';
+import { useAppDispatch } from '@/store/hooks';
 import { cn } from '@/utils/cn';
 import screenSize from '@/data/screen-size.json';
-import { Product } from '../types/collection.type';
-import { type SelectedFilters } from '..';
+import { addCartItem, toggleCart } from '@/features/cart';
+import type { Product } from '../types/collection.type';
+import type { SelectedFilters } from '..';
 
 type ProductCardProps = {
   product: Product;
@@ -52,6 +54,7 @@ const ProductCard = ({
   const [nav, setNav] = useState({ index: 0, section: 0 });
   const [isQuickAddOpen, setQuickAddOpen] = useState(false);
   const divEl = useRef<HTMLDivElement | null>(null);
+  const dispatch = useAppDispatch();
 
   if (!hasGender)
     product.sizes = product.sizes.map((size) => size.split('.')[0]);
@@ -103,11 +106,10 @@ const ProductCard = ({
 
   const handleToggleQuickAdd = () => setQuickAddOpen(!isQuickAddOpen);
 
-  const handleAddToCart = (size: string) => {
+  const AddCartItem = (size: string) => {
     const edition = editions[nav.index];
 
-    console.log({
-      amount: 1,
+    const productToCart = {
       editionId: edition.id,
       size,
       handle: product.handle,
@@ -116,7 +118,10 @@ const ProductCard = ({
       salePrice: edition.salePrice,
       colorName: edition.colorName,
       image: edition.image,
-    });
+    };
+
+    dispatch(addCartItem(productToCart));
+    dispatch(toggleCart());
   };
 
   return (
@@ -216,7 +221,7 @@ const ProductCard = ({
               key={size}
               size={size}
               product={currProduct}
-              onClick={() => handleAddToCart(size)}
+              onClick={() => AddCartItem(size)}
             />
           ))}
         </div>
@@ -260,6 +265,7 @@ const ProductCard = ({
                   key={size}
                   size={size}
                   product={currProduct}
+                  onClick={() => AddCartItem(size)}
                   className={cn(
                     hasGender ? 'text-[9.8px]' : 'uppercase text-sm',
                   )}

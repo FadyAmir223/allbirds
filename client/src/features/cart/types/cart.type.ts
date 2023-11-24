@@ -1,11 +1,17 @@
-export type Cart = {
-  amount: number;
+export type ProductSignature = {
+  handle: string;
   editionId: number;
   size: string;
-  handle: string;
+};
+
+export type PureCartProduct = ProductSignature & {
   name: string;
   price: number;
-  salePrice: number;
+  salePrice?: number;
   colorName: string;
   image: string;
+};
+
+export type CartProduct = PureCartProduct & {
+  amount: number;
 };

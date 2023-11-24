@@ -4,7 +4,7 @@ const Loading = () => {
       <img
         src='/images/main-page/favicon.webp'
         alt='favicon'
-        className='w-14 animate-[scaling_1.8s_linear_infinite]'
+        className='w-14 animate-[scaling_1.5s_ease-out_infinite]'
       />
     </div>
   );
