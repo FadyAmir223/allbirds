@@ -2,7 +2,7 @@ import { FormEvent, MouseEvent, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import LinkCustom from '@/components/link-custom.component';
-import { cn } from '@/utils/cn';
+import { cn } from '@/utils/cn.util';
 
 const EmailServiceForm = () => {
   const [errorMessage, setErrorMessage] = useState(false);

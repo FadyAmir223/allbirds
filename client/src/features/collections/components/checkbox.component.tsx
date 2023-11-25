@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef } from 'react';
 
-import { cn } from '@/utils/cn';
+import { cn } from '@/utils/cn.util';
 
 type CheckboxProps = ComponentPropsWithoutRef<'input'> & {
   tag: string;

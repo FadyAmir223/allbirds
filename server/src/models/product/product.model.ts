@@ -62,7 +62,7 @@ async function getCollection(type, gender, skip, limit) {
                     as: 'product',
                     in: {
                       id: '$$product.id',
-                      handle: '$$product.handle ',
+                      handle: '$$product.handle',
                       colorName: '$$product.colorName',
                       colors: '$$product.colors',
                       hues: '$$product.hues',

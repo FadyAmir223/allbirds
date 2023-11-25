@@ -14,14 +14,14 @@ import {
   collectionQuery,
   collectionFiltersQuery,
 } from '../services/collection.query';
-import { ensureType } from '../utils/ensureType';
-import type { Collection } from '../types/collection.type';
-import type {
-  FilterValues,
-  FilterKey,
-  Filters,
-  SelectedFilters,
-} from '../types/filters.type';
+import { ensureType } from '../utils/ensureType.util';
+import {
+  type Collection,
+  type Filters,
+  type SelectedFilters,
+  type FilterKey,
+  type FilterValues,
+} from '..';
 
 const delimiter = '_';
 
@@ -35,7 +35,7 @@ const Collections = () => {
   const [searchParams] = useSearchParams();
 
   const params = useParams();
-  const type = params.type || '';
+  const type = params.type as string;
   const ensuredType = ensureType(type);
   const hasGender = ensuredType.gender !== undefined;
 

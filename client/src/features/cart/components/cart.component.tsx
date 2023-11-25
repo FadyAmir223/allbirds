@@ -10,7 +10,7 @@ import {
   removeCartItem,
   toggleCart,
 } from '../store/cart.slice';
-import { cn } from '@/utils/cn';
+import { cn } from '@/utils/cn.util';
 import CartIcon from '@/assets/svg/cart.svg?react';
 import type { CartProduct } from '../types/cart.type';
 

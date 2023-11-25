@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Markdown from 'react-markdown';
 import { FaAngleRight } from 'react-icons/fa';
 
-import { cn } from '@/utils/cn';
+import { cn } from '@/utils/cn.util';
 
 type MarkdownLinkProps = ComponentPropsWithoutRef<'a'> & {
   href?: string;

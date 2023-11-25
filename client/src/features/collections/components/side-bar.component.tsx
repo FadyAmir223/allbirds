@@ -5,7 +5,7 @@ import { RiCloseLine } from 'react-icons/ri';
 import SizeButton from '@/components/product/size-button.component';
 import Checkbox from './checkbox.component';
 import Drawer from '@/components/drawer.component';
-import { cn } from '@/utils/cn';
+import { cn } from '@/utils/cn.util';
 import { type FilterKey, type Filters } from '..';
 
 type SideBarProps = {

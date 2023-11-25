@@ -2,7 +2,7 @@ import { lazy } from 'react';
 import { Route, Navigate } from 'react-router-dom';
 
 import { loader as collectionAction } from '../services/collection.loader';
-import { lazyImport } from '@/utils/lazy-import';
+import { lazyImport } from '@/utils/lazy-import.util';
 
 const Collections = lazy(() => import('./collection.route'));
 const { NotFound } = lazyImport(() => import('@/features/misc'), 'NotFound');

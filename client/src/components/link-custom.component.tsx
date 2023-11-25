@@ -1,7 +1,7 @@
 import { ComponentPropsWithoutRef } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
-import { cn } from '@/utils/cn';
+import { cn } from '@/utils/cn.util';
 
 type ExtraProps = {
   styleType?: 'normal' | 'invert';

@@ -1,7 +1,7 @@
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { useSwiper } from 'swiper/react';
 
-import { cn } from '@/utils/cn';
+import { cn } from '@/utils/cn.util';
 
 type SlideNavButtonsProps = {
   total: number;

@@ -1,32 +1,18 @@
-export type Collection = {
-  pagination: {
-    total: number;
-    page: number;
-    perPage: number;
-  };
-  products: Product[];
+import type { Pagination } from '@/types/pagination.type';
+import { type ProductMain, type ProductEdition } from '@/features/products';
+
+export type CollectionEdition = Omit<ProductEdition, 'images'> & {
+  image: string;
 };
 
-export type Product = {
-  _id: string;
-  handle: string;
-  name: string;
-  price: number;
-  sizes: string[];
-  bestFor: string[];
-  material: string;
+export type CollectionProduct = ProductMain & {
   editions: {
     edition: string;
-    products: EditionProduct[];
+    products: CollectionEdition[];
   }[];
 };
 
-export type EditionProduct = {
-  id: number;
-  colorName: string;
-  colors: string[];
-  hues: string[];
-  sizesSoldOut: string[];
-  image: string;
-  salePrice?: number;
+export type Collection = {
+  pagination: Pagination;
+  products: CollectionProduct[];
 };

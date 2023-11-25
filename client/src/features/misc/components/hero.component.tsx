@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import LinkCustom from '@/components/link-custom.component';
-import { cn } from '@/utils/cn';
+import { cn } from '@/utils/cn.util';
 import heroLinks from '../data/men-women-url.json';
 
 const featuredLinks = [

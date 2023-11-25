@@ -1,11 +1,11 @@
 import { ComponentPropsWithoutRef } from 'react';
 
-import { cn } from '@/utils/cn';
-import { EditionProduct } from '@/features/collections';
+import { cn } from '@/utils/cn.util';
+import { CollectionEdition } from '@/features/collections';
 
 type SizeButtonProps = ComponentPropsWithoutRef<'button'> & {
   size: string;
-  product?: EditionProduct;
+  product?: CollectionEdition;
   selected?: boolean;
 };
 

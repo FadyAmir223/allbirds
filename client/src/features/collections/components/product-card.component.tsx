@@ -5,14 +5,13 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import SideButton from '@/components/product/size-button.component';
 import ColorButton from '@/components/product/color-button.component';
 import { useAppDispatch } from '@/store/hooks';
-import { cn } from '@/utils/cn';
-import screenSize from '@/data/screen-size.json';
 import { addCartItem, toggleCart } from '@/features/cart';
-import type { Product } from '../types/collection.type';
-import type { SelectedFilters } from '..';
+import { cn } from '@/utils/cn.util';
+import screenSize from '@/data/screen-size.json';
+import { type CollectionProduct, type SelectedFilters } from '..';
 
 type ProductCardProps = {
-  product: Product;
+  product: CollectionProduct;
   hasGender: boolean;
   selectedFilters: SelectedFilters;
 };
@@ -136,7 +135,8 @@ const ProductCard = ({
         />
       </div>
 
-      <Link to={product.handle} className='relative z-10'>
+      {/* TODO: to={'/products/' + currProduct.handle} */}
+      <Link to={'/products/' + product.handle} className='relative z-10'>
         <p className='font-semibold text-[11px] mt-2 uppercase px-3 md:px-0 z-10 relative'>
           {product.name}
         </p>

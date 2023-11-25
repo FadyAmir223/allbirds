@@ -9,7 +9,7 @@ import SearchField from '@/components/header/search-field.component';
 import Overlay from '@/components/overlay.component';
 import { Cart } from '@/features/cart';
 import { useScroll } from '@/hooks/useScroll';
-import { cn } from '@/utils/cn';
+import { cn } from '@/utils/cn.util';
 import headerNavData from '@/data/header.json';
 
 const headerLeftItems = [

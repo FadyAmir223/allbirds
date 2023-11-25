@@ -11,7 +11,7 @@ import LinkCustom from '@/components/link-custom.component';
 import Modal from '@/components/modal.component';
 import Overlay from '@/components/overlay.component';
 import { useScroll } from '@/hooks/useScroll';
-import { cn } from '@/utils/cn';
+import { cn } from '@/utils/cn.util';
 import SearchIcon from '@/assets/svg/search.svg?react';
 
 type SearchFieldProps = {

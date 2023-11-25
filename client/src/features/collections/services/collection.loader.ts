@@ -7,7 +7,7 @@ import {
   collectionKeys,
 } from './collection.query';
 import { refactorCollectionsToSlides } from '@/features/misc';
-import { ensureType } from '../utils/ensureType';
+import { ensureType } from '../utils/ensureType.util';
 import { type Filters, type Collection } from '..';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {

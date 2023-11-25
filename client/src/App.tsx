@@ -12,7 +12,7 @@ import { CollectionRoute } from '@/features/collections';
 import { ProductRoute } from '@/features/products';
 import { PagesRoute } from '@/features/pages';
 import { loader as homeLoader } from './features/misc';
-import { lazyImport } from '@/utils/lazy-import';
+import { lazyImport } from '@/utils/lazy-import.util';
 
 const mistFactory = () => import('@/features/misc');
 const { Home } = lazyImport(mistFactory, 'Home');

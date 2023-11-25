@@ -17,7 +17,7 @@ export const refactorCollectionsToSlides = (
         imgUrl: edition.image,
         title: product.name,
         description,
-        url: '/collections/' + product.handle,
+        url: '/products/' + product.handle,
       };
     }),
   );

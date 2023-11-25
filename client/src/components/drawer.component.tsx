@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import Modal from '@/components/modal.component';
 import Overlay from '@/components/overlay.component';
 import { useScroll } from '@/hooks/useScroll';
-import { cn } from '@/utils/cn';
+import { cn } from '@/utils/cn.util';
 
 type DrawerProps = {
   isOpen: boolean;
