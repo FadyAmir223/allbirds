@@ -6,9 +6,9 @@ type SizeChartProps = {
   handleClose: () => void;
 };
 
-const SizeChart = ({ isOpen, handleClose }: SizeChartProps) => {
+const SizeChart = (props: SizeChartProps) => {
   return (
-    <BottomDrawer isOpen={isOpen} handleClose={handleClose}>
+    <BottomDrawer {...props}>
       <h3 className='text-3xl font-bold mb-4'>Allbirds Size Chart</h3>
       <p className='mb-5'>
         Allbirds fit true to size for most customers. If you have wide feet or

@@ -1,6 +1,7 @@
-import { TfiClose } from 'react-icons/tfi';
 import { Link } from 'react-router-dom';
+import { TfiClose } from 'react-icons/tfi';
 
+import { CartIcon } from './cart-icon.component';
 import Drawer from '@/components/drawer.component';
 import LinkCustom from '@/components/link-custom.component';
 import CloseButton from '@/components/close-button.component';
@@ -12,7 +13,6 @@ import {
   toggleCart,
 } from '../store/cart.slice';
 import { cn } from '@/utils/cn.util';
-import CartIcon from '@/assets/svg/cart.svg?react';
 import type { CartProduct } from '../types/cart.type';
 
 type CartProps = {
@@ -56,14 +56,8 @@ export const Cart = ({ handleNavClose }: CartProps) => {
 
   return (
     <>
-      <button
-        className='ml-3 block scale-75 relative'
-        onClick={handleCartToggle}
-      >
+      <button className='ml-3 block scale-75' onClick={handleCartToggle}>
         <CartIcon />
-        <span className='absolute top-0 left-[10px] font-bold text-xs'>
-          {cart.totalAmount}
-        </span>
       </button>
 
       <Drawer
@@ -74,11 +68,8 @@ export const Cart = ({ handleNavClose }: CartProps) => {
         <div className='relative text-center border-b-4 border-b-silver pb-2'>
           <CloseButton position='left' onClick={handleCartClose} />
 
-          <div className='scale-75 relative mb-1 inline-block'>
+          <div className='scale-75 mb-1 inline-block'>
             <CartIcon />
-            <span className='absolute top-0 left-[10px] font-bold text-xs'>
-              {cart.totalAmount}
-            </span>
           </div>
 
           <p className='text-gray text-[10px] leading-[10px]'>
@@ -128,11 +119,14 @@ export const Cart = ({ handleNavClose }: CartProps) => {
                         <div className=''>
                           <h4 className='font-bold'>{item.name}</h4>
                           <p className='text-[0.85rem]'>{item.colorName}</p>
-                          <p className=' text-[0.85rem]'>size: {item.size}</p>
+                          <p className='text-[0.85rem]'>size: {item.size}</p>
                         </div>
                       </Link>
 
-                      <button onClick={() => handleDeleteCartItem(item)}>
+                      <button
+                        className='self-start'
+                        onClick={() => handleDeleteCartItem(item)}
+                      >
                         <TfiClose />
                       </button>
                     </div>

@@ -11,7 +11,7 @@ const Overlay = ({ isOpen, className, ...props }: OverlayProps) => {
     isOpen && (
       <button
         className={cn(
-          'bg-gray fixed top-0 left-0 w-screen h-[100dvh] animate-[fade_250ms_linear] z-40 opacity-75 cursor-auto',
+          'bg-gray fixed top-0 left-0 w-screen h-[100dvh] animate-[fade_250ms_linear] z-50 opacity-75 cursor-auto',
           className,
         )}
         {...props}
