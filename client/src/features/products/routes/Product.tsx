@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useState } from 'react';
 import {
   Link,
   useLoaderData,
@@ -6,26 +6,21 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import { useQueries } from '@tanstack/react-query';
-import Markdown from 'react-markdown';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { MdStar, MdStarHalf, MdStarBorder } from 'react-icons/md';
-import { FaChevronDown } from 'react-icons/fa';
-
-import ProductImageSlider from '../components/product-image-slider.component';
 import ColorButton from '@/components/product/color-button.component';
 import SizeButton from '@/components/product/size-button.component';
 import LinkCustom from '@/components/link-custom.component';
 import SizeChart from '../components/size-shart.component';
 import AddToCart from '../components/add-to-cart.component';
-import MarkdownLink from '@/components/markdown-link.component';
-import { SlideCard } from '@/features/misc';
 import { useScroll } from '@/hooks/useScroll';
-import { useAppDispatch } from '@/store/hooks';
 import { productQuery, productReviewsQuery } from '../services/product.query';
-import { addCartItem } from '@/features/cart';
 import { cn } from '@/utils/cn.util';
 import { type ProductDetailed, type Reviews } from '..';
+import { useAppDispatch } from '@/store/hooks';
+import { addCartItem } from '@/features/cart';
 
-const Product = () => {
+export const Product = () => {
   const params = useParams();
   const productName = params.productName as string;
 
@@ -56,22 +51,13 @@ const Product = () => {
     product: 0,
     image: 0,
     size: prevSizeIdx || 0,
-    dropdown: -1,
   });
 
   const [isOpen, setOpen] = useState({ sizeChart: false, addToCart: false });
   useScroll(isOpen.sizeChart, isOpen.addToCart);
 
-  const elMarkdowns = useRef<(HTMLDivElement | null)[]>([]);
-
   const { product } = detailedProduct || {};
   if (!product || !reviews) return;
-
-  // const dropdownLength = product.dropdown.length;
-  // if (elMarkdowns.current.length !== dropdownLength)
-  //   elMarkdowns.current = Array(dropdownLength)
-  //     .fill(null)
-  //     .map((_, i) => elMarkdowns.current[i] || createRef());
 
   const selectedProduct = product.editions[nav.edition].products[nav.product];
 
@@ -122,76 +108,80 @@ const Product = () => {
   const handleSizeChartToggle = () =>
     setOpen({ ...isOpen, sizeChart: !isOpen.sizeChart });
 
-  const handleDropdownToggle = (index: number) =>
-    setNav({ ...nav, dropdown: nav.dropdown === index ? -1 : index });
-
   return (
     <main className='py-10 px-6 relative'>
       <section className='flex gap-16'>
-        <div className='w-3/5 '>
-          <ProductImageSlider
-            images={selectedProduct.images}
-            currImgIndex={nav.image}
-            handleImageChange={handleImageChange}
-            handleNeighbourImage={handleNeighbourImage}
-          />
-
-          <div className='my-6 mb-10 text-center text-gray'>
-            <h2 className='capitalize font-bold bg-silver border-b border-b-gray-light p-4'>
-              {product.name} highlights
-            </h2>
-            {product.highlights.map((highlight) => (
-              <p
-                key={highlight}
-                className='bg-silver border-b border-b-gray-light last-of-type:border-b-0 p-3 text-[14px]'
+        <div className='w-3/5 flex gap-x-6'>
+          <div className='flex flex-col gap-y-2.5 w-[11%]'>
+            {selectedProduct.images.map((image, idx) => (
+              <button
+                key={image}
+                className='bg-silver relative pb-[100%] aspect-square w-full'
+                onClick={() => handleImageChange(idx)}
               >
-                {highlight}
-              </p>
+                <img src={image} alt='' className='absolute inset-0' />
+              </button>
             ))}
           </div>
 
-          <div className='text-gray'>
-            <ul className=''>
-              {product.dropdown.map((item, idx) => (
-                <li
-                  key={item.title}
-                  className='border-t border-t-gray-light last-of-type:border-b last-of-type:border-b-gray-light'
-                >
-                  <button
-                    className='flex justify-between items-center w-full py-5'
-                    onClick={() => handleDropdownToggle(idx)}
+          <div className='relative select-none flex-1'>
+            <div className='overflow-hidden'>
+              <div
+                className='flex duration-300 relative'
+                style={{ transform: `translateX(-${nav.image * 100}%)` }}
+              >
+                {selectedProduct.images.map((image) => (
+                  <div
+                    key={image}
+                    className='aspect-square bg-silver relative pb-[100%]'
                   >
-                    <span className='uppercase text-[12px] tracking-[2px] font-semibold'>
-                      {item.title}
-                    </span>
-                    <span
-                      className={cn('duration-[250ms]', {
-                        'rotate-180': nav.dropdown === idx,
-                      })}
-                    >
-                      <FaChevronDown />
+                    <img
+                      src={image}
+                      alt={selectedProduct.handle}
+                      className='absolute inset-0'
+                    />
+                  </div>
+                ))}
+
+                <div className='absolute bottom-3.5 right-2 flex gap-x-3'>
+                  <button
+                    className='rounded-full border-silver bg-white w-12 h-12 grid place-items-center text-gray'
+                    onClick={() => handleNeighbourImage(-1)}
+                  >
+                    <span className='scale-125'>
+                      <FaAngleLeft />
                     </span>
                   </button>
-
-                  <div
-                    ref={(el) => (elMarkdowns.current[idx] = el)}
-                    className='text-sm leading-6 overflow-hidden duration-[250ms] transition-[height]'
-                    style={{
-                      height:
-                        nav.dropdown === idx
-                          ? elMarkdowns?.current[idx]?.scrollHeight
-                          : '0px',
-                    }}
+                  <button
+                    className='rounded-full border-silver bg-white w-12 h-12 grid place-items-center text-gray'
+                    onClick={() => handleNeighbourImage(1)}
                   >
-                    <Markdown
-                      components={{ a: (props) => <MarkdownLink {...props} /> }}
-                    >
-                      {item.content}
-                    </Markdown>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                    <span className='scale-125'>
+                      <FaAngleRight />
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* <div className='absolute bottom-3.5 right-2 flex gap-x-3'>
+              <button
+                className='rounded-full border-silver bg-white w-12 h-12 grid place-items-center text-gray'
+                onClick={() => handleNeighbourImage(-1)}
+              >
+                <span className='scale-125'>
+                  <FaAngleLeft />
+                </span>
+              </button>
+              <button
+                className='rounded-full border-silver bg-white w-12 h-12 grid place-items-center text-gray'
+                onClick={() => handleNeighbourImage(1)}
+              >
+                <span className='scale-125'>
+                  <FaAngleRight />
+                </span>
+              </button>
+            </div> */}
           </div>
         </div>
 
@@ -251,7 +241,7 @@ const Product = () => {
                   {edition.edition}
                 </h3>
 
-                <div className='grid grid-cols-5 md:grid-cols-5 lg:grid-cols-8 gap-5'>
+                <div className='grid grid-cols-9 gap-1.5'>
                   {edition.products.map((editionProduct, productIdx) => (
                     <ColorButton
                       key={editionProduct.id}
@@ -276,7 +266,7 @@ const Product = () => {
               select size
             </p>
 
-            <div className='grid grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-1.5 mb-3'>
+            <div className='grid grid-cols-8 gap-1.5 mb-3'>
               {product.sizes.map((size, sizeIdx) => (
                 <SizeButton
                   key={size}
@@ -318,25 +308,6 @@ const Product = () => {
                 <span className='text-sm'> ${selectedProduct.salePrice}</span>
               )}
             </LinkCustom>
-
-            <p className='mt-3 mb-14 text-[12px] text-center'>
-              Free shipping on orders over $75. Free returns.
-            </p>
-
-            <div className=''>
-              <p className='font-semibold text-xl mb-4'>Also Cosider</p>
-              <div className='flex gap-x-4'>
-                {product.recommendations.map((recommendation) => (
-                  // path not scraped
-                  // workaround option 2: GET /api/product/recommendations
-                  <SlideCard
-                    imgUrl={recommendation.image}
-                    title={recommendation.name}
-                    className='shadow-md w-1/2 cursor-pointer'
-                  />
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -352,5 +323,3 @@ const Product = () => {
     </main>
   );
 };
-
-export default Product;

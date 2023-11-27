@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-export const useScroll = (isOpen: boolean) => {
+export const useScroll = (...isOpenArgs: boolean[]) => {
   useEffect(() => {
-    isOpen
+    isOpenArgs.some((isOpen) => isOpen)
       ? document.body.classList.add('overflow-y-hidden')
       : document.body.classList.remove('overflow-y-hidden');
-  }, [isOpen]);
+  }, [isOpenArgs]);
 };

@@ -4,10 +4,14 @@ import { cn } from '@/utils/cn.util';
 
 type ColorButtonProps = ComponentPropsWithoutRef<'button'> & {
   hues: string[];
+  selectable?: boolean;
+  selected?: boolean;
 };
 
 const ColorButton = ({
   hues,
+  selectable = false,
+  selected = false,
   className,
   style,
   ...props
@@ -33,6 +37,12 @@ const ColorButton = ({
       className={cn(
         'w-full aspect-square border-2 border-gray rounded-full',
         className,
+        {
+          'relative before:absolute before:inset-[-5px] before:border-[1.5px] before:border-transparent before:rounded-full before:p-2':
+            selectable,
+          'before:border-gray': selected,
+          'hover:before:border-gray-medium': selectable && !selected,
+        },
       )}
       style={{ background: linearGradient(), ...style }}
       {...props}

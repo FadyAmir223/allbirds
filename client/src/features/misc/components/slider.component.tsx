@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
 
-import SlideCard from './slide-card.component';
+import { SlideCard } from './slide-card.component';
 import SlideNavButtons from './slide-nav-buttons.component';
 import { cn } from '@/utils/cn.util';
 import screenSize from '@/data/screen-size.json';
@@ -13,7 +13,7 @@ export type Card = {
   imgUrl: string;
   miniImgUrl?: string;
   title: string;
-  description: string;
+  description?: string;
   url?: string;
 };
 

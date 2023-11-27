@@ -1,13 +1,8 @@
-import { useState, MouseEvent, ComponentPropsWithoutRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, MouseEvent } from 'react';
 import Markdown from 'react-markdown';
 import { FaAngleRight } from 'react-icons/fa';
 
-import { cn } from '@/utils/cn.util';
-
-type MarkdownLinkProps = ComponentPropsWithoutRef<'a'> & {
-  href?: string;
-};
+import MarkdownLink from '@/components/markdown-link.component';
 
 type ShopAdProps = {
   onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
@@ -18,17 +13,6 @@ const ads = [
   'The New Wool Runner 2 Is Next-Gen Design With Next-Level Comfort. [Shop Men](/collections/mens) l [Shop Women](/collections/womens)',
   'Gift Cozy, Get Cozy: Wrap Up Foolproof Gifts For Everyone On Your List. [Shop Men](/collections/mens) | [Shop Women](/collections/womens)',
 ];
-
-const MarkdownLink = ({
-  children,
-  className,
-  href,
-  ...props
-}: MarkdownLinkProps) => (
-  <Link to={href || '/'} className={cn('underline', className)} {...props}>
-    {children}
-  </Link>
-);
 
 const ShopAd = ({ onClick }: ShopAdProps) => {
   const [currAd, setCurrAd] = useState(0);

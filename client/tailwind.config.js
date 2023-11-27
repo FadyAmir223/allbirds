@@ -13,7 +13,7 @@ export default {
     },
     extend: {
       colors: {
-        gray: '#212A2F',
+        gray: '#212a2f',
         'gray-light': '#d3d4d5',
         'gray-dark': '#94999b',
         'gray-medium': '#767676',
@@ -21,9 +21,11 @@ export default {
         silver: '#f5f5f5',
         'silver-2': '#f9f9f9',
         'silver-dark': '#4d5559',
-        red: '#AD1F00',
+        red: '#ad1f00',
         'red-dark': '#b65151',
         brown: '#f8f7f5',
+        tBodyEven: '#f1f6f8',
+        tBodyOdd: '#eeebe5',
       },
     },
   },

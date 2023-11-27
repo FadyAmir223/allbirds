@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Drawer from '@/components/drawer.component';
 import LinkCustom from '@/components/link-custom.component';
+import CloseButton from '@/components/close-button.component';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   addCartItem,
@@ -71,12 +72,7 @@ export const Cart = ({ handleNavClose }: CartProps) => {
         handleClose={handleCartClose}
       >
         <div className='relative text-center border-b-4 border-b-silver pb-2'>
-          <button
-            className='absolute left-0 top-0 hover:rotate-90 duration-[400ms] scale-125'
-            onClick={handleCartClose}
-          >
-            <TfiClose />
-          </button>
+          <CloseButton position='left' onClick={handleCartClose} />
 
           <div className='scale-75 relative mb-1 inline-block'>
             <CartIcon />

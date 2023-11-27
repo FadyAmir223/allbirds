@@ -16,7 +16,7 @@ const Checkbox = ({ tag, isColor = false, ...props }: CheckboxProps) => {
         className={cn(
           'cursor-pointer peer appearance-none w-[18px] h-4',
           isColor
-            ? 'rounded-full border-[1px] border-gray relative before:absolute before:w-full before:h-full before:rounded-full before:p-[9px] before:translate-x-[-3.5px] before:translate-y-[-3.5px] before:border-0 before:border-silver-dark hover:before:border-2 checked:before:border-2 '
+            ? 'border border-gray-light rounded-full hover:before:border-gray-medium checked:before:border-gray checked:hover:before:border-gray relative before:absolute before:inset-[-2.5px] before:border-[1.5px] before:border-transparent before:rounded-full before:p-2 aspect-square'
             : 'border border-gray group-hover/checkbox:bg-silver-dark/30 checked:group-hover/checkbox:bg-gray checked:bg-gray rounded-sm relative before:absolute before:top-[8px] before:right-[-1px] before:w-[14px] before:h-[1.9px] before:-rotate-45 before:bg-white after:absolute after:bottom-[1px] after:left-[2px] after:w-[1.9px] after:h-[6px] after:-rotate-[30deg] after:bg-white',
         )}
         style={isColor ? { backgroundColor: tag } : {}}

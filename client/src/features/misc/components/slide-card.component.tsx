@@ -6,9 +6,9 @@ import heroLinks from '../data/men-women-url.json';
 import { Card } from './slider.component';
 
 type SlideCardProps = ComponentPropsWithoutRef<'div'> &
-  Card & { appendix: boolean };
+  Card & { appendix?: boolean };
 
-const SlideCard = ({
+export const SlideCard = ({
   imgUrl,
   miniImgUrl,
   title,
@@ -29,7 +29,7 @@ const SlideCard = ({
         <img
           src={imgUrl}
           alt=''
-          className='absolute top-0 left-0 w-full h-full object-cover duration-500 transition-transform group-hover:scale-[105%]'
+          className='absolute inset-0 object-cover duration-500 transition-transform group-hover:scale-[105%] bg-silver'
           loading='lazy'
         />
         {appendix && (
@@ -87,5 +87,3 @@ const SlideCard = ({
     </div>
   );
 };
-
-export default SlideCard;
