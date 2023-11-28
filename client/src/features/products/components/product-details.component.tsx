@@ -49,10 +49,11 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
   const [nav, setNav] = useState({
     edition: 0,
     product: 0,
-    image: 0,
     size: prevSizeIdx || 0,
     dropdown: -1,
   });
+
+  const imageIndex = useRef(0);
 
   const [isOpen, setOpen] = useState({ sizeChart: false, addToCart: false });
   useScroll(isOpen.sizeChart, isOpen.addToCart);
@@ -65,16 +66,10 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
 
   const selectedProduct = product.editions[nav.edition].products[nav.product];
 
-  const handleImageChange = (index: number) => setNav({ ...nav, image: index });
-
-  const handleNeighbourImage = (direction: -1 | 1) => {
-    const images = selectedProduct.images.length;
-    const index = (nav.image + direction + images) % images;
-    setNav({ ...nav, image: index });
+  const handleProductChange = (editionIndex: number, productIndex: number) => {
+    setNav({ ...nav, edition: editionIndex, product: productIndex });
+    imageIndex.current = 0;
   };
-
-  const handleProductChange = (editionIndex: number, productIndex: number) =>
-    setNav({ ...nav, image: 0, edition: editionIndex, product: productIndex });
 
   const handleSizeChange = (sizeIndex: number) => {
     setNav({ ...nav, size: sizeIndex });
@@ -121,9 +116,8 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
         <div className='w-3/5 '>
           <ProductImageSlider
             images={selectedProduct.images}
-            currImgIndex={nav.image}
-            handleImageChange={handleImageChange}
-            handleNeighbourImage={handleNeighbourImage}
+            editionIndex={nav.edition}
+            productIndex={nav.product}
           />
 
           <div className='my-6 mb-10 text-center text-gray'>
@@ -315,7 +309,7 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
 
             <div className=''>
               <p className='font-semibold text-xl mb-4'>Also Cosider</p>
-              <div className='flex gap-x-4'>
+              <div className='grid grid-cols-2 gap-x-4'>
                 {product.recommendations.map((recommendation) => (
                   // path not scraped
                   // workaround option 2: GET /api/product/recommendations
@@ -323,7 +317,8 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
                     key={recommendation.name}
                     imgUrl={recommendation.image}
                     title={recommendation.name}
-                    className='shadow-md w-1/2 cursor-pointer'
+                    className='shadow-md w-full cursor-pointer'
+                    titleStyle='p-2'
                   />
                 ))}
               </div>

@@ -6,7 +6,7 @@ import heroLinks from '../data/men-women-url.json';
 import { Card } from './slider.component';
 
 type SlideCardProps = ComponentPropsWithoutRef<'div'> &
-  Card & { appendix?: boolean };
+  Card & { appendix?: boolean; titleStyle?: string };
 
 export const SlideCard = ({
   imgUrl,
@@ -15,6 +15,7 @@ export const SlideCard = ({
   description,
   appendix,
   className,
+  titleStyle,
   ...props
 }: SlideCardProps) => {
   return (
@@ -52,7 +53,7 @@ export const SlideCard = ({
           </>
         )}
       </div>
-      <div className='px-6 py-3 text-gray'>
+      <div className={cn('px-6 py-3 text-gray', titleStyle)}>
         <h4 className='capitalize font-bold text-[14px] tracking-wide whitespace-nowrap'>
           {title}
         </h4>
