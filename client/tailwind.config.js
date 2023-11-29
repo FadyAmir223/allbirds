@@ -27,6 +27,7 @@ export default {
         brown: '#f8f7f5',
         tBodyEven: '#f1f6f8',
         tBodyOdd: '#eeebe5',
+        'grayish-brown': '#9c9487',
       },
     },
   },

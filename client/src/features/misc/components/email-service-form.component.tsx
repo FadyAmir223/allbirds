@@ -6,15 +6,18 @@ import { cn } from '@/utils/cn.util';
 
 const EmailServiceForm = () => {
   const [errorMessage, setErrorMessage] = useState(false);
-  const formEl = useRef<HTMLFormElement | null>(null);
+  const elForm = useRef<HTMLFormElement | null>(null);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const form = formEl.current;
+    const form = elForm.current;
     const email = form?.elements.namedItem('email') as HTMLInputElement | null;
 
-    if (!email?.value) setErrorMessage(true);
+    if (!email?.value) return setErrorMessage(true);
+
+    // ...
+    // add to email service collection
   };
 
   const handleErrorHide = (
@@ -38,7 +41,7 @@ const EmailServiceForm = () => {
         <div className='w-full sm:w-1/2' id='email-service'>
           <form
             className='flex gap-y-3 md:gap-y-0 md:gap-x-3 flex-col md:flex-row'
-            ref={formEl}
+            ref={elForm}
             onSubmit={handleSubmit}
           >
             <input
@@ -65,9 +68,7 @@ const EmailServiceForm = () => {
           <span
             className={cn(
               'text-[11px] font-bold tracking-[0.5px] text-red-dark invisible',
-              {
-                visible: errorMessage,
-              },
+              { visible: errorMessage },
             )}
           >
             Please use valid email address
@@ -76,7 +77,7 @@ const EmailServiceForm = () => {
       </div>
 
       <div className='text-center'>
-        <span className='text-[10px] text-center '>
+        <span className='text-[10px] text-center'>
           Note: You can opt-out at any time. See our{' '}
           <Link to='/pages/privacy-policy' className='underline font-bold'>
             Privacy Policy

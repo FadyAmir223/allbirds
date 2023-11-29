@@ -8,7 +8,6 @@ import ShopAd from '@/components/header/shopAd.component';
 import SearchField from '@/components/header/search-field.component';
 import Overlay from '@/components/overlay.component';
 import { Cart } from '@/features/cart';
-import { useScroll } from '@/hooks/useScroll';
 import { cn } from '@/utils/cn.util';
 import headerNavData from '@/data/header.json';
 
@@ -62,8 +61,6 @@ const Header = () => {
   const divEl = useRef<HTMLDivElement | null>(null);
 
   const handleAdHide = () => setAdHidden(scrollY > 100);
-
-  useScroll(nav.isOpen);
 
   useEffect(() => {
     addEventListener('scroll', handleAdHide);
@@ -133,7 +130,7 @@ const Header = () => {
     <>
       <header
         className={cn(
-          'fixed z-50 bg-white w-full duration-[400ms] transition-transform',
+          'fixed z-40 bg-white w-full duration-[400ms] transition-transform',
           {
             '-translate-y-8': isAdHidden,
           },

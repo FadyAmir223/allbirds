@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef } from 'react';
+import { ComponentPropsWithoutRef, useEffect } from 'react';
 
 import { cn } from '@/utils/cn.util';
 
@@ -7,11 +7,17 @@ type OverlayProps = ComponentPropsWithoutRef<'button'> & {
 };
 
 const Overlay = ({ isOpen, className, ...props }: OverlayProps) => {
+  useEffect(() => {
+    isOpen
+      ? document.body.classList.add('overflow-y-hidden')
+      : document.body.classList.remove('overflow-y-hidden');
+  }, [isOpen]);
+
   return (
     isOpen && (
       <button
         className={cn(
-          'bg-gray fixed top-0 left-0 w-screen h-[100dvh] animate-[fade_250ms_linear] z-50 opacity-75 cursor-auto',
+          'bg-gray fixed top-0 left-0 w-screen h-[100dvh] animate-[fade_250ms_linear] z-40 opacity-75 cursor-auto',
           className,
         )}
         {...props}

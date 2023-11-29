@@ -14,7 +14,6 @@ import AddToCartModal from './add-to-cart-modal.component';
 import GetNotifiedModal from './get-notified-modal.component';
 import MarkdownLink from '@/components/markdown-link.component';
 import { SlideCard } from '@/features/misc';
-import { useScroll } from '@/hooks/useScroll';
 import { useAppDispatch } from '@/store/hooks';
 import { productQuery, productReviewsQuery } from '../services/product.query';
 import { cn } from '@/utils/cn.util';
@@ -59,9 +58,8 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
   const [isOpen, setOpen] = useState({
     sizeChart: false,
     addToCart: false,
-    getNotified: false,
+    getNotified: true,
   });
-  useScroll(isOpen.sizeChart, isOpen.addToCart);
 
   const elMarkdowns = useRef<(HTMLDivElement | null)[]>([]);
   const lastAddedItem = useRef<PureCartProduct | null>(null);

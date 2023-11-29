@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 
 import Modal from '@/components/modal.component';
 import Overlay from '@/components/overlay.component';
-import { useScroll } from '@/hooks/useScroll';
 import { cn } from '@/utils/cn.util';
 
 type DrawerProps = {
@@ -13,8 +12,6 @@ type DrawerProps = {
 };
 
 const Drawer = ({ isOpen, children, className, handleClose }: DrawerProps) => {
-  useScroll(isOpen);
-
   return (
     <Modal>
       <Overlay
