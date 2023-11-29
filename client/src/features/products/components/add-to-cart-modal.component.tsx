@@ -5,14 +5,13 @@ import LinkCustom from '@/components/link-custom.component';
 import { CartIcon, toggleCart } from '@/features/cart';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { type PureCartProduct } from '@/features/cart';
+import type { ModalProps } from '../types/modal.type';
 
-type AddToCartProps = {
-  isOpen: boolean;
-  handleClose: () => void;
+type AddToCartModalProps = ModalProps & {
   item: PureCartProduct | null;
 };
 
-const AddToCart = ({ item, isOpen, handleClose }: AddToCartProps) => {
+const AddToCartModal = ({ item, isOpen, handleClose }: AddToCartModalProps) => {
   const totalPrice = useAppSelector((state) => state.cart.totalPrice);
   const dispatch = useAppDispatch();
 
@@ -82,4 +81,4 @@ const AddToCart = ({ item, isOpen, handleClose }: AddToCartProps) => {
   );
 };
 
-export default AddToCart;
+export default AddToCartModal;

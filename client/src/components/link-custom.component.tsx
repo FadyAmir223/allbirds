@@ -18,12 +18,15 @@ const LinkCustom = ({
   children,
   ...props
 }: LinkCustomProps) => {
+  const isDisabled =
+    element === 'button' && 'disabled' in props && props.disabled;
+
   const style = cn(
     'py-2 px-[18px] bg-gray text-white focus:outline-0 rounded-sm uppercase text-center border-2 border-gray text-xs font-semibold tracking-[1.5px] w-fit duration-100',
     {
-      'hover:bg-white hover:text-gray': styleType === 'normal',
+      'hover:bg-white hover:text-gray': styleType === 'normal' && !isDisabled,
       'bg-white text-gray hover:bg-gray hover:text-white':
-        styleType === 'invert',
+        styleType === 'invert' && !isDisabled,
     },
     className,
   );

@@ -1,12 +1,8 @@
-import sizeChartData from '../data/size-chart.json';
 import BottomDrawer from '@/components/bottom-drawer.component';
+import sizeChartData from '../data/size-chart.json';
+import type { ModalProps } from '../types/modal.type';
 
-type SizeChartProps = {
-  isOpen: boolean;
-  handleClose: () => void;
-};
-
-const SizeChart = (props: SizeChartProps) => {
+const SizeChartModal = (props: ModalProps) => {
   return (
     <BottomDrawer {...props}>
       <h3 className='text-3xl font-bold mb-4'>Allbirds Size Chart</h3>
@@ -60,4 +56,4 @@ const SizeChart = (props: SizeChartProps) => {
   );
 };
 
-export default SizeChart;
+export default SizeChartModal;

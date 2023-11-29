@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import type { Swiper as SwiperType } from 'swiper/types';
+
 import screenSize from '@/data/screen-size.json';
 
 type ProductImageSliderProps = {
@@ -31,7 +32,7 @@ const ProductImageSlider = ({
   return (
     <div className='flex gap-x-6'>
       <div
-        className='flex flex-col gap-y-2.5 '
+        className='hidden lg:flex flex-col gap-y-2.5'
         style={{ minWidth: `calc((100% - ${(8 - 1) * 11.5}px) / 8)` }}
       >
         {images.map((image, idx) => (
@@ -45,7 +46,7 @@ const ProductImageSlider = ({
         ))}
       </div>
 
-      <div className='relative w-[calc(100%-12.5%-10px)]'>
+      <div className='relative w-full lg:w-[calc(100%-12.5%-10px)]'>
         <div className='overflow-hidden'>
           <div className='relative'>
             <Swiper
@@ -87,7 +88,7 @@ const SlideNavButtons = () => {
   };
 
   return (
-    <div className='absolute bottom-3.5 right-2 flex gap-x-3 z-10'>
+    <div className='absolute bottom-3.5 right-2 hidden lg:flex gap-x-3 z-10'>
       <button
         className='rounded-full border-silver bg-white w-12 h-12 grid place-items-center text-gray'
         onClick={() => handleNeighbourSlide(-1)}

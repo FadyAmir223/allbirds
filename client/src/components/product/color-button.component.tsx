@@ -35,10 +35,10 @@ const ColorButton = ({
   return (
     <button
       className={cn(
-        'w-full aspect-square border-2 border-gray rounded-full',
+        'w-full aspect-square border border-gray rounded-full',
         className,
         {
-          'relative before:absolute before:inset-[-5px] before:border-[1.5px] before:border-transparent before:rounded-full before:p-2':
+          'relative before:absolute before:inset-[-2px] before:border-2 before:border-transparent before:rounded-full before:p-2':
             selectable,
           'before:border-gray': selected,
           'hover:before:border-gray-medium': selectable && !selected,
