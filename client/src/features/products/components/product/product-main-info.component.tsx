@@ -1,8 +1,7 @@
-import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { MdStar, MdStarHalf, MdStarBorder } from 'react-icons/md';
 
 import ProductPrice from './product-price.component';
+import StarRating from '../star-rating.component';
 import { cn } from '@/utils/cn.util';
 
 type ProductMainInfoProps = {
@@ -51,25 +50,7 @@ const ProductMainInfo = ({
 
       <div className='flex justify-between mb-5'>
         <div className='flex items-center gap-2'>
-          <div className='flex items-center gap-x-0.5'>
-            {Array.from({ length: 5 }).map((_, idx) => (
-              <Fragment key={idx}>
-                {idx + 1 <= rating ? (
-                  <span className='text-gray scale-110'>
-                    <MdStar />
-                  </span>
-                ) : idx + 1 > rating && idx < rating ? (
-                  <span className='text-gray scale-110'>
-                    <MdStarHalf />
-                  </span>
-                ) : (
-                  <span className='scale-110'>
-                    <MdStarBorder />
-                  </span>
-                )}
-              </Fragment>
-            ))}
-          </div>
+          <StarRating rating={rating} scale='sm' />
           <span className='underline'>({totalReviews})</span>
         </div>
 

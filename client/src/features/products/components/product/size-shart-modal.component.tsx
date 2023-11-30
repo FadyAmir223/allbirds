@@ -1,6 +1,6 @@
 import BottomDrawer from '@/components/bottom-drawer.component';
-import sizeChartData from '../data/size-chart.json';
-import type { ModalProps } from '../types/modal.type';
+import sizeChartData from '../../data/size-chart.json';
+import type { ModalProps } from '../../types/modal.type';
 
 const SizeChartModal = (props: ModalProps) => {
   return (
@@ -23,7 +23,7 @@ const SizeChartModal = (props: ModalProps) => {
         If you wear a women’s size 12, try a men’s size 10 or 11.
       </p>
 
-      <ul className=''>
+      <ul>
         {sizeChartData.map(({ gender, fields }) => (
           <li key={gender} className='mb-12 last-of-type:mb-0'>
             <h5 className='uppercase tracking-[1.5px] mb-3 font-semibold text-[16px]'>

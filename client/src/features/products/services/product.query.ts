@@ -7,7 +7,7 @@ import { ProductDetailed, Reviews } from '..';
 
 export type ProductReviewsQuery = {
   name: string;
-  pages?: number;
+  page?: number;
   limit?: number;
 };
 

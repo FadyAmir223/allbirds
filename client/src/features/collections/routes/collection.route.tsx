@@ -99,7 +99,7 @@ const Collections = () => {
                 className='lg:hidden flex items-center rounded-full border border-gray-light hover:border-silver-dark duration-[250ms] text-[9.5px] uppercase tracking-[0.7px] px-3.5 py-[3px]'
                 onClick={handleFilterMobileToggle}
               >
-                <span className=''>filters</span>
+                <span>filters</span>
                 <span className='pl-2 flex flex-col items-center gap-1'>
                   <span className='w-5 h-[1px] bg-gray relative before:absolute before:rounded-full before:w-[3px] before:h-[3px] before:border before:border-gray before:left-1/4 before:top-[-1px]' />
                   <span className='w-5 h-[1px] bg-gray relative before:absolute before:rounded-full before:w-[3px] before:h-[3px] before:border before:border-gray before:right-1/4 before:top-[-1px]' />

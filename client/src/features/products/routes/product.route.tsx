@@ -1,17 +1,45 @@
 import { useLoaderData } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useQueries } from '@tanstack/react-query';
 
-import ProductDetails from '../components/product-details.component';
-import { type ProductDetailed, type Reviews } from '..';
+import ProductDetails from '../components/product/product-details.component';
+import Reviews from '../components/reviews/reviews.component';
+import { productQuery, productReviewsQuery } from '../services/product.query';
+
+import { type ProductDetailed, type Reviews as ReviewsType } from '..';
 
 const Product = () => {
   const [initProduct, initReviews] = useLoaderData() as [
     ProductDetailed,
-    Reviews,
+    ReviewsType,
   ];
 
+  const params = useParams();
+  const productName = params.productName as string;
+
+  const [{ data: detailedProduct }, { data: reviews }] = useQueries({
+    queries: [
+      { ...productQuery(productName), initialData: initProduct },
+      {
+        ...productReviewsQuery({ name: productName }),
+        initialData: initReviews,
+      },
+    ],
+  });
+
+  const { product } = detailedProduct || {};
+  if (!product || !reviews) return;
+
   return (
-    <main className=''>
-      <ProductDetails initProduct={initProduct} initReviews={initReviews} />
+    <main>
+      <ProductDetails
+        initProduct={initProduct}
+        reviews={{
+          rating: reviews?.rating,
+          total: reviews?.pagination.total,
+        }}
+      />
+      <Reviews initReviews={initReviews} productName={product.name} />
     </main>
   );
 };

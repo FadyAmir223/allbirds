@@ -20,3 +20,8 @@ export type Review = {
     _id: string;
   }[];
 };
+
+export type ReviewsHeadline = {
+  rating: number;
+  total: number;
+};

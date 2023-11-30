@@ -29,7 +29,7 @@ async function httpsGetReviews(req: Request, res: Response): Promise<Response> {
     handle,
     skip,
     limit,
-    page
+    page,
   );
   res.status(status).json({ pagination, rating, reviews, message });
 }
@@ -53,14 +53,14 @@ async function httpsAddReview(req: Request, res: Response): Promise<Response> {
   const { status, pagination, rating, reviews, message } = await addReview(
     handle,
     req.body,
-    req.user
+    req.user,
   );
   res.status(status).json({ pagination, rating, reviews, message });
 }
 
 async function httpsRemoveReview(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<Response> {
   const { handle, reviewId } = req.params;
 
@@ -70,7 +70,7 @@ async function httpsRemoveReview(
   const { status, pagination, rating, reviews, message } = await removeReview(
     handle,
     reviewId,
-    req.user._id
+    req.user._id,
   );
 
   res.status(status).json({ pagination, rating, reviews, message });

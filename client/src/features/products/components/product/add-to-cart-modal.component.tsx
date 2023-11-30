@@ -5,7 +5,7 @@ import LinkCustom from '@/components/link-custom.component';
 import { CartIcon, toggleCart } from '@/features/cart';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { type PureCartProduct } from '@/features/cart';
-import type { ModalProps } from '../types/modal.type';
+import type { ModalProps } from '../../types/modal.type';
 
 type AddToCartModalProps = ModalProps & {
   item: PureCartProduct | null;
@@ -46,7 +46,7 @@ const AddToCartModal = ({ item, isOpen, handleClose }: AddToCartModalProps) => {
                 className='w-[8.75rem] bg-silver object-fit aspect-square'
               />
             </Link>
-            <div className=''>
+            <div>
               <h4 className='font-bold'>{item.name}</h4>
               <p className='text-[0.85rem]'>{item.colorName}</p>
               <p className='text-[0.85rem]'>size: {item.size}</p>

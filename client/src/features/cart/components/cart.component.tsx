@@ -99,8 +99,8 @@ export const Cart = ({ handleNavClose }: CartProps) => {
             </ul>
           </div>
         ) : (
-          <div className=''>
-            <ul className=''>
+          <div>
+            <ul>
               {cart.items.map((item) => (
                 <li
                   className='py-5 border-b last-of-type:border-b-2 border-b-gray flex items-center gap-x-5'
@@ -116,7 +116,7 @@ export const Cart = ({ handleNavClose }: CartProps) => {
                   <div className='flex flex-col justify-between flex-grow text-gray gap-y-3'>
                     <div className='flex justify-between'>
                       <Link to={'/products/' + item.handle}>
-                        <div className=''>
+                        <div>
                           <h4 className='font-bold'>{item.name}</h4>
                           <p className='text-[0.85rem]'>{item.colorName}</p>
                           <p className='text-[0.85rem]'>size: {item.size}</p>
@@ -150,7 +150,7 @@ export const Cart = ({ handleNavClose }: CartProps) => {
                         </button>
                       </div>
 
-                      <div className=''>
+                      <div>
                         {item.salePrice && (
                           <span className='mr-1 text-red'>
                             ${item.salePrice}
@@ -171,8 +171,8 @@ export const Cart = ({ handleNavClose }: CartProps) => {
             </ul>
 
             <div className='flex justify-between items-center mt-3 mb-6'>
-              <span className=''>subtotal</span>
-              <span className=''>${cart.totalPrice}</span>
+              <span>subtotal</span>
+              <span>${cart.totalPrice}</span>
             </div>
 
             <LinkCustom

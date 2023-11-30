@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useQueries } from '@tanstack/react-query';
-import Markdown from 'react-markdown';
+import { useQuery } from '@tanstack/react-query';
 import { FaChevronDown } from 'react-icons/fa';
+import Markdown from 'react-markdown';
 
 import ProductImageSlider from './product-image-slider.component';
 import ProductMainInfo from './product-main-info.component';
@@ -13,38 +13,33 @@ import SizeChartModal from './size-shart-modal.component';
 import AddToCartModal from './add-to-cart-modal.component';
 import GetNotifiedModal from './get-notified-modal.component';
 import MarkdownLink from '@/components/markdown-link.component';
+import MaterialFeatures from './material-features.component';
 import { SlideCard } from '@/features/misc';
 import { useAppDispatch } from '@/store/hooks';
-import { productQuery, productReviewsQuery } from '../services/product.query';
+import { productQuery } from '../../services/product.query';
 import { cn } from '@/utils/cn.util';
 import { type PureCartProduct, addCartItem } from '@/features/cart';
-import { type ProductDetailed, type Reviews } from '..';
+import { type ProductDetailed, type ReviewsHeadline } from '../..';
 
 type ProductDetailsProps = {
   initProduct: ProductDetailed;
-  initReviews: Reviews;
+  reviews: ReviewsHeadline;
 };
 
-const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
+const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
   const params = useParams();
   const productName = params.productName as string;
 
-  const [{ data: detailedProduct }, { data: reviews }] = useQueries({
-    queries: [
-      { ...productQuery(productName), initialData: initProduct },
-      {
-        ...productReviewsQuery({ name: productName }),
-        initialData: initReviews,
-      },
-    ],
-  });
+  const {
+    data: { product },
+  } = useQuery({ ...productQuery(productName), initialData: initProduct });
 
   const dispatch = useAppDispatch();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const prevSizeVal = searchParams.get('size') || '';
-  const prevSizeIdx = detailedProduct?.product.sizes.indexOf(prevSizeVal);
+  const prevSizeIdx = product.sizes.indexOf(prevSizeVal);
 
   const [nav, setNav] = useState({
     edition: 0,
@@ -58,14 +53,11 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
   const [isOpen, setOpen] = useState({
     sizeChart: false,
     addToCart: false,
-    getNotified: true,
+    getNotified: false,
   });
 
   const elMarkdowns = useRef<(HTMLDivElement | null)[]>([]);
   const lastAddedItem = useRef<PureCartProduct | null>(null);
-
-  const { product } = detailedProduct || {};
-  if (!product || !reviews) return;
 
   const selectedProduct = product.editions[nav.edition].products[nav.product];
   const isSelectedSizeSoldOut = selectedProduct.sizesSoldOut.includes(
@@ -155,7 +147,7 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
             price={product.price}
             salePrice={selectedProduct.salePrice}
             rating={reviews.rating}
-            totalReviews={reviews.pagination.total}
+            totalReviews={reviews.total}
             mobile
           />
 
@@ -180,21 +172,21 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
           </div>
 
           <div className='text-gray hidden lg:block'>
-            <ul className=''>
+            <ul>
               {product.dropdown.map((item, idx) => (
                 <li
                   key={item.title}
                   className='border-t border-t-gray-light last-of-type:border-b last-of-type:border-b-gray-light'
                 >
                   <button
-                    className='flex justify-between items-center w-full py-5'
+                    className='flex justify-between items-center w-full py-3'
                     onClick={() => handleDropdownToggle(idx)}
                   >
-                    <span className='uppercase text-[12px] tracking-[2px] font-semibold'>
+                    <span className='uppercase text-[10px] tracking-[2px] font-semibold'>
                       {item.title}
                     </span>
                     <span
-                      className={cn('duration-[250ms]', {
+                      className={cn('text-[13px] duration-[250ms]', {
                         'rotate-180': nav.dropdown === idx,
                       })}
                     >
@@ -231,7 +223,7 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
             price={product.price}
             salePrice={selectedProduct.salePrice}
             rating={reviews.rating}
-            totalReviews={reviews.pagination.total}
+            totalReviews={reviews.total}
           />
 
           <div className='mb-8'>
@@ -281,7 +273,7 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
             )}
           </div>
 
-          <div className=''>
+          <div>
             <p className='uppercase text-[12px] font-semibold tracking-[2px] mb-2'>
               select size
             </p>
@@ -325,7 +317,7 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
               Free shipping on orders over $75. Free returns.
             </p>
 
-            <div className=''>
+            <div>
               <p className='font-semibold text-xl mb-4'>Also Cosider</p>
               <div className='grid grid-cols-2 gap-x-4'>
                 {product.recommendations.map((recommendation) => (
@@ -344,6 +336,8 @@ const ProductDetails = ({ initProduct, initReviews }: ProductDetailsProps) => {
           </div>
         </div>
       </section>
+
+      <MaterialFeatures materialFeatures={product.materialFeatures} />
 
       <SizeChartModal
         isOpen={isOpen.sizeChart}
