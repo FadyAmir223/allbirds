@@ -1,1 +1,1 @@
-export type CollectionGender = 'mens' | 'womens';
+export type CollectionGender = 'mens' | 'womens'

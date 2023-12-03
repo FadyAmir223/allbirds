@@ -1,23 +1,23 @@
-import { Link, useSearchParams } from 'react-router-dom';
-import { FaArrowRightLong } from 'react-icons/fa6';
-import { RiCloseLine } from 'react-icons/ri';
+import { Link, useSearchParams } from 'react-router-dom'
+import { FaArrowRightLong } from 'react-icons/fa6'
+import { RiCloseLine } from 'react-icons/ri'
 
-import SizeButton from '@/components/product/size-button.component';
-import Checkbox from './checkbox.component';
-import Drawer from '@/components/drawer.component';
-import { cn } from '@/utils/cn.util';
-import { type FilterKey, type Filters } from '..';
+import Checkbox from './checkbox.component'
+import Drawer from '@/components/drawer.component'
+import SizeButton from '@/components/product/size-button.component'
+import { cn } from '@/utils/cn.util'
+import { type FilterKey, type Filters } from '..'
 
 type SideBarProps = {
-  filters: Filters['filters'];
+  filters: Filters['filters']
   selectedFilters: {
-    [key in FilterKey]: string[] | undefined;
-  };
-  delimiter: string;
-  isFilterOpen: boolean;
-  hasGender: boolean;
-  handleFilterMobileToggle: () => void;
-};
+    [key in FilterKey]: string[] | undefined
+  }
+  delimiter: string
+  isFilterOpen: boolean
+  hasGender: boolean
+  handleFilterMobileToggle: () => void
+}
 
 const SideBar = ({
   isFilterOpen,
@@ -26,7 +26,7 @@ const SideBar = ({
 }: SideBarProps) => {
   return (
     <>
-      <aside className='hidden lg:block p-4 w-[265px] text-gray self-start'>
+      <aside className='hidden w-[265px] self-start p-4 text-gray lg:block'>
         <Link to='/' className='text-[10px] font-semibold'>
           Home /
         </Link>
@@ -34,7 +34,7 @@ const SideBar = ({
       </aside>
 
       <Drawer isOpen={isFilterOpen} handleClose={handleFilterMobileToggle}>
-        <div className='fixed px-6 py-3 top-0 w-full border-b border-b-gray bg-white z-10'>
+        <div className='fixed top-0 z-10 w-full border-b border-b-gray bg-white px-6 py-3'>
           <button
             className='scale-150 duration-[400ms] hover:translate-x-2'
             onClick={handleFilterMobileToggle}
@@ -45,18 +45,18 @@ const SideBar = ({
         <SideBarFilters drawer {...props} />
       </Drawer>
     </>
-  );
-};
+  )
+}
 
 const checkboxFilters: { label: string; filterType: FilterKey }[] = [
   { label: 'best for', filterType: 'bestFor' },
   { label: 'material', filterType: 'material' },
-];
+]
 
 type SideBarFiltersProps = Omit<
   SideBarProps,
   'isFilterOpen' | 'handleFilterMobileToggle'
-> & { drawer?: boolean };
+> & { drawer?: boolean }
 
 const SideBarFilters = ({
   filters,
@@ -65,74 +65,74 @@ const SideBarFilters = ({
   hasGender,
   drawer = false,
 }: SideBarFiltersProps) => {
-  const [, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams()
 
   const hasFilters = !Object.values(selectedFilters).every(
     (value) => value === undefined,
-  );
+  )
 
   if (!hasGender)
-    filters.sizes = filters.sizes.map((size) => size.split('.')[0]);
+    filters.sizes = filters.sizes.map((size) => size.split('.')[0])
 
   const handleFilterBy = (key: string, value: string) => {
     setSearchParams(
       (prevSearchParams) => {
-        const queryValue = prevSearchParams.get(key);
+        const queryValue = prevSearchParams.get(key)
 
-        const values = queryValue?.split(delimiter) || [];
-        const index = values.indexOf(value);
-        index === -1 ? values.push(value) : values.splice(index, 1);
+        const values = queryValue?.split(delimiter) || []
+        const index = values.indexOf(value)
+        index === -1 ? values.push(value) : values.splice(index, 1)
 
-        if (!isNaN(Number(values[0]))) values.sort((a, b) => +a - +b);
-        const stringValues = values?.join(delimiter);
+        if (!isNaN(Number(values[0]))) values.sort((a, b) => +a - +b)
+        const stringValues = values?.join(delimiter)
 
         stringValues
           ? prevSearchParams.set(key, stringValues)
-          : prevSearchParams.delete(key);
+          : prevSearchParams.delete(key)
 
-        return prevSearchParams;
+        return prevSearchParams
       },
       { replace: true },
-    );
-  };
+    )
+  }
 
   const clearFilterBy = () => {
     setSearchParams(
       (prevSearchParams) => {
         Object.keys(selectedFilters).map((selectedFilter) => {
-          prevSearchParams.delete(selectedFilter);
-        });
-        return prevSearchParams;
+          prevSearchParams.delete(selectedFilter)
+        })
+        return prevSearchParams
       },
       { replace: true },
-    );
-  };
+    )
+  }
 
   return (
     <aside className={cn({ 'mt-16 pl-4': drawer })}>
-      <div className='border-b border-b-gray mt-2 mb-3 pb-2'>
-        <div className='flex items-center pb-2 mb-3'>
+      <div className='mb-3 mt-2 border-b border-b-gray pb-2'>
+        <div className='mb-3 flex items-center pb-2'>
           <p className='text-[15px] font-bold'>Filter By:</p>
           {drawer && hasFilters && (
             <button
-              className='underline mx-14 text-[#e8e6e3]'
+              className='mx-14 text-[#e8e6e3] underline'
               onClick={clearFilterBy}
             >
               clear All
             </button>
           )}
         </div>
-        <div className='flex gap-1 flex-wrap'>
+        <div className='flex flex-wrap gap-1'>
           {Object.entries(selectedFilters).map(
             ([filterKey, filterList]) =>
               filterList?.map((filterValue) => (
                 <button
                   key={filterValue}
-                  className='text-[12px] pl-[7px] pr-[4px] py-[3px] rounded-full flex items-center gap-2 border border-gray-light hover:border-silver-dark duration-[250ms]'
+                  className='flex items-center gap-2 rounded-full border border-gray-light py-[3px] pl-[7px] pr-[4px] text-[12px] duration-[250ms] hover:border-silver-dark'
                   onClick={() => handleFilterBy(filterKey, filterValue)}
                 >
-                  <p className='capitalize whitespace-nowrap'>{filterValue}</p>
-                  <span className='bg-silver-dark rounded-full text-white p-[2px]'>
+                  <p className='whitespace-nowrap capitalize'>{filterValue}</p>
+                  <span className='rounded-full bg-silver-dark p-[2px] text-white'>
                     <RiCloseLine />
                   </span>
                 </button>
@@ -141,11 +141,11 @@ const SideBarFilters = ({
         </div>
       </div>
 
-      <div className='border-b border-b-gray mt-2 mb-3 pb-2 pr-4'>
-        <h5 className='uppercase font-bold text-sm tracking-[1px] mb-2'>
+      <div className='mb-3 mt-2 border-b border-b-gray pb-2 pr-4'>
+        <h5 className='mb-2 text-sm font-bold uppercase tracking-[1px]'>
           sizes
         </h5>
-        <p className='text-[10px] tracking-[0.3px] mb-3'>
+        <p className='mb-3 text-[10px] tracking-[0.3px]'>
           Most of our shoes only come in full sizes. If you’re a half size,
           select your nearest whole size too.
         </p>
@@ -161,7 +161,7 @@ const SideBarFilters = ({
               size={size}
               selected={selectedFilters.sizes?.includes(size)}
               className={cn(
-                hasGender ? 'text-[10px]' : 'uppercase font-bold text-[16px]',
+                hasGender ? 'text-[10px]' : 'text-[16px] font-bold uppercase',
               )}
               onClick={() => handleFilterBy('sizes', size)}
             />
@@ -170,8 +170,8 @@ const SideBarFilters = ({
       </div>
 
       {checkboxFilters.map(({ label, filterType }) => (
-        <div key={label} className='border-b border-b-gray mt-2 mb-3 pb-2'>
-          <h5 className='uppercase font-bold text-sm tracking-[1px] mb-2'>
+        <div key={label} className='mb-3 mt-2 border-b border-b-gray pb-2'>
+          <h5 className='mb-2 text-sm font-bold uppercase tracking-[1px]'>
             {label}
           </h5>
           <ul>
@@ -188,7 +188,7 @@ const SideBarFilters = ({
       ))}
 
       <div>
-        <h5 className='uppercase font-bold text-sm tracking-[1px] mb-2'>hue</h5>
+        <h5 className='mb-2 text-sm font-bold uppercase tracking-[1px]'>hue</h5>
         <ul>
           {filters.hues?.map((hue) => (
             <Checkbox
@@ -202,7 +202,7 @@ const SideBarFilters = ({
         </ul>
       </div>
     </aside>
-  );
-};
+  )
+}
 
-export default SideBar;
+export default SideBar

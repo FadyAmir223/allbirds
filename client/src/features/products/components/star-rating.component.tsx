@@ -1,17 +1,18 @@
-import { cn } from '@/utils/cn.util';
-import { Fragment } from 'react';
-import { MdStar, MdStarBorder, MdStarHalf } from 'react-icons/md';
+import { Fragment } from 'react'
+import { MdStar, MdStarBorder, MdStarHalf } from 'react-icons/md'
+
+import { cn } from '@/utils/cn.util'
 
 const scales = {
   sm: 'scale-100',
   md: 'scale-125',
   lg: 'scale-150',
-};
+}
 
 type StarRatingProps = {
-  rating: number;
-  scale: keyof typeof scales;
-};
+  rating: number
+  scale: keyof typeof scales
+}
 
 const StarRating = ({ rating, scale }: StarRatingProps) => {
   return (
@@ -19,11 +20,11 @@ const StarRating = ({ rating, scale }: StarRatingProps) => {
       {Array.from({ length: 5 }).map((_, idx) => (
         <Fragment key={idx}>
           {idx + 1 <= rating ? (
-            <span className='text-gray scale-110'>
+            <span className='scale-110 text-gray'>
               <MdStar />
             </span>
           ) : idx + 1 > rating && idx < rating ? (
-            <span className='text-gray scale-110'>
+            <span className='scale-110 text-gray'>
               <MdStarHalf />
             </span>
           ) : (
@@ -34,7 +35,7 @@ const StarRating = ({ rating, scale }: StarRatingProps) => {
         </Fragment>
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default StarRating;
+export default StarRating

@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { BiHelpCircle, BiSearch } from 'react-icons/bi';
-import { HiOutlineUser } from 'react-icons/hi';
-import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
+import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { BiHelpCircle, BiSearch } from 'react-icons/bi'
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
+import { HiOutlineUser } from 'react-icons/hi'
 
-import ShopAd from '@/components/header/shopAd.component';
-import SearchField from '@/components/header/search-field.component';
-import Overlay from '@/components/overlay.component';
-import { Cart } from '@/features/cart';
-import { cn } from '@/utils/cn.util';
-import headerNavData from '@/data/header.json';
+import SearchField from '@/components/header/search-field.component'
+import ShopAd from '@/components/header/shopAd.component'
+import Overlay from '@/components/overlay.component'
+import { cn } from '@/utils/cn.util'
+import headerNavData from '@/data/header.json'
+import { Cart } from '@/features/cart'
 
 const headerLeftItems = [
   { text: 'men', url: '' },
@@ -17,120 +17,120 @@ const headerLeftItems = [
   { text: 'kids', url: '' },
   { text: 'socks', url: '/collections/socks' },
   { text: 'sale', url: '' },
-];
+]
 
 const headerRightItems = [
   { text: 'sustainability', url: '' },
   { text: 'return', url: '/pages/return' },
-];
+]
 
 const headerIconItems = [
   { text: '', url: 'pages/search', hiddenSm: true, icon: <BiSearch /> },
   { text: 'account', url: 'account', hiddenSm: false, icon: <HiOutlineUser /> },
   { text: 'help', url: 'pages/help', hiddenSm: false, icon: <BiHelpCircle /> },
-];
+]
 
 const headerItemsMd = [
   ...headerLeftItems,
   ...headerRightItems,
   ...headerIconItems,
-].filter((headerItem) => headerItem.text !== '');
+].filter((headerItem) => headerItem.text !== '')
 
 const emptyCategory = {
   categoryName: '',
   sections: [{ title: { text: '', url: '' }, routes: [{ text: '', url: '' }] }],
   featured: [{ text: '', url: '', imageUrl: '', imageUrlMobile: '' }],
-};
+}
 
 type Nav = {
-  isOpen: boolean;
-  category: typeof emptyCategory;
-  subCategoryMobile: string;
-  tabMobile: 'left' | 'middle' | 'right';
-};
+  isOpen: boolean
+  category: typeof emptyCategory
+  subCategoryMobile: string
+  tabMobile: 'left' | 'middle' | 'right'
+}
 
 const Header = () => {
-  const [isAdHidden, setAdHidden] = useState(false);
+  const [isAdHidden, setAdHidden] = useState(false)
   const [nav, setNav] = useState<Nav>({
     isOpen: false,
     category: headerNavData[0],
     subCategoryMobile: '',
     tabMobile: 'left',
-  });
+  })
 
-  const divEl = useRef<HTMLDivElement | null>(null);
+  const divEl = useRef<HTMLDivElement | null>(null)
 
-  const handleAdHide = () => setAdHidden(scrollY > 100);
+  const handleAdHide = () => setAdHidden(scrollY > 100)
 
   useEffect(() => {
-    addEventListener('scroll', handleAdHide);
-    return () => removeEventListener('scroll', handleAdHide);
-  }, []);
+    addEventListener('scroll', handleAdHide)
+    return () => removeEventListener('scroll', handleAdHide)
+  }, [])
 
   useEffect(() => {
     if (!nav.isOpen) {
       const timeout = setTimeout(() => {
-        setNav((prevNav) => ({ ...prevNav, tabMobile: 'left' }));
-      }, 250);
+        setNav((prevNav) => ({ ...prevNav, tabMobile: 'left' }))
+      }, 250)
 
-      return () => clearTimeout(timeout);
+      return () => clearTimeout(timeout)
     }
-  }, [nav.isOpen]);
+  }, [nav.isOpen])
 
   const handleNavClose = () => {
     if (nav.isOpen)
       setNav((prevNav) => ({
         ...prevNav,
         isOpen: false,
-      }));
-  };
+      }))
+  }
 
   const handleNavClickDesktop = (headerCategoryText: string) =>
     setNav((prevNav) => {
       const isOpen =
-        !prevNav.isOpen || headerCategoryText !== prevNav.category.categoryName;
+        !prevNav.isOpen || headerCategoryText !== prevNav.category.categoryName
 
       const category = isOpen
         ? headerNavData.find(
             (headerNavItem) =>
               headerNavItem.categoryName === headerCategoryText,
           ) || emptyCategory
-        : prevNav.category;
+        : prevNav.category
 
-      return { ...prevNav, isOpen, category };
-    });
+      return { ...prevNav, isOpen, category }
+    })
 
   const handleToggleNavMobile = () =>
-    setNav((prevNav) => ({ ...prevNav, isOpen: !prevNav.isOpen }));
+    setNav((prevNav) => ({ ...prevNav, isOpen: !prevNav.isOpen }))
 
   const handleNavClickMobile = (headerCategoryText: string) =>
     setNav((prevNav) => {
       const category =
         headerNavData.find(
           (headerNavItem) => headerNavItem.categoryName === headerCategoryText,
-        ) || emptyCategory;
+        ) || emptyCategory
 
-      return { ...prevNav, category, tabMobile: 'middle' };
-    });
+      return { ...prevNav, category, tabMobile: 'middle' }
+    })
 
   const handleNavBackMobile = () =>
-    setNav((prevNav) => ({ ...prevNav, tabMobile: 'left' }));
+    setNav((prevNav) => ({ ...prevNav, tabMobile: 'left' }))
 
   const handleSubCategoryMobile = (subCategory: string) =>
     setNav((prevNav) => ({
       ...prevNav,
       subCategoryMobile: subCategory,
       tabMobile: 'right',
-    }));
+    }))
 
   const handleSubCategoryBackMobile = () =>
-    setNav((prevNav) => ({ ...prevNav, tabMobile: 'middle' }));
+    setNav((prevNav) => ({ ...prevNav, tabMobile: 'middle' }))
 
   return (
     <>
       <header
         className={cn(
-          'fixed z-40 bg-white w-full duration-[400ms] transition-transform',
+          'fixed z-40 w-full bg-white transition-transform duration-[400ms]',
           {
             '-translate-y-8': isAdHidden,
           },
@@ -138,9 +138,9 @@ const Header = () => {
       >
         <ShopAd onClick={handleNavClose} />
         <div>
-          <div className='px-[15px] lg:px-6 py-[9px] md:py-[12px] lg:py-[4px] shadow-md'>
+          <div className='px-[15px] py-[9px] shadow-md md:py-[12px] lg:px-6 lg:py-[4px]'>
             <nav className='flex items-center justify-between text-gray'>
-              <ul className='hidden lg:flex gap-5'>
+              <ul className='hidden gap-5 lg:flex'>
                 {headerLeftItems.map((navCategory) => (
                   <li
                     key={navCategory.text}
@@ -173,32 +173,32 @@ const Header = () => {
               </ul>
 
               <button
-                className='flex lg:hidden scale-125'
+                className='flex scale-125 lg:hidden'
                 onClick={handleToggleNavMobile}
               >
-                <div className='relative w-5 h-[15px] group scale-[80%]'>
+                <div className='group relative h-[15px] w-5 scale-[80%]'>
                   <span
                     className={cn(
-                      'absolute duration-100 ease-linear bg-black w-full h-[1.5px] left-0',
+                      'absolute left-0 h-[1.5px] w-full bg-black duration-100 ease-linear',
                       nav.isOpen ? 'top-[6px] rotate-45' : ' top-0',
                     )}
                   />
                   <span
                     className={cn(
-                      'absolute duration-100 ease-linear bg-black w-full h-[2px] left-0 top-[6px]',
+                      'absolute left-0 top-[6px] h-[2px] w-full bg-black duration-100 ease-linear',
                       { hidden: nav.isOpen },
                     )}
                   />
                   <span
                     className={cn(
-                      'absolute duration-100 ease-linear bg-black w-full h-[1.5px] left-0',
+                      'absolute left-0 h-[1.5px] w-full bg-black duration-100 ease-linear',
                       nav.isOpen ? 'top-[6px] -rotate-45' : 'top-[13px]',
                     )}
                   />
                 </div>
               </button>
 
-              <div className='w-[80px] box-border'>
+              <div className='box-border w-[80px]'>
                 <Link to='/' onClick={handleNavClose}>
                   <img
                     src='/images/main-page/logo.webp'
@@ -264,14 +264,14 @@ const Header = () => {
 
           <div
             className={cn(
-              'absolute z-50 overflow-hidden w-full hidden lg:block duration-300 transition-[height]',
+              'absolute z-50 hidden w-full overflow-hidden transition-[height] duration-300 lg:block',
             )}
             ref={divEl}
             style={{
               height: nav.isOpen ? divEl.current?.scrollHeight : 0 + 'px',
             }}
           >
-            <div className='pt-[47px] pb-6 px-[103px] bg-white hidden lg:grid grid-cols-5 gap-x-6'>
+            <div className='hidden grid-cols-5 gap-x-6 bg-white px-[103px] pb-6 pt-[47px] lg:grid'>
               {nav.category.categoryName === 'sustainability' && <div />}
 
               {nav.category.sections.map((section) => (
@@ -296,7 +296,7 @@ const Header = () => {
                     {section.routes.map((route) => (
                       <li
                         key={route.text}
-                        className='py-[5px] text-[11px] tracking-[0.4px] leading-[1.43]'
+                        className='py-[5px] text-[11px] leading-[1.43] tracking-[0.4px]'
                       >
                         <Link
                           to={route.url}
@@ -315,9 +315,9 @@ const Header = () => {
                 <h3 className='allbirds-font mb-[22px]'>featured</h3>
                 {nav.category.featured.map((feature) => (
                   <ul key={feature.text}>
-                    <li className='first-of-type:mb-6 relative group'>
+                    <li className='group relative first-of-type:mb-6'>
                       <Link to={feature.url} onClick={handleNavClose}>
-                        <span className='allbirds-font absolute grid place-items-center w-full h-full group-hover:underline text-white'>
+                        <span className='allbirds-font absolute grid h-full w-full place-items-center text-white group-hover:underline'>
                           {feature.text}
                         </span>
                         <img src={feature.imageUrl} alt='' />
@@ -331,13 +331,13 @@ const Header = () => {
 
           <Overlay
             isOpen={nav.isOpen}
-            className='hidden lg:block relative h-[calc(100vh-50px)]'
+            className='relative hidden h-[calc(100vh-50px)] lg:block'
             onClick={handleNavClose}
           />
 
           <div
             className={cn(
-              'absolute w-screen bg-white overflow-x-hidden lg:hidden duration-[250ms]',
+              'absolute w-screen overflow-x-hidden bg-white duration-[250ms] lg:hidden',
               nav.isOpen
                 ? isAdHidden
                   ? 'h-[calc(100vh-45px)]'
@@ -347,7 +347,7 @@ const Header = () => {
           >
             <ul
               className={cn(
-                'duration-[250ms] absolute w-full pb-16',
+                'absolute w-full pb-16 duration-[250ms]',
                 nav.tabMobile === 'middle' || nav.tabMobile === 'right'
                   ? '-translate-x-full'
                   : 'translate-x-0',
@@ -368,7 +368,7 @@ const Header = () => {
                     </Link>
                   ) : (
                     <button
-                      className='allbirds-font text-[9px] flex justify-between items-center w-full px-7 py-4'
+                      className='allbirds-font flex w-full items-center justify-between px-7 py-4 text-[9px]'
                       onClick={() => handleNavClickMobile(headerItem.text)}
                     >
                       <span
@@ -386,7 +386,7 @@ const Header = () => {
             </ul>
             <ul
               className={cn(
-                'duration-[250ms] absolute w-full pb-16',
+                'absolute w-full pb-16 duration-[250ms]',
                 nav.tabMobile === 'right'
                   ? '-translate-x-full'
                   : nav.tabMobile === 'middle'
@@ -396,7 +396,7 @@ const Header = () => {
             >
               <li className='border-b-[1px] border-b-gray-light'>
                 <button
-                  className='dropdown-mobile bg-silver flex justify-center items-center w-full border-b-[1px] border-b-gray-light'
+                  className='dropdown-mobile flex w-full items-center justify-center border-b-[1px] border-b-gray-light bg-silver'
                   onClick={handleNavBackMobile}
                 >
                   <span className='absolute left-7 scale-[150%]'>
@@ -412,7 +412,7 @@ const Header = () => {
                   className='border-b-[1px] border-b-gray-light'
                 >
                   <button
-                    className='dropdown-mobile w-full flex justify-between items-center'
+                    className='dropdown-mobile flex w-full items-center justify-between'
                     onClick={() => handleSubCategoryMobile(section.title.text)}
                   >
                     {section.title.text}
@@ -433,7 +433,7 @@ const Header = () => {
                       onClick={handleNavClose}
                     >
                       <img src={feature.imageUrlMobile} alt='' />
-                      <p className='text-center capitalize font-semibold text-[11.5px] mt-1 text-gray'>
+                      <p className='mt-1 text-center text-[11.5px] font-semibold capitalize text-gray'>
                         {feature.text}
                       </p>
                     </Link>
@@ -443,14 +443,14 @@ const Header = () => {
             </ul>
             <ul
               className={cn(
-                'duration-[250ms] absolute w-full pb-16',
+                'absolute w-full pb-16 duration-[250ms]',
                 nav.tabMobile === 'right'
                   ? 'translate-x-0'
                   : 'translate-x-full',
               )}
             >
               <button
-                className='dropdown-mobile bg-silver flex justify-center items-center w-full border-b-[1px] border-b-gray-light'
+                className='dropdown-mobile flex w-full items-center justify-center border-b-[1px] border-b-gray-light bg-silver'
                 onClick={handleSubCategoryBackMobile}
               >
                 <span className='absolute left-7 scale-[150%]'>
@@ -471,7 +471,7 @@ const Header = () => {
                     >
                       <Link
                         to={route.url}
-                        className='text-[11px] px-7 py-4 block capitalize'
+                        className='block px-7 py-4 text-[11px] capitalize'
                         onClick={handleNavClose}
                       >
                         {route.text}
@@ -486,7 +486,7 @@ const Header = () => {
       </header>
       <div className='pb-[calc(32px+82px)] md:pb-[calc(32px+50px)]' />
     </>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

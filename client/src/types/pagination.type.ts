@@ -1,5 +1,5 @@
 export type Pagination = {
-  total: number;
-  page: number;
-  perPage: number;
-};
+  total: number
+  page: number
+  perPage: number
+}

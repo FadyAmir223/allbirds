@@ -1,11 +1,11 @@
-import { ComponentPropsWithoutRef } from 'react';
-import { Link } from 'react-router-dom';
+import { ComponentPropsWithoutRef } from 'react'
+import { Link } from 'react-router-dom'
 
-import { cn } from '@/utils/cn.util';
+import { cn } from '@/utils/cn.util'
 
 type MarkdownLinkProps = ComponentPropsWithoutRef<'a'> & {
-  href?: string;
-};
+  href?: string
+}
 
 const MarkdownLink = ({
   children,
@@ -16,6 +16,6 @@ const MarkdownLink = ({
   <Link to={href || '/'} className={cn('underline', className)} {...props}>
     {children}
   </Link>
-);
+)
 
-export default MarkdownLink;
+export default MarkdownLink

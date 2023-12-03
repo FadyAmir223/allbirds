@@ -1,4 +1,4 @@
-import { ProductReviewsQuery } from './product.query';
+import { ProductReviewsQuery } from './product.query'
 
 export const productKeys = {
   details: (name: string) => ['products', name],
@@ -11,4 +11,4 @@ export const productKeys = {
     ...productKeys.addReview(name),
     id,
   ],
-};
+}

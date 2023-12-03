@@ -1,28 +1,28 @@
-import { useEffect, useRef, ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import { ReactNode, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 
 interface ModalProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 const Modal = ({ children }: ModalProps) => {
-  const elRef = useRef<HTMLDivElement | null>(null);
+  const elRef = useRef<HTMLDivElement | null>(null)
 
-  if (!elRef.current) elRef.current = document.createElement('div');
+  if (!elRef.current) elRef.current = document.createElement('div')
 
   useEffect(() => {
-    const modalRoot = document.getElementById('modal');
+    const modalRoot = document.getElementById('modal')
 
-    if (!modalRoot) throw new Error("#modal doesn't exist");
+    if (!modalRoot) throw new Error("#modal doesn't exist")
 
-    if (elRef.current) modalRoot.appendChild(elRef.current);
+    if (elRef.current) modalRoot.appendChild(elRef.current)
 
     return () => {
-      if (elRef.current) modalRoot.removeChild(elRef.current);
-    };
-  }, []);
+      if (elRef.current) modalRoot.removeChild(elRef.current)
+    }
+  }, [])
 
-  return createPortal(children, elRef.current);
-};
+  return createPortal(children, elRef.current)
+}
 
-export default Modal;
+export default Modal

@@ -1,14 +1,14 @@
-import { ComponentPropsWithoutRef } from 'react';
+import { ComponentPropsWithoutRef } from 'react'
 
-import Modal from '@/components/modal.component';
-import Overlay from '@/components/overlay.component';
-import CloseButton from './close-button.component';
-import { cn } from '@/utils/cn.util';
+import CloseButton from './close-button.component'
+import Modal from '@/components/modal.component'
+import Overlay from '@/components/overlay.component'
+import { cn } from '@/utils/cn.util'
 
 type BottomDrawerProps = ComponentPropsWithoutRef<'div'> & {
-  isOpen: boolean;
-  handleClose: () => void;
-};
+  isOpen: boolean
+  handleClose: () => void
+}
 
 const BottomDrawer = ({
   isOpen,
@@ -23,21 +23,21 @@ const BottomDrawer = ({
 
       <div
         className={cn(
-          'bg-white text-gray py-16 px-40 z-50 fixed top-1/2 left-1/2 -translate-x-1/2 translate-y-[calc(50%+5dvh)] h-[95dvh] w-[98%] duration-300 transition-transform tracking-[0.4px] overflow-y-scroll',
+          'fixed left-1/2 top-1/2 z-50 h-[100dvh] w-full -translate-x-1/2 translate-y-[calc(50%+2.5dvh)] overflow-y-scroll bg-white px-40 py-16 tracking-[0.4px] text-gray transition-transform duration-300 md:h-[95dvh] md:w-[98%]',
           isOpen ? '-translate-y-1/2' : 'opacity-0',
           className,
         )}
         {...props}
       >
         <CloseButton
-          className='top-6 right-6 scale-[1.8]'
+          className='right-6 top-6 scale-[1.8]'
           onClick={handleClose}
         />
 
         {children}
       </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default BottomDrawer;
+export default BottomDrawer

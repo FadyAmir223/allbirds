@@ -1,24 +1,24 @@
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
-import { useSwiper } from 'swiper/react';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
+import { useSwiper } from 'swiper/react'
 
-import { cn } from '@/utils/cn.util';
+import { cn } from '@/utils/cn.util'
 
 type SlideNavButtonsProps = {
-  total: number;
-  imagesPerSlide: number;
-};
+  total: number
+  imagesPerSlide: number
+}
 
 const SlideNavButtons = ({ total, imagesPerSlide }: SlideNavButtonsProps) => {
-  const swiper = useSwiper();
+  const swiper = useSwiper()
 
-  const handleClickNext = () => swiper.slideNext();
-  const handleClickPrev = () => swiper.slidePrev();
+  const handleClickNext = () => swiper.slideNext()
+  const handleClickPrev = () => swiper.slidePrev()
 
   return (
     <>
       <button
         className={cn(
-          'absolute right-0 top-1/2 -translate-y-1/2 rounded-full bg-gray text-gray-light grid place-items-center w-10 h-10 z-10',
+          'absolute right-0 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-gray text-gray-light',
           { hidden: swiper.realIndex > total - imagesPerSlide - 1 },
         )}
         onClick={handleClickNext}
@@ -31,7 +31,7 @@ const SlideNavButtons = ({ total, imagesPerSlide }: SlideNavButtonsProps) => {
 
       <button
         className={cn(
-          'absolute left-0 top-1/2 -translate-y-1/2 rounded-full bg-gray text-gray-light grid place-items-center w-10 h-10 z-10',
+          'absolute left-0 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-gray text-gray-light',
           { hidden: swiper.realIndex === 0 },
         )}
         onClick={handleClickPrev}
@@ -42,7 +42,7 @@ const SlideNavButtons = ({ total, imagesPerSlide }: SlideNavButtonsProps) => {
         </span>
       </button>
     </>
-  );
-};
+  )
+}
 
-export default SlideNavButtons;
+export default SlideNavButtons

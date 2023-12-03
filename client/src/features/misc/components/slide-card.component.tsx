@@ -1,12 +1,12 @@
-import { ComponentPropsWithoutRef } from 'react';
+import { ComponentPropsWithoutRef } from 'react'
 
-import LinkCustom from '@/components/link-custom.component';
-import { cn } from '@/utils/cn.util';
-import heroLinks from '../data/men-women-url.json';
-import { Card } from './slider.component';
+import { Card } from './slider.component'
+import LinkCustom from '@/components/link-custom.component'
+import { cn } from '@/utils/cn.util'
+import heroLinks from '../data/men-women-url.json'
 
 type SlideCardProps = ComponentPropsWithoutRef<'div'> &
-  Card & { appendix?: boolean; titleStyle?: string };
+  Card & { appendix?: boolean; titleStyle?: string }
 
 export const SlideCard = ({
   imgUrl,
@@ -21,29 +21,29 @@ export const SlideCard = ({
   return (
     <div
       className={cn(
-        'group shadow-lg shadow-gray-light overflow-hidden group',
+        'group group overflow-hidden shadow-lg shadow-gray-light',
         className,
       )}
       {...props}
     >
-      <div className='relative group/overlay w-full pb-[100%] overflow-hidden'>
+      <div className='group/overlay relative w-full overflow-hidden pb-[100%]'>
         <img
           src={imgUrl}
           alt=''
-          className='absolute inset-0 object-cover duration-500 transition-transform group-hover:scale-[105%] bg-silver'
+          className='absolute inset-0 bg-silver object-cover transition-transform duration-500 group-hover:scale-[105%]'
           loading='lazy'
         />
         {appendix && (
           <>
-            <div className='absolute top-0 left-0 w-full h-full transition-opacity duration-500 ease-out bg-gray opacity-0 group-hover/overlay:opacity-40 hidden md:block' />
+            <div className='absolute left-0 top-0 hidden h-full w-full bg-gray opacity-0 transition-opacity duration-500 ease-out group-hover/overlay:opacity-40 md:block' />
 
-            <div className='absolute top-0 left-0 w-full h-full transition-opacity duration-500 ease-out opacity-0 group-hover/overlay:opacity-100 justify-center items-center hidden md:flex'>
+            <div className='absolute left-0 top-0 hidden h-full w-full items-center justify-center opacity-0 transition-opacity duration-500 ease-out group-hover/overlay:opacity-100 md:flex'>
               <div className='flex flex-col gap-y-3'>
                 {heroLinks.map((heroLink) => (
                   <LinkCustom
                     key={heroLink.text}
                     to={heroLink.url}
-                    className='z-30 py-[10px] border-none block relative w-full'
+                    className='relative z-30 block w-full border-none py-[10px]'
                   >
                     {heroLink.text}
                   </LinkCustom>
@@ -54,24 +54,24 @@ export const SlideCard = ({
         )}
       </div>
       <div className={cn('px-6 py-3 text-gray', titleStyle)}>
-        <h4 className='capitalize font-bold text-[14px] tracking-wide whitespace-nowrap'>
+        <h4 className='whitespace-nowrap text-[14px] font-bold capitalize tracking-wide'>
           {title}
         </h4>
         {!appendix && (
-          <p className='leading-[1.4] text-[12px] tracking-[0.3px] whitespace-nowrap'>
+          <p className='whitespace-nowrap text-[12px] leading-[1.4] tracking-[0.3px]'>
             {description}
           </p>
         )}
         {appendix && (
           <>
-            <div className='flex gap-x-2 items-center  border-t-[1px] border-t-gray-light pt-[10px] mt-[10px]'>
+            <div className='mt-[10px] flex items-center  gap-x-2 border-t-[1px] border-t-gray-light pt-[10px]'>
               <img src={miniImgUrl} alt='' className='w-6' />
-              <p className='leading-[1.4] text-[12px] tracking-[0.3px]'>
+              <p className='text-[12px] leading-[1.4] tracking-[0.3px]'>
                 {description}
               </p>
             </div>
 
-            <div className='flex md:hidden flex-col gap-y-2 mt-2'>
+            <div className='mt-2 flex flex-col gap-y-2 md:hidden'>
               {heroLinks.map((heroLink) => (
                 <LinkCustom
                   key={heroLink.text}
@@ -86,5 +86,5 @@ export const SlideCard = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}

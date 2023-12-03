@@ -1,20 +1,20 @@
-import { ComponentPropsWithoutRef } from 'react';
-import { Link, LinkProps } from 'react-router-dom';
+import { ComponentPropsWithoutRef } from 'react'
+import { Link, LinkProps } from 'react-router-dom'
 
-import { cn } from '@/utils/cn.util';
+import { cn } from '@/utils/cn.util'
 
 const styleTypes = {
   normal: 'hover:bg-white hover:text-gray',
   invert: 'bg-white text-gray hover:bg-gray hover:text-white',
-};
+}
 
 type ExtraProps = {
-  styleType?: keyof typeof styleTypes;
-  element?: 'link' | 'button';
-};
+  styleType?: keyof typeof styleTypes
+  element?: 'link' | 'button'
+}
 
 type LinkCustomProps = (ComponentPropsWithoutRef<'button'> | LinkProps) &
-  ExtraProps;
+  ExtraProps
 
 const LinkCustom = ({
   styleType = 'normal',
@@ -24,13 +24,13 @@ const LinkCustom = ({
   ...props
 }: LinkCustomProps) => {
   const isDisabled =
-    element === 'button' && 'disabled' in props && props.disabled;
+    element === 'button' && 'disabled' in props && props.disabled
 
   const style = cn(
     'py-2 px-[18px] bg-gray text-white focus:outline-0 rounded-sm uppercase text-center border-2 border-gray text-xs font-semibold tracking-[1.5px] w-fit duration-100',
     { [styleTypes[styleType]]: !isDisabled },
     className,
-  );
+  )
 
   return element === 'link' ? (
     <Link className={style} {...(props as LinkProps)}>
@@ -43,7 +43,7 @@ const LinkCustom = ({
     >
       {children}
     </button>
-  );
-};
+  )
+}
 
-export default LinkCustom;
+export default LinkCustom

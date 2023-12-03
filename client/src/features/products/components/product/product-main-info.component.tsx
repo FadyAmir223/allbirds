@@ -1,18 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 
-import ProductPrice from './product-price.component';
-import StarRating from '../star-rating.component';
-import { cn } from '@/utils/cn.util';
+import StarRating from '../star-rating.component'
+import ProductPrice from './product-price.component'
+import { cn } from '@/utils/cn.util'
 
 type ProductMainInfoProps = {
-  name: string;
-  freeShipping: boolean;
-  price: number;
-  salePrice: number | undefined;
-  rating: number;
-  totalReviews: number;
-  mobile?: boolean;
-};
+  name: string
+  freeShipping: boolean
+  price: number
+  salePrice: number | undefined
+  rating: number
+  totalReviews: number
+  mobile?: boolean
+}
 
 const ProductMainInfo = ({
   name,
@@ -25,12 +25,12 @@ const ProductMainInfo = ({
 }: ProductMainInfoProps) => {
   return (
     <div className={cn(mobile ? 'block lg:hidden' : 'hidden lg:block')}>
-      <Link to='/' className='hover:underline font-semibold text-[10px]'>
+      <Link to='/' className='text-[10px] font-semibold hover:underline'>
         Home /
       </Link>
 
       <div className='flex justify-between'>
-        <h1 className='text-xl lg:text-3xl font-bold mb-1'>{name}</h1>
+        <h1 className='mb-1 text-xl font-bold lg:text-3xl'>{name}</h1>
         <ProductPrice
           price={price}
           salePrice={salePrice}
@@ -38,30 +38,30 @@ const ProductMainInfo = ({
         />
       </div>
 
-      <div className='hidden lg:flex items-center mt-1 mb-2'>
+      <div className='mb-2 mt-1 hidden items-center lg:flex'>
         <ProductPrice price={price} salePrice={salePrice} />
 
         {freeShipping && (
-          <span className='ml-2 text-[12px] p-1.5 bg-silver uppercase italic font-semibold tracking-[0.5px]'>
+          <span className='ml-2 bg-silver p-1.5 text-[12px] font-semibold uppercase italic tracking-[0.5px]'>
             free shipping
           </span>
         )}
       </div>
 
-      <div className='flex justify-between mb-5'>
+      <div className='mb-5 flex justify-between'>
         <div className='flex items-center gap-2'>
           <StarRating rating={rating} scale='sm' />
           <span className='underline'>({totalReviews})</span>
         </div>
 
         {freeShipping && (
-          <span className='lg:hidden ml-2 text-[12px] p-1.5 bg-silver uppercase italic font-semibold tracking-[0.5px]'>
+          <span className='ml-2 bg-silver p-1.5 text-[12px] font-semibold uppercase italic tracking-[0.5px] lg:hidden'>
             free shipping
           </span>
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductMainInfo;
+export default ProductMainInfo

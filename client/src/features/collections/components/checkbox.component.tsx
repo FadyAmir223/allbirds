@@ -1,23 +1,23 @@
-import { ComponentPropsWithoutRef } from 'react';
+import { ComponentPropsWithoutRef } from 'react'
 
-import { cn } from '@/utils/cn.util';
+import { cn } from '@/utils/cn.util'
 
 type CheckboxProps = ComponentPropsWithoutRef<'input'> & {
-  tag: string;
-  isColor?: boolean;
-};
+  tag: string
+  isColor?: boolean
+}
 
 const Checkbox = ({ tag, isColor = false, ...props }: CheckboxProps) => {
   return (
-    <li className='flex items-center cursor-pointer select-none mb-2 last-of-type:mb-0 group/checkbox'>
+    <li className='group/checkbox mb-2 flex cursor-pointer select-none items-center last-of-type:mb-0'>
       <input
         type='checkbox'
         id={tag}
         className={cn(
-          'cursor-pointer peer appearance-none w-[18px] h-4',
+          'peer h-4 w-[18px] cursor-pointer appearance-none',
           isColor
-            ? 'border border-gray-light rounded-full hover:before:border-gray-medium checked:before:border-gray checked:hover:before:border-gray relative before:absolute before:inset-[-2.5px] before:border-[1.5px] before:border-transparent before:rounded-full before:p-2 aspect-square'
-            : 'border border-gray group-hover/checkbox:bg-silver-dark/30 checked:group-hover/checkbox:bg-gray checked:bg-gray rounded-sm relative before:absolute before:top-[8px] before:right-[-1px] before:w-[14px] before:h-[1.9px] before:-rotate-45 before:bg-white after:absolute after:bottom-[1px] after:left-[2px] after:w-[1.9px] after:h-[6px] after:-rotate-[30deg] after:bg-white',
+            ? 'relative aspect-square rounded-full border border-gray-light before:absolute before:inset-[-2.5px] before:rounded-full before:border-[1.5px] before:border-transparent before:p-2 checked:before:border-gray hover:before:border-gray-medium checked:hover:before:border-gray'
+            : 'relative rounded-sm border border-gray before:absolute before:right-[-1px] before:top-[8px] before:h-[1.9px] before:w-[14px] before:-rotate-45 before:bg-white after:absolute after:bottom-[1px] after:left-[2px] after:h-[6px] after:w-[1.9px] after:-rotate-[30deg] after:bg-white checked:bg-gray group-hover/checkbox:bg-silver-dark/30 checked:group-hover/checkbox:bg-gray',
         )}
         style={isColor ? { backgroundColor: tag } : {}}
         {...props}
@@ -25,12 +25,12 @@ const Checkbox = ({ tag, isColor = false, ...props }: CheckboxProps) => {
 
       <label
         htmlFor={tag}
-        className='peer-checked:font-bold capitalize cursor-pointer text-[12px] w-full pl-2.5'
+        className='w-full cursor-pointer pl-2.5 text-[12px] capitalize peer-checked:font-bold'
       >
         {tag.replace('-', ' ')}
       </label>
     </li>
-  );
-};
+  )
+}
 
-export default Checkbox;
+export default Checkbox

@@ -1,11 +1,11 @@
-import { lazy } from 'react';
-import { Outlet, Route } from 'react-router-dom';
+import { lazy } from 'react'
+import { Outlet, Route } from 'react-router-dom'
 
-const Login = lazy(() => import('./login.route'));
-const Signup = lazy(() => import('./signup.route'));
-const Account = lazy(() => import('./account.loader'));
+import { loader as accountLoader } from '../services/account.loader'
 
-import { loader as accountLoader } from '../services/account.loader';
+const Login = lazy(() => import('./login.route'))
+const Signup = lazy(() => import('./signup.route'))
+const Account = lazy(() => import('./account.loader'))
 
 export const UserRoute = () => {
   return (
@@ -14,5 +14,5 @@ export const UserRoute = () => {
       <Route path='login' element={<Login />} />
       <Route path='signup' element={<Signup />} />
     </Route>
-  );
-};
+  )
+}

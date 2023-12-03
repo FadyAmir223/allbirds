@@ -1,11 +1,11 @@
-import { lazy } from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import { lazy } from 'react'
+import { Navigate, Route } from 'react-router-dom'
 
-import { loader as collectionAction } from '../services/collection.loader';
-import { lazyImport } from '@/utils/lazy-import.util';
+import { lazyImport } from '@/utils/lazy-import.util'
+import { loader as collectionAction } from '../services/collection.loader'
 
-const Collections = lazy(() => import('./collection.route'));
-const { NotFound } = lazyImport(() => import('@/features/misc'), 'NotFound');
+const Collections = lazy(() => import('./collection.route'))
+const { NotFound } = lazyImport(() => import('@/features/misc'), 'NotFound')
 
 export const CollectionRoute = () => {
   return (
@@ -18,5 +18,5 @@ export const CollectionRoute = () => {
         errorElement={<NotFound />}
       />
     </Route>
-  );
-};
+  )
+}

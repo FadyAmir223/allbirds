@@ -1,72 +1,77 @@
-import { useRef, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { FaChevronDown } from 'react-icons/fa';
-import Markdown from 'react-markdown';
+import { ReactNode, useRef, useState } from 'react'
+import { useParams, useSearchParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { FaChevronDown } from 'react-icons/fa'
+import Markdown from 'react-markdown'
 
-import ProductImageSlider from './product-image-slider.component';
-import ProductMainInfo from './product-main-info.component';
-import ColorButton from '@/components/product/color-button.component';
-import SizeButton from '@/components/product/size-button.component';
-import LinkCustom from '@/components/link-custom.component';
-import SizeChartModal from './size-shart-modal.component';
-import AddToCartModal from './add-to-cart-modal.component';
-import GetNotifiedModal from './get-notified-modal.component';
-import MarkdownLink from '@/components/markdown-link.component';
-import MaterialFeatures from './material-features.component';
-import { SlideCard } from '@/features/misc';
-import { useAppDispatch } from '@/store/hooks';
-import { productQuery } from '../../services/product.query';
-import { cn } from '@/utils/cn.util';
-import { type PureCartProduct, addCartItem } from '@/features/cart';
-import { type ProductDetailed, type ReviewsHeadline } from '../..';
+import AddToCartModal from './add-to-cart-modal.component'
+import GetNotifiedModal from './get-notified-modal.component'
+import ProductImageSlider from './product-image-slider.component'
+import ProductMainInfo from './product-main-info.component'
+import SizeChartModal from './size-shart-modal.component'
+import LinkCustom from '@/components/link-custom.component'
+import MarkdownLink from '@/components/markdown-link.component'
+import ColorButton from '@/components/product/color-button.component'
+import SizeButton from '@/components/product/size-button.component'
+import { productQuery } from '../../services/product.query'
+import { cn } from '@/utils/cn.util'
+import { addCartItem } from '@/features/cart'
+import { SlideCard } from '@/features/misc'
+import { useAppDispatch } from '@/store/hooks'
+import type { ProductDetailed, ReviewsHeadline } from '../..'
+import type { PureCartProduct } from '@/features/cart'
 
 type ProductDetailsProps = {
-  initProduct: ProductDetailed;
-  reviews: ReviewsHeadline;
-};
+  initProduct: ProductDetailed
+  reviews: ReviewsHeadline
+  children: ReactNode
+}
 
-const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
-  const params = useParams();
-  const productName = params.productName as string;
+const ProductDetails = ({
+  initProduct,
+  reviews,
+  children,
+}: ProductDetailsProps) => {
+  const params = useParams()
+  const productName = params.productName as string
 
   const {
     data: { product },
-  } = useQuery({ ...productQuery(productName), initialData: initProduct });
+  } = useQuery({ ...productQuery(productName), initialData: initProduct })
 
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  const prevSizeVal = searchParams.get('size') || '';
-  const prevSizeIdx = product.sizes.indexOf(prevSizeVal);
+  const prevSizeVal = searchParams.get('size') || ''
+  const prevSizeIdx = product.sizes.indexOf(prevSizeVal)
 
   const [nav, setNav] = useState({
     edition: 0,
     product: 0,
     size: prevSizeIdx !== -1 ? prevSizeIdx : null,
     dropdown: -1,
-  });
+  })
 
-  const imageIndex = useRef(0);
+  const imageIndex = useRef(0)
 
   const [isOpen, setOpen] = useState({
     sizeChart: false,
     addToCart: false,
     getNotified: false,
-  });
+  })
 
-  const elMarkdowns = useRef<(HTMLDivElement | null)[]>([]);
-  const lastAddedItem = useRef<PureCartProduct | null>(null);
+  const elMarkdowns = useRef<(HTMLDivElement | null)[]>([])
+  const lastAddedItem = useRef<PureCartProduct | null>(null)
 
-  const selectedProduct = product.editions[nav.edition].products[nav.product];
+  const selectedProduct = product.editions[nav.edition].products[nav.product]
   const isSelectedSizeSoldOut = selectedProduct.sizesSoldOut.includes(
     product.sizes[nav.size || 0],
-  );
+  )
 
   const getCartButtonText = () => {
-    if (isSelectedSizeSoldOut) return 'get notified';
-    else if (!nav.size) return 'select size';
+    if (isSelectedSizeSoldOut) return 'get notified'
+    else if (!nav.size) return 'select size'
     else
       return (
         <>
@@ -84,29 +89,29 @@ const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
             <span className='text-sm'> ${selectedProduct.salePrice}</span>
           )}
         </>
-      );
-  };
+      )
+  }
 
   const handleProductChange = (editionIndex: number, productIndex: number) => {
-    setNav({ ...nav, edition: editionIndex, product: productIndex });
-    imageIndex.current = 0;
-  };
+    setNav({ ...nav, edition: editionIndex, product: productIndex })
+    imageIndex.current = 0
+  }
 
   const handleSizeChange = (sizeIndex: number) => {
-    setNav({ ...nav, size: sizeIndex });
+    setNav({ ...nav, size: sizeIndex })
     setSearchParams((prevSearchParams) => {
-      prevSearchParams.set('size', product.sizes[sizeIndex]);
-      return prevSearchParams;
-    });
-  };
+      prevSearchParams.set('size', product.sizes[sizeIndex])
+      return prevSearchParams
+    })
+  }
 
   const addToCart = () => {
-    handleAddToCartToggle();
+    handleAddToCartToggle()
 
-    const sideViewRegex = /left|profile|lat|1-min|^((?!closeup).)*pink-1/i;
+    const sideViewRegex = /left|profile|lat|1-min|^((?!closeup).)*pink-1/i
     const sideImage = selectedProduct.images.find((image) =>
       sideViewRegex.test(image),
-    );
+    )
 
     lastAddedItem.current = {
       handle: product.handle,
@@ -117,29 +122,29 @@ const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
       salePrice: selectedProduct.salePrice,
       colorName: selectedProduct.colorName,
       image: sideImage || selectedProduct.images[0],
-    };
+    }
 
-    dispatch(addCartItem(lastAddedItem.current));
-  };
+    dispatch(addCartItem(lastAddedItem.current))
+  }
 
   const handleModalPopup = () =>
-    isSelectedSizeSoldOut ? handleGetNotifiedToggle() : addToCart();
+    isSelectedSizeSoldOut ? handleGetNotifiedToggle() : addToCart()
 
   const handleAddToCartToggle = () =>
-    setOpen({ ...isOpen, addToCart: !isOpen.addToCart });
+    setOpen({ ...isOpen, addToCart: !isOpen.addToCart })
 
   const handleGetNotifiedToggle = () =>
-    setOpen({ ...isOpen, getNotified: !isOpen.getNotified });
+    setOpen({ ...isOpen, getNotified: !isOpen.getNotified })
 
   const handleSizeChartToggle = () =>
-    setOpen({ ...isOpen, sizeChart: !isOpen.sizeChart });
+    setOpen({ ...isOpen, sizeChart: !isOpen.sizeChart })
 
   const handleDropdownToggle = (index: number) =>
-    setNav({ ...nav, dropdown: nav.dropdown === index ? -1 : index });
+    setNav({ ...nav, dropdown: nav.dropdown === index ? -1 : index })
 
   return (
-    <main className='py-10 px-6 relative'>
-      <section className='flex flex-col lg:flex-row gap-y-4 lg:gap-x-16'>
+    <main className='relative px-6 py-10'>
+      <section className='flex flex-col gap-y-4 lg:flex-row lg:gap-x-16'>
         <div className='w-full lg:w-3/5'>
           <ProductMainInfo
             name={product.name}
@@ -157,21 +162,21 @@ const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
             productIndex={nav.product}
           />
 
-          <div className='mb-6 lg:my-6 lg:mb-10 text-center text-gray hidden lg:block'>
-            <h2 className='capitalize font-bold bg-silver border-b border-b-gray-light p-4'>
+          <div className='mb-6 hidden text-center text-gray lg:my-6 lg:mb-10 lg:block'>
+            <h2 className='border-b border-b-gray-light bg-silver p-4 font-bold capitalize'>
               {product.name} highlights
             </h2>
             {product.highlights.map((highlight) => (
               <p
                 key={highlight}
-                className='bg-silver border-b border-b-gray-light last-of-type:border-b-0 p-3 text-[14px]'
+                className='border-b border-b-gray-light bg-silver p-3 text-[14px] last-of-type:border-b-0'
               >
                 {highlight}
               </p>
             ))}
           </div>
 
-          <div className='text-gray hidden lg:block'>
+          <div className='hidden text-gray lg:block'>
             <ul>
               {product.dropdown.map((item, idx) => (
                 <li
@@ -179,10 +184,10 @@ const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
                   className='border-t border-t-gray-light last-of-type:border-b last-of-type:border-b-gray-light'
                 >
                   <button
-                    className='flex justify-between items-center w-full py-3'
+                    className='flex w-full items-center justify-between py-3'
                     onClick={() => handleDropdownToggle(idx)}
                   >
-                    <span className='uppercase text-[10px] tracking-[2px] font-semibold'>
+                    <span className='text-[10px] font-semibold uppercase tracking-[2px]'>
                       {item.title}
                     </span>
                     <span
@@ -196,7 +201,7 @@ const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
 
                   <div
                     ref={(el) => (elMarkdowns.current[idx] = el)}
-                    className='text-sm leading-6 overflow-hidden duration-[250ms] transition-[height]'
+                    className='overflow-hidden text-sm leading-6 transition-[height] duration-[250ms]'
                     style={{
                       height:
                         nav.dropdown === idx
@@ -230,9 +235,9 @@ const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
             {product.editions.map((edition, editionIdx) => (
               <div
                 key={edition.edition}
-                className='mb-5 last:mb-0 hidden lg:block'
+                className='mb-5 hidden last:mb-0 lg:block'
               >
-                <h3 className='uppercase text-[12px] font-semibold tracking-[2px] mb-2'>
+                <h3 className='mb-2 text-[12px] font-semibold uppercase tracking-[2px]'>
                   {edition.edition}
                 </h3>
 
@@ -256,7 +261,7 @@ const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
             ))}
           </div>
 
-          <div className='mb-8 flex lg:hidden gap-5 flex-wrap'>
+          <div className='mb-8 flex flex-wrap gap-5 lg:hidden'>
             {product.editions.map((edition, editionIdx) =>
               edition.products.map((editionProduct, productIdx) => (
                 <ColorButton
@@ -274,11 +279,11 @@ const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
           </div>
 
           <div>
-            <p className='uppercase text-[12px] font-semibold tracking-[2px] mb-2'>
+            <p className='mb-2 text-[12px] font-semibold uppercase tracking-[2px]'>
               select size
             </p>
 
-            <div className='grid grid-cols-7 gap-1.5 mb-3'>
+            <div className='mb-3 grid grid-cols-7 gap-1.5'>
               {product.sizes.map((size, sizeIdx) => (
                 <SizeButton
                   key={size}
@@ -297,7 +302,7 @@ const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
                 We recommend you size up.{' '}
               </span>
               <button
-                className='underline font-semibold text-[13px]'
+                className='text-[13px] font-semibold underline'
                 onClick={handleSizeChartToggle}
               >
                 See Size Chart
@@ -313,21 +318,21 @@ const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
               {getCartButtonText()}
             </LinkCustom>
 
-            <p className='mt-3 mb-14 text-[12px] text-center'>
+            <p className='mb-14 mt-3 text-center text-[12px]'>
               Free shipping on orders over $75. Free returns.
             </p>
 
             <div>
-              <p className='font-semibold text-xl mb-4'>Also Cosider</p>
+              <p className='mb-4 text-xl font-semibold'>Also Cosider</p>
               <div className='grid grid-cols-2 gap-x-4'>
                 {product.recommendations.map((recommendation) => (
                   // path not scraped
-                  // workaround option 2: GET /api/product/recommendations
+                  // option 2: GET /api/product/recommendations
                   <SlideCard
                     key={recommendation.name}
                     imgUrl={recommendation.image}
                     title={recommendation.name}
-                    className='shadow-md w-full cursor-pointer'
+                    className='w-full cursor-pointer shadow-md'
                     titleStyle='p-2'
                   />
                 ))}
@@ -337,7 +342,7 @@ const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
         </div>
       </section>
 
-      <MaterialFeatures materialFeatures={product.materialFeatures} />
+      {children}
 
       <SizeChartModal
         isOpen={isOpen.sizeChart}
@@ -353,7 +358,7 @@ const ProductDetails = ({ initProduct, reviews }: ProductDetailsProps) => {
         handleClose={handleGetNotifiedToggle}
       />
     </main>
-  );
-};
+  )
+}
 
-export default ProductDetails;
+export default ProductDetails

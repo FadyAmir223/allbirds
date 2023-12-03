@@ -1,1 +1,1 @@
-export * from './collection.query';
+export * from './collection.query'

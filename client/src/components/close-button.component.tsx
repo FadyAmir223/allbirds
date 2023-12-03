@@ -1,17 +1,17 @@
-import { ComponentPropsWithoutRef } from 'react';
-import { TfiClose } from 'react-icons/tfi';
+import { ComponentPropsWithoutRef } from 'react'
+import { TfiClose } from 'react-icons/tfi'
 
-import { cn } from '@/utils/cn.util';
+import { cn } from '@/utils/cn.util'
 
 type CloseButtonProps = ComponentPropsWithoutRef<'button'> & {
-  position?: 'left' | 'right';
-};
+  position?: 'left' | 'right'
+}
 
 const CloseButton = ({ position, className, ...props }: CloseButtonProps) => {
   return (
     <button
       className={cn(
-        'absolute top-0 hover:rotate-90 duration-[400ms] scale-125',
+        'absolute top-0 scale-125 duration-[400ms] hover:rotate-90',
         {
           'left-0': position === 'left',
           'right-0': position === 'right',
@@ -22,7 +22,7 @@ const CloseButton = ({ position, className, ...props }: CloseButtonProps) => {
     >
       <TfiClose />
     </button>
-  );
-};
+  )
+}
 
-export default CloseButton;
+export default CloseButton

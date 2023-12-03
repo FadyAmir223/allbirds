@@ -1,8 +1,8 @@
-import { lazy } from 'react';
-import { Route } from 'react-router-dom';
+import { lazy } from 'react'
+import { Route } from 'react-router-dom'
 
-const Search = lazy(() => import('./search.route'));
-const OurComitment = lazy(() => import('./our-comitment.route'));
+const Search = lazy(() => import('./search.route'))
+const OurComitment = lazy(() => import('./our-comitment.route'))
 
 export const PagesRoute = () => {
   return (
@@ -10,5 +10,5 @@ export const PagesRoute = () => {
       <Route path='search' element={<Search />} />
       <Route path='our-commitment' element={<OurComitment />} />
     </Route>
-  );
-};
+  )
+}

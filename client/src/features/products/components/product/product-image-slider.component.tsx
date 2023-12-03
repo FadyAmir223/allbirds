@@ -1,44 +1,46 @@
-import { useEffect, useState } from 'react';
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-import { Pagination } from 'swiper/modules';
-import type { Swiper as SwiperType } from 'swiper/types';
-import 'swiper/css';
-import 'swiper/css/pagination';
+import { useEffect, useState } from 'react'
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
+import { Pagination } from 'swiper/modules'
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react'
 
-import screenSize from '@/data/screen-size.json';
+import type { Swiper as SwiperType } from 'swiper/types'
+
+import 'swiper/css'
+import 'swiper/css/pagination'
+
+import screenSize from '@/data/screen-size.json'
 
 type ProductImageSliderProps = {
-  images: string[];
-  editionIndex: number;
-  productIndex: number;
-};
+  images: string[]
+  editionIndex: number
+  productIndex: number
+}
 
 const ProductImageSlider = ({
   images,
   editionIndex,
   productIndex,
 }: ProductImageSliderProps) => {
-  const [swiper, setSwiper] = useState<SwiperType | null>(null);
+  const [swiper, setSwiper] = useState<SwiperType | null>(null)
 
   const handleImageSlide = (index: number) => {
-    swiper?.slideTo(index);
-  };
+    swiper?.slideTo(index)
+  }
 
   useEffect(() => {
-    if (swiper) swiper.slideTo(0, 0);
-  }, [editionIndex, productIndex]); // eslint-disable-line
+    if (swiper) swiper.slideTo(0, 0)
+  }, [editionIndex, productIndex]) // eslint-disable-line
 
   return (
     <div className='flex gap-x-6'>
       <div
-        className='hidden lg:flex flex-col gap-y-2.5'
+        className='hidden flex-col gap-y-2.5 lg:flex'
         style={{ minWidth: `calc((100% - ${(8 - 1) * 11.5}px) / 8)` }}
       >
         {images.map((image, idx) => (
           <button
             key={image}
-            className='bg-silver relative pb-[100%] aspect-square w-full'
+            className='relative aspect-square w-full bg-silver pb-[100%]'
             onClick={() => handleImageSlide(idx)}
           >
             <img src={image} alt='' className='absolute inset-0' />
@@ -63,7 +65,7 @@ const ProductImageSlider = ({
               {images.map((image) => (
                 <SwiperSlide
                   key={image}
-                  className='aspect-square bg-silver relative pb-[100%]'
+                  className='relative aspect-square bg-silver pb-[100%]'
                 >
                   <img src={image} alt='' className='absolute inset-0' />
                 </SwiperSlide>
@@ -75,22 +77,22 @@ const ProductImageSlider = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 const SlideNavButtons = () => {
-  const swiper = useSwiper();
+  const swiper = useSwiper()
 
   const handleNeighbourSlide = (direction: 1 | -1) => {
-    const slides = swiper.slides.length;
-    const index = (swiper.realIndex + direction + slides) % slides;
-    swiper.slideToLoop(index);
-  };
+    const slides = swiper.slides.length
+    const index = (swiper.realIndex + direction + slides) % slides
+    swiper.slideToLoop(index)
+  }
 
   return (
-    <div className='absolute bottom-3.5 right-2 hidden lg:flex gap-x-3 z-10'>
+    <div className='absolute bottom-3.5 right-2 z-10 hidden gap-x-3 lg:flex'>
       <button
-        className='rounded-full border-silver bg-white w-12 h-12 grid place-items-center text-gray'
+        className='grid h-12 w-12 place-items-center rounded-full border-silver bg-white text-gray'
         onClick={() => handleNeighbourSlide(-1)}
       >
         <span className='scale-125'>
@@ -98,7 +100,7 @@ const SlideNavButtons = () => {
         </span>
       </button>
       <button
-        className='rounded-full border-silver bg-white w-12 h-12 grid place-items-center text-gray'
+        className='grid h-12 w-12 place-items-center rounded-full border-silver bg-white text-gray'
         onClick={() => handleNeighbourSlide(1)}
       >
         <span className='scale-125'>
@@ -106,7 +108,7 @@ const SlideNavButtons = () => {
         </span>
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default ProductImageSlider;
+export default ProductImageSlider

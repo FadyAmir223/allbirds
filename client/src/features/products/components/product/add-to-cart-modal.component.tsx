@@ -1,24 +1,24 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 
-import BottomDrawer from '@/components/bottom-drawer.component';
-import LinkCustom from '@/components/link-custom.component';
-import { CartIcon, toggleCart } from '@/features/cart';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { type PureCartProduct } from '@/features/cart';
-import type { ModalProps } from '../../types/modal.type';
+import BottomDrawer from '@/components/bottom-drawer.component'
+import LinkCustom from '@/components/link-custom.component'
+import { CartIcon, toggleCart } from '@/features/cart'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import type { ModalProps } from '../../types/modal.type'
+import type { PureCartProduct } from '@/features/cart'
 
 type AddToCartModalProps = ModalProps & {
-  item: PureCartProduct | null;
-};
+  item: PureCartProduct | null
+}
 
 const AddToCartModal = ({ item, isOpen, handleClose }: AddToCartModalProps) => {
-  const totalPrice = useAppSelector((state) => state.cart.totalPrice);
-  const dispatch = useAppDispatch();
+  const totalPrice = useAppSelector((state) => state.cart.totalPrice)
+  const dispatch = useAppDispatch()
 
   const handleCartOpen = () => {
-    handleClose();
-    dispatch(toggleCart());
-  };
+    handleClose()
+    dispatch(toggleCart())
+  }
 
   return (
     item && (
@@ -27,9 +27,9 @@ const AddToCartModal = ({ item, isOpen, handleClose }: AddToCartModalProps) => {
         isOpen={isOpen}
         handleClose={handleClose}
       >
-        <div className='border-b border-b-silver pb-2 mb-3'>
-          <div className='flex gap-x-3 items-center'>
-            <h3 className='text-[22px] font-bold mb-1'>
+        <div className='mb-3 border-b border-b-silver pb-2'>
+          <div className='flex items-center gap-x-3'>
+            <h3 className='mb-1 text-[22px] font-bold'>
               You've Got Great Taste
             </h3>
             <CartIcon />
@@ -43,7 +43,7 @@ const AddToCartModal = ({ item, isOpen, handleClose }: AddToCartModalProps) => {
               <img
                 src={item.image}
                 alt={item.name}
-                className='w-[8.75rem] bg-silver object-fit aspect-square'
+                className='object-fit aspect-square w-[8.75rem] bg-silver'
               />
             </Link>
             <div>
@@ -55,19 +55,19 @@ const AddToCartModal = ({ item, isOpen, handleClose }: AddToCartModalProps) => {
           </div>
 
           <div className='w-2/5'>
-            <div className='flex justify-between items-center font-semibold mb-3'>
+            <div className='mb-3 flex items-center justify-between font-semibold'>
               <span className='text-sm'>Subtotal</span>
               <span className='text-sm'>${totalPrice}</span>
             </div>
             <LinkCustom
-              className='mb-1.5 w-full text-[14px] py-3 tracking-[1.5px]'
+              className='mb-1.5 w-full py-3 text-[14px] tracking-[1.5px]'
               element='button'
               onClick={handleCartOpen}
             >
               view cart & checkout
             </LinkCustom>
             <LinkCustom
-              className='w-full text-[14px] py-3 tracking-[1.5px]'
+              className='w-full py-3 text-[14px] tracking-[1.5px]'
               element='button'
               styleType='invert'
               onClick={handleClose}
@@ -78,7 +78,7 @@ const AddToCartModal = ({ item, isOpen, handleClose }: AddToCartModalProps) => {
         </div>
       </BottomDrawer>
     )
-  );
-};
+  )
+}
 
-export default AddToCartModal;
+export default AddToCartModal

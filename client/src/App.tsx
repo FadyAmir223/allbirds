@@ -1,22 +1,22 @@
 import {
-  Route,
-  RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
-} from 'react-router-dom';
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
 
-import Layout from '@/components/layout.component';
-import ErrorFallback from '@/components/error-fallback.component';
-import { UserRoute } from '@/features/auth';
-import { CollectionRoute } from '@/features/collections';
-import { ProductRoute } from '@/features/products';
-import { PagesRoute } from '@/features/pages';
-import { loader as homeLoader } from './features/misc';
-import { lazyImport } from '@/utils/lazy-import.util';
+import ErrorFallback from '@/components/error-fallback.component'
+import Layout from '@/components/layout.component'
+import { lazyImport } from '@/utils/lazy-import.util'
+import { loader as homeLoader } from './features/misc'
+import { UserRoute } from '@/features/auth'
+import { CollectionRoute } from '@/features/collections'
+import { PagesRoute } from '@/features/pages'
+import { ProductRoute } from '@/features/products'
 
-const mistFactory = () => import('@/features/misc');
-const { Home } = lazyImport(mistFactory, 'Home');
-const { NotFound } = lazyImport(mistFactory, 'NotFound');
+const mistFactory = () => import('@/features/misc')
+const { Home } = lazyImport(mistFactory, 'Home')
+const { NotFound } = lazyImport(mistFactory, 'NotFound')
 
 const App = () => {
   return (
@@ -34,7 +34,7 @@ const App = () => {
         ),
       )}
     />
-  );
-};
+  )
+}
 
-export default App;
+export default App

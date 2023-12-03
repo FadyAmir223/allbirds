@@ -1,3 +1,3 @@
-export * from './routes';
+export * from './routes'
 
-export * from './services/user.slice';
+export * from './services/user.slice'

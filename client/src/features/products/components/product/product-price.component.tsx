@@ -1,10 +1,10 @@
-import { cn } from '@/utils/cn.util';
+import { cn } from '@/utils/cn.util'
 
 type ProductPriceProps = {
-  price: number;
-  salePrice: number | undefined;
-  className?: string;
-};
+  price: number
+  salePrice: number | undefined
+  className?: string
+}
 
 const ProductPrice = ({ price, salePrice, className }: ProductPriceProps) => {
   return (
@@ -16,9 +16,9 @@ const ProductPrice = ({ price, salePrice, className }: ProductPriceProps) => {
       >
         ${price}
       </span>
-      {salePrice && <span className='text-sm ml-1 text-red'>{salePrice}</span>}
+      {salePrice && <span className='ml-1 text-sm text-red'>{salePrice}</span>}
     </div>
-  );
-};
+  )
+}
 
-export default ProductPrice;
+export default ProductPrice

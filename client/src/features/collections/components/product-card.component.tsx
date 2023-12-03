@@ -1,62 +1,62 @@
-import { useRef, useState, Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import { Fragment, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 
-import SideButton from '@/components/product/size-button.component';
-import ColorButton from '@/components/product/color-button.component';
-import { useAppDispatch } from '@/store/hooks';
-import { addCartItem, toggleCart } from '@/features/cart';
-import { cn } from '@/utils/cn.util';
-import screenSize from '@/data/screen-size.json';
-import { type CollectionProduct, type SelectedFilters } from '..';
+import ColorButton from '@/components/product/color-button.component'
+import SideButton from '@/components/product/size-button.component'
+import { cn } from '@/utils/cn.util'
+import { type CollectionProduct, type SelectedFilters } from '..'
+import screenSize from '@/data/screen-size.json'
+import { addCartItem, toggleCart } from '@/features/cart'
+import { useAppDispatch } from '@/store/hooks'
 
 type ProductCardProps = {
-  product: CollectionProduct;
-  hasGender: boolean;
-  selectedFilters: SelectedFilters;
-};
+  product: CollectionProduct
+  hasGender: boolean
+  selectedFilters: SelectedFilters
+}
 
-const isSmall = innerWidth > screenSize.sm && innerWidth < screenSize.md;
-const isMedium = innerWidth > screenSize.md;
+const isSmall = innerWidth > screenSize.sm && innerWidth < screenSize.md
+const isMedium = innerWidth > screenSize.md
 
 // 24 sm:20 md:8
-const gap = isSmall ? 20 : isMedium ? 8 : 4;
-const itemsPerSlide = isMedium ? 6 : 4;
+const gap = isSmall ? 20 : isMedium ? 8 : 4
+const itemsPerSlide = isMedium ? 6 : 4
 
 const style = {
   width: `calc((100% - ${(itemsPerSlide - 1) * gap}px) / ${itemsPerSlide})`,
-};
+}
 
 // workaround until generic equaion is found
 const getMaxSections = (productsLength: number) => {
-  let sections = 0;
-  if (productsLength <= itemsPerSlide) return sections;
+  let sections = 0
+  if (productsLength <= itemsPerSlide) return sections
 
-  let remain = productsLength;
-  const maxItems = itemsPerSlide - 1;
+  let remain = productsLength
+  const maxItems = itemsPerSlide - 1
 
   for (let i = 0; ; i++) {
-    if (i === 0) remain -= maxItems;
-    else if (remain <= maxItems) break;
-    else remain -= itemsPerSlide - 2;
-    sections += 1;
+    if (i === 0) remain -= maxItems
+    else if (remain <= maxItems) break
+    else remain -= itemsPerSlide - 2
+    sections += 1
   }
 
-  return sections;
-};
+  return sections
+}
 
 const ProductCard = ({
   product,
   hasGender,
   selectedFilters,
 }: ProductCardProps) => {
-  const [nav, setNav] = useState({ index: 0, section: 0 });
-  const [isQuickAddOpen, setQuickAddOpen] = useState(false);
-  const divEl = useRef<HTMLDivElement | null>(null);
-  const dispatch = useAppDispatch();
+  const [nav, setNav] = useState({ index: 0, section: 0 })
+  const [isQuickAddOpen, setQuickAddOpen] = useState(false)
+  const divEl = useRef<HTMLDivElement | null>(null)
+  const dispatch = useAppDispatch()
 
   if (!hasGender)
-    product.sizes = product.sizes.map((size) => size.split('.')[0]);
+    product.sizes = product.sizes.map((size) => size.split('.')[0])
 
   const editions = product.editions
     .flatMap((edition) => edition.products)
@@ -64,49 +64,49 @@ const ProductCard = ({
       const bySize =
         !product.sizesSoldOut.some(
           (sizeSoldOut) => selectedFilters.sizes?.includes(sizeSoldOut),
-        ) ?? true;
+        ) ?? true
 
       const byHue =
-        selectedFilters.hues?.some((hue) => product.hues.includes(hue)) ?? true;
+        selectedFilters.hues?.some((hue) => product.hues.includes(hue)) ?? true
 
-      return bySize && byHue;
-    });
+      return bySize && byHue
+    })
 
-  if (editions.length === 0) return <></>;
+  if (editions.length === 0) return <></>
 
-  const currProduct = editions[nav.index];
-  const MaxSections = getMaxSections(editions.length - 1);
+  const currProduct = editions[nav.index]
+  const MaxSections = getMaxSections(editions.length - 1)
 
   const section = {
     first: nav.section === 0,
     last: nav.section === MaxSections,
-  };
+  }
 
   const imagesPerSlide =
     MaxSections === 0
       ? itemsPerSlide
       : section.first || section.last
       ? itemsPerSlide - 1
-      : itemsPerSlide - 2;
+      : itemsPerSlide - 2
 
   const slice = {
     min: nav.section * imagesPerSlide,
     max: (nav.section + 1) * imagesPerSlide,
-  };
+  }
 
   const handleIndexChange = (index: number) =>
     setNav({
       index: index + nav.section * imagesPerSlide,
       section: nav.section,
-    });
+    })
 
   const handleSectionChange = (direction: 1 | -1) =>
-    setNav({ index: nav.index, section: nav.section + direction });
+    setNav({ index: nav.index, section: nav.section + direction })
 
-  const handleToggleQuickAdd = () => setQuickAddOpen(!isQuickAddOpen);
+  const handleToggleQuickAdd = () => setQuickAddOpen(!isQuickAddOpen)
 
   const AddCartItem = (size: string) => {
-    const edition = editions[nav.index];
+    const edition = editions[nav.index]
 
     const productToCart = {
       editionId: edition.id,
@@ -117,32 +117,32 @@ const ProductCard = ({
       salePrice: edition.salePrice,
       colorName: edition.colorName,
       image: edition.image,
-    };
+    }
 
-    dispatch(addCartItem(productToCart));
-    dispatch(toggleCart());
-  };
+    dispatch(addCartItem(productToCart))
+    dispatch(toggleCart())
+  }
 
   return (
-    <div className='text-gray relative bg-blue group bg-white h-fit'>
-      <div className='hidden md:block absolute w-[calc(100%+32px)] h-[calc(100%+32px)] -top-4 -left-4 group-hover:shadow-2xl group-hover:shadow-gray z-10' />
+    <div className='bg-blue group relative h-fit bg-white text-gray'>
+      <div className='absolute -left-4 -top-4 z-10 hidden h-[calc(100%+32px)] w-[calc(100%+32px)] group-hover:shadow-2xl group-hover:shadow-gray md:block' />
 
       <div className='relative pb-[100%]'>
         <img
           src={currProduct.image}
           alt={product.name}
-          className='absolute top-0 left-0 w-full h-full object-cover bg-silver'
+          className='absolute left-0 top-0 h-full w-full bg-silver object-cover'
         />
       </div>
 
       {/* TODO: to={'/products/' + currProduct.handle} */}
       <Link to={'/products/' + product.handle} className='relative z-10'>
-        <p className='font-semibold text-[11px] mt-2 uppercase px-3 md:px-0 z-10 relative'>
+        <p className='relative z-10 mt-2 px-3 text-[11px] font-semibold uppercase md:px-0'>
           {product.name}
         </p>
       </Link>
 
-      <div className='text-[11.2px] mb-1 px-3 md:px-0 z-10 relative'>
+      <div className='relative z-10 mb-1 px-3 text-[11.2px] md:px-0'>
         {currProduct?.salePrice && (
           <span className='mr-1 text-red'>${currProduct.salePrice}</span>
         )}
@@ -155,14 +155,14 @@ const ProductCard = ({
         </span>
       </div>
 
-      <div className='whitespace-nowrap flex gap-x-1 sm:gap-x-5 md:gap-x-2 px-3 md:px-0'>
+      <div className='flex gap-x-1 whitespace-nowrap px-3 sm:gap-x-5 md:gap-x-2 md:px-0'>
         {!section.first && (
           <button
-            className='bg-white border border-gray z-10 rounded-full md:rounded-none'
+            className='z-10 rounded-full border border-gray bg-white md:rounded-none'
             onClick={() => handleSectionChange(-1)}
             style={style}
           >
-            <span className='scale-90 sm:scale-100 md:scale-125 grid place-items-center w-full h-full'>
+            <span className='grid h-full w-full scale-90 place-items-center sm:scale-100 md:scale-125'>
               <FaAngleLeft />
             </span>
           </button>
@@ -171,7 +171,7 @@ const ProductCard = ({
         {editions.slice(slice.min, slice.max).map((edition, idx) => (
           <Fragment key={edition.id}>
             <button
-              className='bg-silver z-10 hidden md:block'
+              className='z-10 hidden bg-silver md:block'
               onClick={() => handleIndexChange(idx)}
               style={style}
             >
@@ -179,14 +179,14 @@ const ProductCard = ({
                 <img
                   src={edition.image}
                   alt=''
-                  className='absolute top-0 left-0 w-full h-full object-cover'
+                  className='absolute left-0 top-0 h-full w-full object-cover'
                 />
               </div>
             </button>
 
             <ColorButton
               hues={edition.colors}
-              className='block md:hidden z-10'
+              className='z-10 block md:hidden'
               style={style}
               onClick={() => handleIndexChange(idx)}
             />
@@ -195,19 +195,19 @@ const ProductCard = ({
 
         {!section.last && (
           <button
-            className='bg-white border border-gray z-10 rounded-full md:rounded-none'
+            className='z-10 rounded-full border border-gray bg-white md:rounded-none'
             onClick={() => handleSectionChange(1)}
             style={style}
           >
-            <span className='scale-90 sm:scale-100 md:scale-125 grid place-items-center w-full h-full'>
+            <span className='grid h-full w-full scale-90 place-items-center sm:scale-100 md:scale-125'>
               <FaAngleRight />
             </span>
           </button>
         )}
       </div>
 
-      <div className='box-content pb-4 pl-4 -translate-x-4 pr-4 hidden md:group-hover:block absolute w-full z-20 bg-white group-hover:shadow-2xl group-hover:shadow-gray'>
-        <p className='font-semibold text-[11px] mt-2 uppercase mb-1'>
+      <div className='absolute z-20 box-content hidden w-full -translate-x-4 bg-white pb-4 pl-4 pr-4 group-hover:shadow-2xl group-hover:shadow-gray md:group-hover:block'>
+        <p className='mb-1 mt-2 text-[11px] font-semibold uppercase'>
           quick add
         </p>
         <div
@@ -227,21 +227,21 @@ const ProductCard = ({
         </div>
       </div>
 
-      <div className='mt-3 mb-1 pt-2 pb-1 border-t border-t-gray md:hidden px-3 md:px-0'>
+      <div className='mb-1 mt-3 border-t border-t-gray px-3 pb-1 pt-2 md:hidden md:px-0'>
         <div>
-          <div className='flex justify-between items-center w-full'>
-            <p className='font-semibold text-[10px] uppercase'>quick add</p>
+          <div className='flex w-full items-center justify-between'>
+            <p className='text-[10px] font-semibold uppercase'>quick add</p>
             <button
-              className='w-[14px] h-[14px] relative'
+              className='relative h-[14px] w-[14px]'
               onClick={handleToggleQuickAdd}
             >
               <span
                 className={cn(
-                  'absolute w-[1.9px] h-full bg-black top-0 left-1/2 -translate-x-1/2 duration-[250ms]',
+                  'absolute left-1/2 top-0 h-full w-[1.9px] -translate-x-1/2 bg-black duration-[250ms]',
                   { 'rotate-90': isQuickAddOpen },
                 )}
               />
-              <span className='absolute w-full h-[1.7px] bg-black top-1/2 left-0 -translate-y-1/2' />
+              <span className='absolute left-0 top-1/2 h-[1.7px] w-full -translate-y-1/2 bg-black' />
             </button>
           </div>
 
@@ -254,7 +254,7 @@ const ProductCard = ({
           >
             <div
               className={cn(
-                'grid gap-[6px] w-full mt-1',
+                'mt-1 grid w-full gap-[6px]',
                 hasGender
                   ? 'grid-cols-5 sm:grid-cols-7 md:sm:grid-cols-9'
                   : 'grid-cols-4',
@@ -267,7 +267,7 @@ const ProductCard = ({
                   product={currProduct}
                   onClick={() => AddCartItem(size)}
                   className={cn(
-                    hasGender ? 'text-[9.8px]' : 'uppercase text-sm',
+                    hasGender ? 'text-[9.8px]' : 'text-sm uppercase',
                   )}
                 />
               ))}
@@ -276,7 +276,7 @@ const ProductCard = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductCard;
+export default ProductCard

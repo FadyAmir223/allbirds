@@ -1,9 +1,9 @@
-import { lazy } from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import { lazy } from 'react'
+import { Navigate, Route } from 'react-router-dom'
 
-import { loader as productLoader } from '../services/product.loader';
+import { loader as productLoader } from '../services/product.loader'
 
-const Product = lazy(() => import('./product.route'));
+const Product = lazy(() => import('./product.route'))
 
 export const ProductRoute = () => {
   return (
@@ -11,5 +11,5 @@ export const ProductRoute = () => {
       <Route index element={<Navigate to='/' replace />} />
       <Route path=':productName' element={<Product />} loader={productLoader} />
     </Route>
-  );
-};
+  )
+}

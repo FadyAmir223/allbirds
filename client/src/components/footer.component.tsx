@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 
-import footerData from '@/data/footer.json';
+import footerData from '@/data/footer.json'
 
 const Footer = () => {
   return (
-    <footer className='bg-gray text-silver px-6 py-10'>
-      <nav className='grid gap-y-8 md:gap-x-8 md:grid-cols-4 mb-6 text-center md:text-start'>
+    <footer className='bg-gray px-6 py-10 text-silver'>
+      <nav className='mb-6 grid gap-y-8 text-center md:grid-cols-4 md:gap-x-8 md:text-start'>
         {footerData.sections.map((section) => (
           <div key={section.heading}>
-            <h5 className='text-[13px] tracking-[0.5px] font-bold mb-4 uppercase'>
+            <h5 className='mb-4 text-[13px] font-bold uppercase tracking-[0.5px]'>
               {section.heading}
             </h5>
             <ul>
@@ -38,7 +38,7 @@ const Footer = () => {
         <Link to='/pages/accessability'>accessability</Link>
       </p>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

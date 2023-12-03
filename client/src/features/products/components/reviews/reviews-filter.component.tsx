@@ -1,5 +1,5 @@
 const ReviewsFilter = () => {
-  return <div>ReviewsFilter</div>;
-};
+  return <div>ReviewsFilter</div>
+}
 
-export default ReviewsFilter;
+export default ReviewsFilter

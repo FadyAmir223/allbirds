@@ -1,23 +1,23 @@
-import { Link } from 'react-router-dom';
-import { TfiClose } from 'react-icons/tfi';
+import { Link } from 'react-router-dom'
+import { TfiClose } from 'react-icons/tfi'
 
-import { CartIcon } from './cart-icon.component';
-import Drawer from '@/components/drawer.component';
-import LinkCustom from '@/components/link-custom.component';
-import CloseButton from '@/components/close-button.component';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { CartIcon } from './cart-icon.component'
+import CloseButton from '@/components/close-button.component'
+import Drawer from '@/components/drawer.component'
+import LinkCustom from '@/components/link-custom.component'
+import { cn } from '@/utils/cn.util'
 import {
   addCartItem,
   deleteCartItem,
   removeCartItem,
   toggleCart,
-} from '../store/cart.slice';
-import { cn } from '@/utils/cn.util';
-import type { CartProduct } from '../types/cart.type';
+} from '../store/cart.slice'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import type { CartProduct } from '../types/cart.type'
 
 type CartProps = {
-  handleNavClose: () => void;
-};
+  handleNavClose: () => void
+}
 
 const shopItems = [
   { title: "shop men's", url: '/collections/mens' },
@@ -25,34 +25,34 @@ const shopItems = [
   { title: 'shop socks', url: '/collections/socks' },
   { title: "shop men's sale", url: '/collections/sale-mens-shoes' },
   { title: "shop women's sale", url: '/collections/sale-womens-shoes' },
-];
+]
 
 export const Cart = ({ handleNavClose }: CartProps) => {
-  const cart = useAppSelector((state) => state.cart);
-  const dispatch = useAppDispatch();
+  const cart = useAppSelector((state) => state.cart)
+  const dispatch = useAppDispatch()
 
   const handleCartToggle = () => {
-    handleNavClose();
-    dispatch(toggleCart());
-  };
+    handleNavClose()
+    dispatch(toggleCart())
+  }
 
   const handleCartClose = () => {
-    dispatch(toggleCart());
-  };
+    dispatch(toggleCart())
+  }
 
   const handleAddCartItem = (item: CartProduct) => {
-    dispatch(addCartItem(item));
-  };
+    dispatch(addCartItem(item))
+  }
 
   const handleRemoveCartItem = (item: CartProduct) => {
-    const { handle, editionId, size } = item;
-    dispatch(removeCartItem({ handle, editionId, size }));
-  };
+    const { handle, editionId, size } = item
+    dispatch(removeCartItem({ handle, editionId, size }))
+  }
 
   const handleDeleteCartItem = (item: CartProduct) => {
-    const { handle, editionId, size } = item;
-    dispatch(deleteCartItem({ handle, editionId, size }));
-  };
+    const { handle, editionId, size } = item
+    dispatch(deleteCartItem({ handle, editionId, size }))
+  }
 
   return (
     <>
@@ -65,25 +65,25 @@ export const Cart = ({ handleNavClose }: CartProps) => {
         className='p-4'
         handleClose={handleCartClose}
       >
-        <div className='relative text-center border-b-4 border-b-silver pb-2'>
+        <div className='relative border-b-4 border-b-silver pb-2 text-center'>
           <CloseButton position='left' onClick={handleCartClose} />
 
-          <div className='scale-75 mb-1 inline-block'>
+          <div className='mb-1 inline-block scale-75'>
             <CartIcon />
           </div>
 
-          <p className='text-gray text-[10px] leading-[10px]'>
-            You're<span className='font-semibold text-[9.7px]'> 75$ </span>
+          <p className='text-[10px] leading-[10px] text-gray'>
+            You're<span className='text-[9.7px] font-semibold'> 75$ </span>
             away from the free shipping!
           </p>
         </div>
 
         {cart.totalAmount === 0 ? (
           <div className='text-center'>
-            <p className='capitalize mt-4 mb-4 font-medium text-sm'>
+            <p className='mb-4 mt-4 text-sm font-medium capitalize'>
               your cart is empty
             </p>
-            <ul className='flex flex-col gap-2 w-3/5 items-center mx-auto'>
+            <ul className='mx-auto flex w-3/5 flex-col items-center gap-2'>
               {shopItems.map((shopItem) => (
                 <li key={shopItem.url} className='w-full'>
                   <LinkCustom
@@ -103,17 +103,17 @@ export const Cart = ({ handleNavClose }: CartProps) => {
             <ul>
               {cart.items.map((item) => (
                 <li
-                  className='py-5 border-b last-of-type:border-b-2 border-b-gray flex items-center gap-x-5'
+                  className='flex items-center gap-x-5 border-b border-b-gray py-5 last-of-type:border-b-2'
                   key={item.editionId + item.size}
                 >
                   <Link to={'/products/' + item.handle}>
                     <img
                       src={item.image}
                       alt={item.name}
-                      className='w-[6.25rem] bg-silver object-fit aspect-square'
+                      className='object-fit aspect-square w-[6.25rem] bg-silver'
                     />
                   </Link>
-                  <div className='flex flex-col justify-between flex-grow text-gray gap-y-3'>
+                  <div className='flex flex-grow flex-col justify-between gap-y-3 text-gray'>
                     <div className='flex justify-between'>
                       <Link to={'/products/' + item.handle}>
                         <div>
@@ -131,19 +131,19 @@ export const Cart = ({ handleNavClose }: CartProps) => {
                       </button>
                     </div>
 
-                    <div className='flex justify-between items-center'>
-                      <div className='border-2 border-gray-light p-0.5 flex gap-x-4'>
+                    <div className='flex items-center justify-between'>
+                      <div className='flex gap-x-4 border-2 border-gray-light p-0.5'>
                         <button
-                          className='text-gray-light text-lg w-5 h-5 flex justify-center items-center'
+                          className='flex h-5 w-5 items-center justify-center text-lg text-gray-light'
                           onClick={() => handleRemoveCartItem(item)}
                         >
                           −
                         </button>
-                        <span className='text-sm text-gray pointer-events-none'>
+                        <span className='pointer-events-none text-sm text-gray'>
                           {item.amount}
                         </span>
                         <button
-                          className='text-gray-light text-lg w-5 h-5 flex justify-center items-center'
+                          className='flex h-5 w-5 items-center justify-center text-lg text-gray-light'
                           onClick={() => handleAddCartItem(item)}
                         >
                           +
@@ -170,7 +170,7 @@ export const Cart = ({ handleNavClose }: CartProps) => {
               ))}
             </ul>
 
-            <div className='flex justify-between items-center mt-3 mb-6'>
+            <div className='mb-6 mt-3 flex items-center justify-between'>
               <span>subtotal</span>
               <span>${cart.totalPrice}</span>
             </div>
@@ -186,5 +186,5 @@ export const Cart = ({ handleNavClose }: CartProps) => {
         )}
       </Drawer>
     </>
-  );
-};
+  )
+}

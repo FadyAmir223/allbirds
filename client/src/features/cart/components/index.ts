@@ -1,2 +1,2 @@
-export * from './cart.component';
-export * from './cart-icon.component';
+export * from './cart.component'
+export * from './cart-icon.component'

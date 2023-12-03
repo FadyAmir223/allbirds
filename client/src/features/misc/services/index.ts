@@ -1,2 +1,2 @@
-export * from './home.loader';
-export * from './refactorCollectionsToSlides';
+export * from './home.loader'
+export * from './refactorCollectionsToSlides'

@@ -1,19 +1,19 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 
 export const NotFound = () => {
   return (
-    <section className='bg-brown w-full h-[100dvh] grid place-items-center text-gray text-center'>
+    <section className='grid h-[100dvh] w-full place-items-center bg-brown text-center text-gray'>
       <div>
-        <h2 className='uppercase tracking-[2px] text-xl font-bold'>
+        <h2 className='text-xl font-bold uppercase tracking-[2px]'>
           oh, nothing to see here
         </h2>
-        <p className='mt-6 mb-4 text-sm'>
+        <p className='mb-4 mt-6 text-sm'>
           The page you requested does not exist.
         </p>
-        <Link to='/' className='capitalize underline text-sm'>
+        <Link to='/' className='text-sm capitalize underline'>
           go home
         </Link>
       </div>
     </section>
-  );
-};
+  )
+}

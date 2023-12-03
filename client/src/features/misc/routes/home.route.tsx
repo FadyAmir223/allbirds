@@ -1,16 +1,17 @@
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom'
 
-import Hero from '../components/hero.component';
-import SaleAd from '../components/sale-ad.component';
-import { Approach } from '../components/approach.component';
-import EmailServiceForm from '../components/email-service-form.component';
-import { type SectionDesktop, Slider } from '../components/slider.component';
-import gifts from '../data/gifts.json';
-import shopCollections from '../data/shop-collections.json';
-import stories from '../data/stories.json';
+import { Approach } from '../components/approach.component'
+import EmailServiceForm from '../components/email-service-form.component'
+import Hero from '../components/hero.component'
+import SaleAd from '../components/sale-ad.component'
+import { Slider } from '../components/slider.component'
+import gifts from '../data/gifts.json'
+import shopCollections from '../data/shop-collections.json'
+import stories from '../data/stories.json'
+import type { SectionDesktop } from '../components/slider.component'
 
 export const Home = () => {
-  const saleProducts = useLoaderData() as SectionDesktop[];
+  const saleProducts = useLoaderData() as SectionDesktop[]
 
   return (
     <main className='lg:pt-7'>
@@ -62,5 +63,5 @@ export const Home = () => {
       <EmailServiceForm />
       <Approach />
     </main>
-  );
-};
+  )
+}

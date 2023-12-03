@@ -29,19 +29,19 @@
 
 @layer components {
   .contain {
-    @apply px-6 mx-auto;
+    @apply mx-auto px-6;
   }
 
   .header-nav {
-    @apply min-w-[42px] min-h-[42px] cursor-pointer uppercase grid place-items-center text-[9.4px] leading-[1.75px] tracking-[1.4px] font-bold hover:underline;
+    @apply grid min-h-[42px] min-w-[42px] cursor-pointer place-items-center text-[9.4px] font-bold uppercase leading-[1.75px] tracking-[1.4px] hover:underline;
   }
 
   .allbirds-font {
-    @apply uppercase leading-[1.5] text-[12.7px] font-bold tracking-[2px];
+    @apply text-[12.7px] font-bold uppercase leading-[1.5] tracking-[2px];
   }
 
   .dropdown-mobile {
-    @apply allbirds-font text-[9px] px-7 py-4;
+    @apply allbirds-font px-7 py-4 text-[9px];
   }
 }
 

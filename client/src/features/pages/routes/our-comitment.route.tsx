@@ -1,5 +1,5 @@
 const OurComitment = () => {
-  return <div>OurComitment</div>;
-};
+  return <div>OurComitment</div>
+}
 
-export default OurComitment;
+export default OurComitment

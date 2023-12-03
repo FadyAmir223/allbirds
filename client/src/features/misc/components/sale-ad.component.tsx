@@ -1,17 +1,17 @@
-import LinkCustom from '@/components/link-custom.component';
-import heroLinks from '../data/men-women-url.json';
+import LinkCustom from '@/components/link-custom.component'
+import heroLinks from '../data/men-women-url.json'
 
 type SaleAdProps = {
-  imgUrl: string;
-  imgUrlMobile: string;
-  imgAlt?: string;
-  headerText: string;
-  paragraphText: string;
+  imgUrl: string
+  imgUrlMobile: string
+  imgAlt?: string
+  headerText: string
+  paragraphText: string
   links?: {
-    text: string;
-    url: string;
-  }[];
-};
+    text: string
+    url: string
+  }[]
+}
 
 const SaleAd = ({
   imgUrl,
@@ -26,7 +26,7 @@ const SaleAd = ({
       <img
         src={imgUrl}
         alt={imgAlt}
-        className='h-[83dvh] w-full object-cover hidden md:block'
+        className='hidden h-[83dvh] w-full object-cover md:block'
       />
 
       <img
@@ -35,15 +35,15 @@ const SaleAd = ({
         className='h-64 w-full object-cover md:hidden'
       />
 
-      <div className='text-gray text-center mt-8 mb-14 max-w-lg mx-auto'>
-        <h4 className='capitalize font-bold text-2xl md:text-[26px]'>
+      <div className='mx-auto mb-14 mt-8 max-w-lg text-center text-gray'>
+        <h4 className='text-2xl font-bold capitalize md:text-[26px]'>
           {headerText}
         </h4>
-        <p className='text-[12px] md:text-[12px] mt-2 mb-7 tracking-[0.8px]'>
+        <p className='mb-7 mt-2 text-[12px] tracking-[0.8px] md:text-[12px]'>
           {paragraphText}
         </p>
 
-        <div className='flex gap-5 justify-center w-[310px] mx-auto'>
+        <div className='mx-auto flex w-[310px] justify-center gap-5'>
           {links.map((heroLink) => (
             <LinkCustom
               key={heroLink.text}
@@ -56,7 +56,7 @@ const SaleAd = ({
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default SaleAd;
+export default SaleAd
