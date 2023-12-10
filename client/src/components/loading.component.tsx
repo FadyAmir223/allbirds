@@ -1,6 +1,6 @@
 const Loading = () => {
   return (
-    <div className='absolute left-0 top-0 grid h-[100dvh] w-full place-items-center bg-white'>
+    <div className='fixed inset-0 z-[100] grid place-items-center bg-white'>
       <img
         src='/images/main-page/favicon.webp'
         alt='favicon'

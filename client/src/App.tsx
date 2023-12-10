@@ -4,11 +4,9 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom'
-
 import ErrorFallback from '@/components/error-fallback.component'
 import Layout from '@/components/layout.component'
 import { lazyImport } from '@/utils/lazy-import.util'
-import { loader as homeLoader } from './features/misc'
 import { UserRoute } from '@/features/auth'
 import { CollectionRoute } from '@/features/collections'
 import { PagesRoute } from '@/features/pages'
@@ -25,7 +23,7 @@ const App = () => {
         createRoutesFromElements(
           <Route path='/' element={<Layout />} errorElement={<ErrorFallback />}>
             <Route path='*' element={<NotFound />} />
-            <Route index element={<Home />} loader={homeLoader} />
+            <Route index element={<Home />} />
             {CollectionRoute()}
             {ProductRoute()}
             {UserRoute()}

@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
-import { Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react'
-
 import type { Swiper as SwiperType } from 'swiper/types'
-
+import { Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
-
 import screenSize from '@/data/screen-size.json'
 
 type ProductImageSliderProps = {

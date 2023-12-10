@@ -3,7 +3,6 @@ import { useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { FaChevronDown } from 'react-icons/fa'
 import Markdown from 'react-markdown'
-
 import AddToCartModal from './add-to-cart-modal.component'
 import GetNotifiedModal from './get-notified-modal.component'
 import ProductImageSlider from './product-image-slider.component'
@@ -15,11 +14,11 @@ import ColorButton from '@/components/product/color-button.component'
 import SizeButton from '@/components/product/size-button.component'
 import { productQuery } from '../../services/product.query'
 import { cn } from '@/utils/cn.util'
+import type { ProductDetailed, ReviewsHeadline } from '../..'
+import type { PureCartProduct } from '@/features/cart'
 import { addCartItem } from '@/features/cart'
 import { SlideCard } from '@/features/misc'
 import { useAppDispatch } from '@/store/hooks'
-import type { ProductDetailed, ReviewsHeadline } from '../..'
-import type { PureCartProduct } from '@/features/cart'
 
 type ProductDetailsProps = {
   initProduct: ProductDetailed

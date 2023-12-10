@@ -1,8 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import { FaArrowRightLong } from 'react-icons/fa6'
 import { RiCloseLine } from 'react-icons/ri'
-
-import Checkbox from './checkbox.component'
+import { Checkbox } from './checkbox.component'
 import Drawer from '@/components/drawer.component'
 import SizeButton from '@/components/product/size-button.component'
 import { cn } from '@/utils/cn.util'

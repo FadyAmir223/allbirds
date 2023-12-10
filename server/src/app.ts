@@ -1,20 +1,20 @@
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import cookieParser from 'cookie-parser';
+import express from 'express'
+import cors from 'cors'
+import helmet from 'helmet'
+import cookieParser from 'cookie-parser'
 
-import { CLIENT_DOMAIN, NODE_ENV } from './config/env.js';
-import api from './routes/api.js';
+import { CLIENT_DOMAINS } from './config/env.js'
+import api from './routes/api.js'
 
-const app = express();
+const app = express()
 
 app.use(
   cors({
-    origin: CLIENT_DOMAIN,
+    origin: CLIENT_DOMAINS,
     methods: 'GET,POST,DELETE,PUT,PATCH',
     credentials: true,
-  })
-);
+  }),
+)
 
 // app.use(
 //   helmet({
@@ -28,10 +28,10 @@ app.use(
 //   })
 // );
 
-app.use(express.json());
+app.use(express.json())
 
-app.use(cookieParser());
+app.use(cookieParser())
 
-app.use('/api', api);
+app.use('/api', api)
 
-export default app;
+export default app

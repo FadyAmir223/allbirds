@@ -1,11 +1,12 @@
 import { ComponentPropsWithoutRef } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
-
 import { cn } from '@/utils/cn.util'
 
 const styleTypes = {
   normal: 'hover:bg-white hover:text-gray',
   invert: 'bg-white text-gray hover:bg-gray hover:text-white',
+  black:
+    'bg-black text-white border-2 border-transparent hover:bg-transparent hover:text-black hover:border-black',
 }
 
 type ExtraProps = {

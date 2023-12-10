@@ -1,11 +1,10 @@
 import { LoaderFunctionArgs } from 'react-router-dom'
-
+import { queryClient } from '@/lib/react-query'
 import {
   collectionFiltersQuery,
   collectionKeys,
   collectionQuery,
 } from './collection.query'
-import { queryClient } from '@/lib/react-query'
 import { ensureType } from '../utils/ensureType.util'
 import { type Collection, type Filters } from '..'
 import { refactorCollectionsToSlides } from '@/features/misc'

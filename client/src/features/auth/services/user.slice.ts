@@ -1,23 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type UserInitialState = {
-  user: string | null
+  isLoggedIn: boolean
 }
 
 const initialState: UserInitialState = {
-  user: null,
+  isLoggedIn: false,
 }
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setCurrent: (state, action: PayloadAction<string>) => {
-      state.user = action.payload
+    logUserState: (state, action: PayloadAction<boolean>) => {
+      state.isLoggedIn = action.payload
     },
   },
 })
 
-export const { setCurrent } = userSlice.actions
+export const { logUserState } = userSlice.actions
 export const userReducer = userSlice.reducer
 export type { UserInitialState }

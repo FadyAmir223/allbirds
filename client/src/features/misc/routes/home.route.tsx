@@ -1,17 +1,38 @@
-import { useLoaderData } from 'react-router-dom'
-
+import { useEffect, useState } from 'react'
+import { useQueries } from '@tanstack/react-query'
 import { Approach } from '../components/approach.component'
 import EmailServiceForm from '../components/email-service-form.component'
 import Hero from '../components/hero.component'
 import SaleAd from '../components/sale-ad.component'
-import { Slider } from '../components/slider.component'
+import { SectionDesktop, Slider } from '../components/slider.component'
+import { Spinner } from '@/components/spinner.component'
 import gifts from '../data/gifts.json'
 import shopCollections from '../data/shop-collections.json'
 import stories from '../data/stories.json'
-import type { SectionDesktop } from '../components/slider.component'
+import { refactorCollectionsToSlides } from '..'
+import { collectionSaleQuery } from '@/features/collections'
 
 export const Home = () => {
-  const saleProducts = useLoaderData() as SectionDesktop[]
+  const query = { type: 'shoes' }
+
+  const [
+    { data: saleMen, isLoading: isLoadingSaleMen },
+    { data: saleWomen, isLoading: isLoadingSaleWomen },
+  ] = useQueries({
+    queries: [
+      collectionSaleQuery({ ...query, gender: 'mens' }),
+      collectionSaleQuery({ ...query, gender: 'womens' }),
+    ],
+  })
+
+  const [saleProducts, setSaleProducts] = useState<SectionDesktop[] | null>(
+    null,
+  )
+
+  useEffect(() => {
+    if (saleMen && saleWomen)
+      setSaleProducts(refactorCollectionsToSlides([saleMen, saleWomen]))
+  }, [saleMen, saleWomen])
 
   return (
     <main className='lg:pt-7'>
@@ -32,7 +53,11 @@ export const Home = () => {
         paragraphText='Save 20% on our best-selling warm, water-repellent styles.'
       />
 
-      <Slider title='now on sale' slides={saleProducts} />
+      {saleProducts && !isLoadingSaleMen && !isLoadingSaleWomen ? (
+        <Slider title='now on sale' slides={saleProducts} />
+      ) : (
+        <Spinner />
+      )}
 
       {/* keep calm & travel on */}
       <SaleAd

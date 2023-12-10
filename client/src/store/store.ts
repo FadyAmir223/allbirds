@@ -1,11 +1,10 @@
+import { configureStore } from '@reduxjs/toolkit'
 import { PersistConfig, persistReducer, persistStore } from 'redux-persist'
 import autoMergeLevel1 from 'redux-persist/lib/stateReconciler/autoMergeLevel1'
 import storage from 'redux-persist/lib/storage'
 import thunk from 'redux-thunk'
-
-import { userReducer } from '@/features/auth'
+import { UserInitialState, userReducer } from '@/features/auth'
 import { CartInitialState, cartReducer } from '@/features/cart'
-import { configureStore } from '@reduxjs/toolkit'
 
 const cartPersistConfig: PersistConfig<CartInitialState> = {
   key: 'cart',
@@ -14,9 +13,14 @@ const cartPersistConfig: PersistConfig<CartInitialState> = {
   stateReconciler: autoMergeLevel1,
 }
 
+const userPersistConfig: PersistConfig<UserInitialState> = {
+  key: 'user',
+  storage,
+}
+
 const store = configureStore({
   reducer: {
-    user: userReducer,
+    user: persistReducer(userPersistConfig, userReducer),
     cart: persistReducer(cartPersistConfig, cartReducer),
   },
   middleware: [thunk],

@@ -12,18 +12,20 @@
   ],
   "importOrderParserPlugins": ["jsx", "typescript"],
   "importOrder": [
+    "<BUILT_IN_MODULES>",
     "^react$",
     "^react-dom$",
     "^react-router-dom$",
     "^@tanstack/react-query$",
-    "^react",
-    "<THIRD_PARTY_MODULES>",
-    "",
-    "^[.@].*component.*",
-    "^[.@].*query.*",
-    "^[.@].*util.*",
-    "^[.@](?!component|query|util)",
+    "redux",
+    "react",
+    "devtools",
+    ".component$",
+    ".query$",
+    ".util$",
+    ".json$",
     "<TYPES>",
-    "<TYPES>^[.@]"
+    "<TYPES>^[@.]",
+    "<THIRD_PARTY_MODULES>"
   ]
 }

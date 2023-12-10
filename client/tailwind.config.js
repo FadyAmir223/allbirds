@@ -29,6 +29,7 @@ export default {
         tBodyEven: '#f1f6f8',
         tBodyOdd: '#eeebe5',
         'grayish-brown': '#9c9487',
+        'dark-form': '#f1ebe7',
       },
     },
   },

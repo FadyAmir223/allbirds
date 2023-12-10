@@ -133,9 +133,9 @@ DELETE {{url}}/api/cart/delete
 POST {{url}}/api/auth/logout
 
 ## local
-### signup
+### register
 
-POST {{url}}/api/auth/local/signup
+POST {{url}}/api/auth/local/register
 
 {
   "firstName": "fady",
@@ -145,9 +145,9 @@ POST {{url}}/api/auth/local/signup
   "confirmPassword": "P@ssw0rd"
 }
 
-### login
+### signin
 
-POST {{url}}/api/auth/local/login
+POST {{url}}/api/auth/local/signin
 
 {
   "username": "fadymir223@gmail.com",
@@ -156,7 +156,7 @@ POST {{url}}/api/auth/local/login
 
 ### verify email
 
-GET {{url}}/api/auth/verify/8f6d9ceb-18d6-4ea7-a703-21e64fc6208b
+POST {{url}}/api/auth/verify/8f6d9ceb-18d6-4ea7-a703-21e64fc6208b
 
 
 ## social
