@@ -1,18 +1,16 @@
 import { useLoaderData, useParams } from 'react-router-dom'
 import { useQueries } from '@tanstack/react-query'
-
 import MaterialFeatures from '../components/product/material-features.component'
 import ProductDetails from '../components/product/product-details.component'
 import GeneralReview from '../components/reviews/general-review.component'
 import Reviews from '../components/reviews/reviews.component'
 import { productQuery, productReviewsQuery } from '../services/product.query'
-import { type ProductDetailed, type Reviews as ReviewsType } from '..'
+import { loader as productLoader } from '../services/product.loader'
 
 const Product = () => {
-  const [initProduct, initReviews] = useLoaderData() as [
-    ProductDetailed,
-    ReviewsType,
-  ]
+  const [initProduct, initReviews] = useLoaderData() as Awaited<
+    ReturnType<typeof productLoader>
+  >
 
   const params = useParams()
   const productName = params.productName as string

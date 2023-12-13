@@ -1,12 +1,11 @@
 import { Fragment, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
-
 import ColorButton from '@/components/product/color-button.component'
 import SideButton from '@/components/product/size-button.component'
 import { cn } from '@/utils/cn.util'
-import { type CollectionProduct, type SelectedFilters } from '..'
 import screenSize from '@/data/screen-size.json'
+import { type CollectionProduct, type SelectedFilters } from '..'
 import { addCartItem, toggleCart } from '@/features/cart'
 import { useAppDispatch } from '@/store/hooks'
 
@@ -137,7 +136,7 @@ const ProductCard = ({
 
       {/* TODO: to={'/products/' + currProduct.handle} */}
       <Link to={'/products/' + product.handle} className='relative z-10'>
-        <p className='relative z-10 mt-2 px-3 text-[11px] font-semibold uppercase md:px-0'>
+        <p className='relative z-10 mt-2 px-3 text-[11px] font-[500] uppercase md:px-0'>
           {product.name}
         </p>
       </Link>
@@ -207,9 +206,7 @@ const ProductCard = ({
       </div>
 
       <div className='absolute z-20 box-content hidden w-full -translate-x-4 bg-white pb-4 pl-4 pr-4 group-hover:shadow-2xl group-hover:shadow-gray md:group-hover:block'>
-        <p className='mb-1 mt-2 text-[11px] font-semibold uppercase'>
-          quick add
-        </p>
+        <p className='mb-1 mt-2 text-[11px] font-[500] uppercase'>quick add</p>
         <div
           className={cn(
             'grid gap-[6px]',
@@ -230,7 +227,7 @@ const ProductCard = ({
       <div className='mb-1 mt-3 border-t border-t-gray px-3 pb-1 pt-2 md:hidden md:px-0'>
         <div>
           <div className='flex w-full items-center justify-between'>
-            <p className='text-[10px] font-semibold uppercase'>quick add</p>
+            <p className='text-[10px] font-[500] uppercase'>quick add</p>
             <button
               className='relative h-[14px] w-[14px]'
               onClick={handleToggleQuickAdd}

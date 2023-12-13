@@ -2,12 +2,11 @@ import { ReactNode, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
-
 import StarRating from '../star-rating.component'
 import { productReviewsQuery } from '../../services/product.query'
 import { cn } from '@/utils/cn.util'
-import { type Reviews } from '../..'
 import screenSize from '@/data/screen-size.json'
+import { type Reviews } from '../..'
 
 // TODO: add/remove review - after login, purchase
 
@@ -110,7 +109,7 @@ const Reviews = ({ initReviews, children }: ReviewsProps) => {
                       {review.content}
                       <label
                         htmlFor={review._id}
-                        className='block cursor-pointer text-[15px] font-semibold underline'
+                        className='block cursor-pointer text-[15px] font-[500] underline'
                       >
                         Read Less
                       </label>
@@ -118,7 +117,7 @@ const Reviews = ({ initReviews, children }: ReviewsProps) => {
                     {isExpanded && (
                       <label
                         htmlFor={review._id}
-                        className='block cursor-pointer text-[15px] font-semibold underline peer-checked:hidden'
+                        className='block cursor-pointer text-[15px] font-[500] underline peer-checked:hidden'
                       >
                         Read More
                       </label>
@@ -137,9 +136,7 @@ const Reviews = ({ initReviews, children }: ReviewsProps) => {
                   <ul className='text-[13px]'>
                     {review.customFields.map((field) => (
                       <li key={field._id} className='mb-0.5'>
-                        <span className='mr-3 font-semibold'>
-                          {field.title}
-                        </span>
+                        <span className='mr-3 font-[500]'>{field.title}</span>
                         <span>{field.value}</span>
                       </li>
                     ))}

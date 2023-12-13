@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-
 import LinkCustom from '@/components/link-custom.component'
 import { cn } from '@/utils/cn.util'
 import heroLinks from '../data/men-women-url.json'
@@ -42,7 +41,7 @@ const Hero = () => {
         />
 
         <div className='absolute left-0 top-1/2 hidden -translate-y-1/2 bg-white py-14 pr-14 lg:block'>
-          <h4 className={cn('allbirds-font mb-4 font-semibold text-gray')}>
+          <h4 className={cn('allbirds-font mb-4 font-[500] text-gray')}>
             featured
           </h4>
           <ul className='text-[12px] capitalize tracking-[1px] text-silver-dark'>

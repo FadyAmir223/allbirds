@@ -186,7 +186,7 @@ const ProductDetails = ({
                     className='flex w-full items-center justify-between py-3'
                     onClick={() => handleDropdownToggle(idx)}
                   >
-                    <span className='text-[10px] font-semibold uppercase tracking-[2px]'>
+                    <span className='text-[10px] font-[500] uppercase tracking-[2px]'>
                       {item.title}
                     </span>
                     <span
@@ -236,7 +236,7 @@ const ProductDetails = ({
                 key={edition.edition}
                 className='mb-5 hidden last:mb-0 lg:block'
               >
-                <h3 className='mb-2 text-[12px] font-semibold uppercase tracking-[2px]'>
+                <h3 className='mb-2 text-[12px] font-[500] uppercase tracking-[2px]'>
                   {edition.edition}
                 </h3>
 
@@ -278,7 +278,7 @@ const ProductDetails = ({
           </div>
 
           <div>
-            <p className='mb-2 text-[12px] font-semibold uppercase tracking-[2px]'>
+            <p className='mb-2 text-[12px] font-[500] uppercase tracking-[2px]'>
               select size
             </p>
 
@@ -301,7 +301,7 @@ const ProductDetails = ({
                 We recommend you size up.{' '}
               </span>
               <button
-                className='text-[13px] font-semibold underline'
+                className='text-[13px] font-[500] underline'
                 onClick={handleSizeChartToggle}
               >
                 See Size Chart
@@ -322,7 +322,7 @@ const ProductDetails = ({
             </p>
 
             <div>
-              <p className='mb-4 text-xl font-semibold'>Also Cosider</p>
+              <p className='mb-4 text-xl font-[500]'>Also Cosider</p>
               <div className='grid grid-cols-2 gap-x-4'>
                 {product.recommendations.map((recommendation) => (
                   // path not scraped

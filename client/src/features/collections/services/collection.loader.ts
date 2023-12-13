@@ -14,10 +14,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   const queries = ensureType(type)
   const otherGender = queries.gender && (type === 'mens' ? 'womens' : 'mens')
 
-  const promises = []
   const collectionP = queryClient.ensureQueryData(collectionQuery(queries))
   const filtersP = queryClient.ensureQueryData(collectionFiltersQuery(queries))
-  promises.push(collectionP, filtersP)
+  const promises = [collectionP, filtersP]
 
   let suggestions: Collection | undefined
 
@@ -54,5 +53,5 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     suggestions as Collection,
   ])
 
-  return [collection, filters, suggestionSlides]
+  return [collection, filters, suggestionSlides] as const
 }

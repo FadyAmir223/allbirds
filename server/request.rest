@@ -1,9 +1,10 @@
 @url = http://localhost:3000
 @product-name = mens-tree-runners
+
+
 # collections
 ## collection
 ### mens
-
 GET {{url}}/api/collections
   ?type=shoes
   &gender=mens
@@ -11,7 +12,6 @@ GET {{url}}/api/collections
   &limit=1
 
 ### womens
-
 GET {{url}}/api/collections
   ?type=shoes
   &gender=womens
@@ -19,7 +19,6 @@ GET {{url}}/api/collections
   &limit=1
 
 ### socks
-
 GET {{url}}/api/collections
   ?type=socks
   &pages=1
@@ -28,7 +27,6 @@ GET {{url}}/api/collections
 
 ## sale of collection
 ### mens
-
 GET {{url}}/api/collections/sale
   ?type=shoes
   &gender=mens
@@ -36,7 +34,6 @@ GET {{url}}/api/collections/sale
   &limit=1
 
 ### womens
-
 GET {{url}}/api/collections/sale
   ?type=shoes
   &gender=womens
@@ -44,37 +41,32 @@ GET {{url}}/api/collections/sale
 
 ## filters of collection
 ### mens
-
 GET {{url}}/api/collections/filters
   ?type=shoes
   &gender=mens
 
 ### womens
-
 GET {{url}}/api/collections/filters
   ?type=shoes
   &gender=womens
 
 ### socks
-
 GET {{url}}/api/collections/filters
   ?type=socks
 
 
 # products
 ### product
-
 GET {{url}}/api/products/{{product-name}}
 
 ### product reviews
-
 GET {{url}}/api/products/{{product-name}}/reviews
   ?page=1
   &limit=1
 
 ### add review
-
 POST {{url}}/api/products/{{product-name}}/reviews
+
 
 {
   "score": 1,
@@ -90,51 +82,44 @@ POST {{url}}/api/products/{{product-name}}/reviews
 }
 
 ### remove review
-
 DELETE {{url}}/api/products/{{product-name}}/reviews/64e8d7a67425bfaeab10edf2
 
 # cart
 ### cart
-
 GET {{url}}/api/cart
 
 ### add cart itme
-
 POST {{url}}/api/cart/add
 
 {
-    "handle": "mens-tree-runners",
-    "editionId": 6660112482384,
-    "size": "10"
+  "handle": "mens-tree-runners",
+  "editionId": 6660112482384,
+  "size": "10"
 }
 
 ### remove cart item
-
 DELETE {{url}}/api/cart/remove
 
 {
-    "editionId": 6660112482384,
-    "size": "8"
+  "editionId": 6660112482384,
+  "size": "8"
 }
 
 ### delete cart item
-
 DELETE {{url}}/api/cart/delete
 
 {
-    "editionId": 6660112482384,
-    "size": "8"
+  "editionId": 6660112482384,
+  "size": "8"
 }
 
 
 # auth
 ### logout
-
 POST {{url}}/api/auth/logout
 
 ## local
 ### register
-
 POST {{url}}/api/auth/local/register
 
 {
@@ -146,7 +131,6 @@ POST {{url}}/api/auth/local/register
 }
 
 ### signin
-
 POST {{url}}/api/auth/local/signin
 
 {
@@ -155,7 +139,6 @@ POST {{url}}/api/auth/local/signin
 }
 
 ### verify email
-
 POST {{url}}/api/auth/verify/8f6d9ceb-18d6-4ea7-a703-21e64fc6208b
 
 
@@ -165,13 +148,11 @@ POST {{url}}/api/auth/verify/8f6d9ceb-18d6-4ea7-a703-21e64fc6208b
 GET {{url}}/api/auth/google
 
 ### facebook
-
 GET {{url}}/api/auth/facebook
 
 
 ## reset password
 ### request reset password
-
 POST {{url}}/api/auth/password/request-reset-token
 
 {
@@ -179,7 +160,6 @@ POST {{url}}/api/auth/password/request-reset-token
 }
 
 ### verify reset token
-
 POST {{url}}/api/auth/password/verify-reset-token
 
 {
@@ -188,7 +168,6 @@ POST {{url}}/api/auth/password/verify-reset-token
 }
 
 ### reset password
-
 POST {{url}}/api/auth/password/reset
 
 {
@@ -199,18 +178,19 @@ POST {{url}}/api/auth/password/reset
 }
 
 # user
+###
+GET {{url}}/api/user
+
 ## locations
 ### location
-
 GET {{url}}/api/user/locations
 
 ### add location
-
 POST {{url}}/api/user/locations
 
 {
   "company": "company",
-  "address": "123 street",
+  "address": "1235 street",
   "city": "city",
   "country": "country",
   "state": "state",
@@ -219,11 +199,9 @@ POST {{url}}/api/user/locations
 }
 
 ### remove location
-
 DELETE {{url}}/api/user/locations/64e74175a9a33f6697e1f38e
 
 ### edit location
-
 PATCH {{url}}/api/user/locations/64e7417aa9a33f6697e1f391
 
 {
@@ -234,14 +212,8 @@ PATCH {{url}}/api/user/locations/64e7417aa9a33f6697e1f391
 
 
 ## orders
-###
-
+### make order - bug: fix POST -> GET
 GET {{url}}/api/user/orders
 
 ### order history
-
 GET {{url}}/api/user/orders/history
-
-### make order - bug: fix POST -> GET
-
-GET {{url}}/api/user/orders

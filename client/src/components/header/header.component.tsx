@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { BiHelpCircle, BiSearch } from 'react-icons/bi'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 import { HiOutlineUser } from 'react-icons/hi'
-
 import SearchField from '@/components/header/search-field.component'
 import ShopAd from '@/components/header/shopAd.component'
 import Overlay from '@/components/overlay.component'
@@ -433,7 +432,7 @@ const Header = () => {
                       onClick={handleNavClose}
                     >
                       <img src={feature.imageUrlMobile} alt='' />
-                      <p className='mt-1 text-center text-[11.5px] font-semibold capitalize text-gray'>
+                      <p className='mt-1 text-center text-[11.5px] font-[500] capitalize text-gray'>
                         {feature.text}
                       </p>
                     </Link>

@@ -7,10 +7,11 @@ import {
 import ErrorFallback from '@/components/error-fallback.component'
 import Layout from '@/components/layout.component'
 import { lazyImport } from '@/utils/lazy-import.util'
-import { UserRoute } from '@/features/auth'
+import { AuthRoute } from '@/features/auth'
 import { CollectionRoute } from '@/features/collections'
 import { PagesRoute } from '@/features/pages'
 import { ProductRoute } from '@/features/products'
+import { UserRoute } from '@/features/user'
 
 const mistFactory = () => import('@/features/misc')
 const { Home } = lazyImport(mistFactory, 'Home')
@@ -26,6 +27,7 @@ const App = () => {
             <Route index element={<Home />} />
             {CollectionRoute()}
             {ProductRoute()}
+            {AuthRoute()}
             {UserRoute()}
             {PagesRoute()}
           </Route>,

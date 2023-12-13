@@ -28,7 +28,7 @@ const LinkCustom = ({
     element === 'button' && 'disabled' in props && props.disabled
 
   const style = cn(
-    'py-2 px-[18px] bg-gray text-white focus:outline-0 rounded-sm uppercase text-center border-2 border-gray text-xs font-semibold tracking-[1.5px] w-fit duration-100',
+    'py-2 px-[18px] bg-gray text-white focus:outline-0 rounded-sm uppercase text-center border-2 border-gray text-xs font-[500] tracking-[1.5px] w-fit duration-100',
     { [styleTypes[styleType]]: !isDisabled },
     className,
   )

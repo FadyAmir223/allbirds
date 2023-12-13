@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-
 import StarRating from '../star-rating.component'
 import ProductPrice from './product-price.component'
 import { cn } from '@/utils/cn.util'
@@ -25,7 +24,7 @@ const ProductMainInfo = ({
 }: ProductMainInfoProps) => {
   return (
     <div className={cn(mobile ? 'block lg:hidden' : 'hidden lg:block')}>
-      <Link to='/' className='text-[10px] font-semibold hover:underline'>
+      <Link to='/' className='text-[10px] font-[500] hover:underline'>
         Home /
       </Link>
 
@@ -42,7 +41,7 @@ const ProductMainInfo = ({
         <ProductPrice price={price} salePrice={salePrice} />
 
         {freeShipping && (
-          <span className='ml-2 bg-silver p-1.5 text-[12px] font-semibold uppercase italic tracking-[0.5px]'>
+          <span className='ml-2 bg-silver p-1.5 text-[12px] font-[500] uppercase italic tracking-[0.5px]'>
             free shipping
           </span>
         )}
@@ -55,7 +54,7 @@ const ProductMainInfo = ({
         </div>
 
         {freeShipping && (
-          <span className='ml-2 bg-silver p-1.5 text-[12px] font-semibold uppercase italic tracking-[0.5px] lg:hidden'>
+          <span className='ml-2 bg-silver p-1.5 text-[12px] font-[500] uppercase italic tracking-[0.5px] lg:hidden'>
             free shipping
           </span>
         )}

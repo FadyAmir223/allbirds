@@ -26,7 +26,7 @@ const SideBar = ({
   return (
     <>
       <aside className='hidden w-[265px] self-start p-4 text-gray lg:block'>
-        <Link to='/' className='text-[10px] font-semibold'>
+        <Link to='/' className='text-[10px] font-[500]'>
           Home /
         </Link>
         <SideBarFilters {...props} />

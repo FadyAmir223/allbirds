@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
 import { TfiClose } from 'react-icons/tfi'
-
 import { CartIcon } from './cart-icon.component'
 import CloseButton from '@/components/close-button.component'
 import Drawer from '@/components/drawer.component'
 import LinkCustom from '@/components/link-custom.component'
 import { cn } from '@/utils/cn.util'
+import type { CartProduct } from '../types/cart.type'
 import {
   addCartItem,
   deleteCartItem,
@@ -13,7 +13,6 @@ import {
   toggleCart,
 } from '../store/cart.slice'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import type { CartProduct } from '../types/cart.type'
 
 type CartProps = {
   handleNavClose: () => void
@@ -73,7 +72,7 @@ export const Cart = ({ handleNavClose }: CartProps) => {
           </div>
 
           <p className='text-[10px] leading-[10px] text-gray'>
-            You're<span className='text-[9.7px] font-semibold'> 75$ </span>
+            You're<span className='text-[9.7px] font-[500]'> 75$ </span>
             away from the free shipping!
           </p>
         </div>

@@ -1,88 +1,96 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express'
 
 import {
+  getUserInfo,
   addLocation,
   getLocations,
   removeLocation,
   updateLocation,
   getOrders,
-} from '../../models/user/user.model.js';
-import { SERVER_URL } from '../../config/env.js';
+} from '../../models/user/user.model.js'
+import { SERVER_URL } from '../../config/env.js'
+
+async function httpsGetUser(req: Request, res: Response) {
+  const { status, user } = await getUserInfo(req.user._id)
+
+  res.status(status).json({ user })
+}
 
 async function htppsGetLocations(req: Request, res: Response) {
-  const { status, message, locations } = await getLocations(req.user._id);
-  res.status(status).json({ message, locations });
+  const { status, message, locations } = await getLocations(req.user._id)
+  res.status(status).json({ message, locations })
 }
 
 async function httpsAddLocation(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<Response> {
-  const { address, city, country, state, phone } = req.body;
+  const { address, city, country, state, phone } = req.body
 
   if (!(address && city && country && state && phone))
-    return res.status(400).json({ message: 'some fields are missing' });
+    return res.status(400).json({ message: 'some fields are missing' })
 
-  const { status, locations, message } = await addLocation(
+  const { status, location, message } = await addLocation(
     req.user._id,
-    req.body
-  );
-  res.status(status).json({ locations, message });
+    req.body,
+  )
+  res.status(status).json({ location, message })
 }
 
 async function httpsRemoveLocation(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<Response> {
-  const { id } = req.params;
+  const { id } = req.params
 
   if (!id || id.length !== 24)
-    return res.status(400).json({ message: 'invalid location id' });
+    return res.status(400).json({ message: 'invalid location id' })
 
   const { status, locations, message } = await removeLocation(
     req.user._id,
-    req.params.id
-  );
-  res.status(status).json({ locations, message });
+    req.params.id,
+  )
+  res.status(status).json({ locations, message })
 }
 
 async function httpsUpdateLocation(
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<Response> {
-  const { id } = req.params;
-  const { body } = req;
+  const { id } = req.params
+  const { body } = req
 
   if (!id || id.length !== 24)
-    return res.status(400).json({ message: 'invalid location id' });
+    return res.status(400).json({ message: 'invalid location id' })
 
   if (Object.values(body).every((value) => value === ''))
-    return res.status(400).json({ message: 'no fields to update location' });
+    return res.status(400).json({ message: 'no fields to update location' })
 
   const { status, locations, message } = await updateLocation(
     req.user._id,
     req.params,
-    body
-  );
+    body,
+  )
 
-  res.status(status).json({ locations, message });
+  res.status(status).json({ locations, message })
 }
 
 function httpsOrderCart(req: Request, res: Response) {
-  res.redirect(`${SERVER_URL}/api/cart/orders?userId=${req.user._id}`);
+  res.redirect(`${SERVER_URL}/api/cart/orders?userId=${req.user._id}`)
 }
 
 async function httpsGetOrders(req: Request, res: Response) {
-  const { status, orders, message } = await getOrders(req.user._id);
-  res.status(status).json({ orders, message });
+  const { status, orders, message } = await getOrders(req.user._id)
+  res.status(status).json({ orders, message })
 }
 
 async function httpsGetOrderHistory(req: Request, res: Response) {
-  const { status, orders, message } = await getOrders(req.user._id, true);
-  res.status(status).json({ orders, message });
+  const { status, orders, message } = await getOrders(req.user._id, true)
+  res.status(status).json({ orders, message })
 }
 
 export {
+  httpsGetUser,
   htppsGetLocations,
   httpsAddLocation,
   httpsRemoveLocation,
@@ -90,4 +98,4 @@ export {
   httpsOrderCart,
   httpsGetOrders,
   httpsGetOrderHistory,
-};
+}

@@ -29,6 +29,15 @@ async function getUserByEmail(email) {
   }
 }
 
+async function getUserInfo(id) {
+  try {
+    const user = await User.findById(id, 'username email verified -_id').lean()
+    return { status: 200, user }
+  } catch {
+    return { status: 404, mesage: 'user not found' }
+  }
+}
+
 async function getLocalUser(_email) {
   try {
     const { email, password, id } = await User.findOne(
@@ -150,7 +159,7 @@ async function addLocation(userId, location) {
     ).lean()
 
     if (!locations) return { status: 404, message: 'user not found' }
-    return { status: 201, locations }
+    return { status: 201, location: locations.at(-1) }
   } catch {
     return { status: 500, message: 'unable to add location' }
   }
@@ -428,6 +437,7 @@ async function getUserTrustedDevices(email) {
 export {
   getUserById,
   getUserByEmail,
+  getUserInfo,
   getLocalUser,
   createLocalUser,
   createSocialUser,

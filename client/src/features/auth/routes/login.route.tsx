@@ -7,6 +7,8 @@ import {
   useNavigation,
   useSearchParams,
 } from 'react-router-dom'
+import GoogleSvg from '@/assets/svg/google.svg?react'
+import { FaFacebook } from 'react-icons/fa'
 import { ForgetPasswordForm } from '../components/forget-password-form.component'
 import LinkCustom from '@/components/link-custom.component'
 import { cn } from '@/utils/cn.util'
@@ -98,6 +100,30 @@ const Login = () => {
                 register
               </Link>
             </p>
+
+            <span className='relative my-2 block h-6 before:absolute before:left-0 before:top-1/2 before:h-0.5 before:w-full before:bg-black after:absolute after:left-1/2 after:top-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:bg-dark-form after:px-5 after:content-["or"]' />
+
+            <div>
+              <Link
+                to='/api/auth/google'
+                className='mb-3 flex w-full items-center justify-center rounded-full bg-white p-2 duration-150 hover:opacity-90'
+              >
+                <span className='mr-2 h-5 w-5'>
+                  <GoogleSvg />
+                </span>
+                Sign up with Google
+              </Link>
+
+              <Link
+                to='/api/auth/facebook'
+                className='flex w-full items-center justify-center rounded-full bg-[#1877f2] p-2 text-white duration-150 hover:opacity-90'
+              >
+                <span className='mr-2 scale-[1.35]'>
+                  <FaFacebook />
+                </span>
+                Sign up with Google
+              </Link>
+            </div>
           </>
         )}
       </div>

@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom'
-
 import BottomDrawer from '@/components/bottom-drawer.component'
 import LinkCustom from '@/components/link-custom.component'
-import { CartIcon, toggleCart } from '@/features/cart'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import type { ModalProps } from '../../types/modal.type'
 import type { PureCartProduct } from '@/features/cart'
+import { CartIcon, toggleCart } from '@/features/cart'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 
 type AddToCartModalProps = ModalProps & {
   item: PureCartProduct | null
@@ -55,7 +54,7 @@ const AddToCartModal = ({ item, isOpen, handleClose }: AddToCartModalProps) => {
           </div>
 
           <div className='w-2/5'>
-            <div className='mb-3 flex items-center justify-between font-semibold'>
+            <div className='mb-3 flex items-center justify-between font-[500]'>
               <span className='text-sm'>Subtotal</span>
               <span className='text-sm'>${totalPrice}</span>
             </div>

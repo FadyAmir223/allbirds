@@ -6,7 +6,6 @@ import {
   useSearchParams,
 } from 'react-router-dom'
 import { useQueries } from '@tanstack/react-query'
-
 import ProductCard from '../components/product-card.component'
 import SideBar from '../components/side-bar.component'
 import {
@@ -14,14 +13,9 @@ import {
   collectionQuery,
 } from '../services/collection.query'
 import { ensureType } from '../utils/ensureType.util'
-import {
-  type Collection,
-  type FilterKey,
-  type Filters,
-  type FilterValues,
-  type SelectedFilters,
-} from '..'
-import { SectionDesktop, Slider } from '@/features/misc'
+import { type FilterKey, type FilterValues, type SelectedFilters } from '..'
+import { loader as collectionLoader } from '../services/collection.loader'
+import { Slider } from '@/features/misc'
 
 const delimiter = '+'
 
@@ -40,16 +34,16 @@ const Collections = () => {
   const hasGender = ensuredType.gender !== undefined
 
   const [initCollection, initFilters, initSuggestionSlides] =
-    useLoaderData() as [Collection, Filters, SectionDesktop[]]
+    useLoaderData() as Awaited<ReturnType<typeof collectionLoader>>
 
-  const [{ data: collection }, { data: filter }] = useQueries({
+  const [{ data: collection }, { data: _filters }] = useQueries({
     queries: [
       { ...collectionQuery(ensuredType), initialData: initCollection },
       { ...collectionFiltersQuery(ensuredType), initialData: initFilters },
     ],
   })
 
-  const { filters } = filter || {}
+  const { filters } = _filters || {}
   if (!collection || !filters) return
 
   if (!hasGender)
@@ -109,7 +103,7 @@ const Collections = () => {
                     type === gender.type ? (
                       <span
                         key={gender.label}
-                        className='rounded-full border-2 border-gray-light bg-gray px-3.5 py-[3px] font-semibold text-white'
+                        className='rounded-full border-2 border-gray-light bg-gray px-3.5 py-[3px] font-[500] text-white'
                       >
                         {gender.label}
                       </span>

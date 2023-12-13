@@ -1,6 +1,7 @@
 import express from 'express'
 
 import {
+  httpsGetUser,
   htppsGetLocations,
   httpsAddLocation,
   httpsRemoveLocation,
@@ -14,6 +15,7 @@ import needAuth from '../../middlewares/needAuth.js'
 const userRoute = express.Router()
 
 userRoute.use(needAuth)
+userRoute.get('/', httpsGetUser)
 
 const locationRoute = express.Router()
 locationRoute.get('/', htppsGetLocations)

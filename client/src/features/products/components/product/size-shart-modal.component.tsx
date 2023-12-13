@@ -15,7 +15,7 @@ const SizeChartModal = (props: ModalProps) => {
         Did you know that our shoes are actually unisex? You can easily cross
         over to find shoes in your size.
       </p>
-      <p className='mb-5 font-semibold'>Here’s how it works:</p>
+      <p className='mb-5 font-[500]'>Here’s how it works:</p>
       <p className='mb-5'>
         If you wear a men’s size 7, try a women’s size 8 or 9.
       </p>
@@ -26,7 +26,7 @@ const SizeChartModal = (props: ModalProps) => {
       <ul>
         {sizeChartData.map(({ gender, fields }) => (
           <li key={gender} className='mb-12 last-of-type:mb-0'>
-            <h5 className='mb-3 text-[16px] font-semibold uppercase tracking-[1.5px]'>
+            <h5 className='mb-3 text-[16px] font-[500] uppercase tracking-[1.5px]'>
               {gender} shoes
             </h5>
 
