@@ -1,31 +1,101 @@
-import { useState } from 'react'
+import { useReducer } from 'react'
 import { Link, useLoaderData } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { AddressForm } from '../components/address-form.component'
 import BottomDrawer from '@/components/bottom-drawer.component'
 import { locationsQuery } from '../services/user.query'
 import { cn } from '@/utils/cn.util'
-import { loader } from '../services/addresses.loader'
+import { createAction } from '@/utils/createAction.util'
+import type { Location } from '../types/location.type'
+import { useOptimisticDelete } from '../hooks/useOptimisticDelete'
+import { loader as addressesLoader } from '../services/addresses.loader'
+
+type State = {
+  isAdding: boolean
+  isEditing: boolean
+  isDelete: boolean
+  addressToDelete: string
+  addressToEdit: Location | null
+}
+
+type Action =
+  | { type: 'SET_ADDRESS'; payload: State['addressToEdit'] }
+  | { type: 'ADD' }
+  | { type: 'EDIT'; payload: State['addressToEdit'] }
+  | { type: 'CONFIRM_DELETE'; payload: State['addressToDelete'] }
+  | { type: 'DELETE' }
+  | { type: 'CANCLE_DELETE' }
+  | { type: 'BACK' }
+
+const initData: State = {
+  isAdding: false,
+  isEditing: false,
+  isDelete: false,
+  addressToDelete: '',
+  addressToEdit: null,
+}
+
+const reducer = (state = initData, action: Action): State => {
+  switch (action.type) {
+    case 'SET_ADDRESS':
+      return { ...state, addressToEdit: action.payload }
+    case 'ADD':
+      return { ...state, isAdding: true }
+    case 'EDIT':
+      return { ...state, isEditing: true, addressToEdit: action.payload }
+    case 'CONFIRM_DELETE':
+      return { ...state, isDelete: true, addressToDelete: action.payload }
+    case 'DELETE':
+      return { ...state, isDelete: false }
+    case 'CANCLE_DELETE':
+      return { ...state, isDelete: false, addressToDelete: '' }
+    case 'BACK':
+      return {
+        ...state,
+        isAdding: false,
+        isEditing: false,
+        addressToEdit: null,
+      }
+    default:
+      throw new Error('wrong type')
+  }
+}
 
 const Addresses = () => {
-  const initLocation = useLoaderData() as Awaited<ReturnType<typeof loader>>
+  const initLocation = useLoaderData() as Exclude<
+    Awaited<ReturnType<typeof addressesLoader>>,
+    Response
+  >
   const { data: _locations } = useQuery({
     ...locationsQuery,
     initialData: initLocation,
   })
 
-  const [isModalOpen, setModalOpen] = useState(false)
+  const { mutate: deleteAddress } = useOptimisticDelete()
+
+  const [state, dispatch] = useReducer(reducer, initData)
 
   const { locations } = _locations || {}
 
-  const toggleModal = () => setModalOpen(!isModalOpen)
+  const toggleAdd = () => dispatch(createAction('ADD'))
 
-  const handleEdit = () => {}
+  const handleEdit = (address: Location) =>
+    dispatch(createAction('EDIT', address))
 
-  const handleDelete = () => {}
+  const backToAddresses = () => dispatch(createAction('BACK'))
+
+  const handleWantDelete = (addressId: string) =>
+    dispatch(createAction('CONFIRM_DELETE', addressId))
+
+  const handleDelete = () => {
+    deleteAddress(state.addressToDelete)
+    dispatch(createAction('DELETE'))
+  }
+
+  const cancleDelete = () => dispatch(createAction('CANCLE_DELETE'))
 
   return (
-    <main className='min-h-[calc(100dvh-82px)] bg-dark-form py-16'>
+    <main className='min-h-[calc(100dvh-82px)] bg-dark-form px-3 py-16 sm:px-6'>
       <div className='mb-16 text-center'>
         <h1 className='mb-3 pb-1 text-xl font-bold uppercase tracking-[1px]'>
           my addresses
@@ -37,19 +107,23 @@ const Addresses = () => {
               'pointer-events-none': locations.length === 0,
             },
           )}
+          onClick={toggleAdd}
         >
           add new address
         </button>
       </div>
 
       <section className='mx-auto w-full'>
-        {locations.length === 0 ? (
-          <AddressForm />
+        {locations.length === 0 || state.isAdding || state.isEditing ? (
+          <AddressForm
+            initFormData={state.addressToEdit}
+            backToAddresses={backToAddresses}
+          />
         ) : (
           locations.map((location) => (
             <div
               key={location._id}
-              className='mx-auto max-w-md bg-white p-10 leading-7'
+              className='mx-auto mb-4 max-w-md bg-white p-10 leading-7 last-of-type:mb-0'
             >
               <p>
                 <span className='mr-2 font-[500] capitalize'>address:</span>
@@ -75,14 +149,14 @@ const Addresses = () => {
               <div className='mt-5'>
                 <button
                   className='text-[11.5px] font-[500] uppercase tracking-[1px] underline'
-                  onClick={handleEdit}
+                  onClick={() => handleEdit(location)}
                 >
                   edit
                 </button>
                 <span className='mx-2'>|</span>
                 <button
                   className='text-[11.5px] font-[500] uppercase tracking-[1px] underline'
-                  onClick={toggleModal}
+                  onClick={() => handleWantDelete(location._id)}
                 >
                   delete
                 </button>
@@ -100,9 +174,9 @@ const Addresses = () => {
       </Link>
 
       <BottomDrawer
-        className='px-8 py-12 md:h-[40dvh] md:w-2/4'
-        isOpen={isModalOpen}
-        handleClose={toggleModal}
+        className='translate-y-[calc(50%+30dvh)] px-8 py-12 opacity-100 md:h-[40dvh] md:w-2/4'
+        isOpen={state.isDelete}
+        handleClose={cancleDelete}
       >
         <h3 className='mb-2 text-xl font-bold'>Confirm Delete</h3>
         <p className='mb-10 capitalize'>
@@ -117,7 +191,7 @@ const Addresses = () => {
           </button>
           <button
             className='w-24 rounded-md bg-silver px-3 py-1.5'
-            onClick={toggleModal}
+            onClick={cancleDelete}
           >
             cancel
           </button>

@@ -18,7 +18,11 @@ export const UserRoute = () => {
         loader={(args) => accountLoader(args, isLoggedIn)}
       />
 
-      <Route path='addresses' element={<Addresses />} loader={addressLoader} />
+      <Route
+        path='addresses'
+        element={<Addresses />}
+        loader={(args) => addressLoader(args, isLoggedIn)}
+      />
     </Route>
   )
 }

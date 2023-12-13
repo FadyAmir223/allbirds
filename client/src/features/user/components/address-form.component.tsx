@@ -1,20 +1,19 @@
-import { useMutation } from '@tanstack/react-query'
-import { queryClient } from '@/lib/react-query'
 import { useForm } from 'react-hook-form'
 import { DevTool } from '@hookform/devtools'
 import LinkCustom from '@/components/link-custom.component'
 import { cn } from '@/utils/cn.util'
 import { getErrorMessage } from '@/utils/getErrorMessage.util'
-import { userKeys } from '../services/user.key'
-import { LocationRes, Locations } from '../types/location.type'
+import type { Location } from '../types/location.type'
+import { useAddAddress } from '../hooks/useOptimisticAdd'
+import { useOptimisticEdit } from '../hooks/useOptimisticEdit'
 import { Checkbox } from '@/features/collections'
-import { axios } from '@/lib/axios'
 
 type AddressFormProps = {
-  initFormData?: FormData
+  initFormData: Location | null
+  backToAddresses: () => void
 }
 
-type FormData = {
+export type FormData = {
   address: string
   city: string
   country: string
@@ -33,40 +32,36 @@ const input = [
   { label: 'phone', required: true },
 ] as const
 
-export const AddressForm = ({ initFormData }: AddressFormProps) => {
+export const AddressForm = ({
+  initFormData,
+  backToAddresses,
+}: AddressFormProps) => {
   const {
     register,
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({ defaultValues: initFormData })
+  } = useForm<FormData>({ defaultValues: initFormData || undefined })
 
-  const { mutate, isError, error } = useMutation({
-    mutationFn: (formData: FormData): Promise<LocationRes> =>
-      axios.post('user/locations', formData),
-    onMutate: async (formData) => {
-      await queryClient.cancelQueries({ ...userKeys.locations(), exact: true })
+  const {
+    mutate: addAddress,
+    isError: isErrorAdd,
+    error: errorAdd,
+  } = useAddAddress()
 
-      const oldLocations = queryClient.getQueryData(
-        userKeys.locations(),
-      ) as Locations
+  const {
+    mutate: editAddress,
+    isError: isErrorEdit,
+    error: errorEdit,
+  } = useOptimisticEdit()
 
-      queryClient.setQueryData(userKeys.locations(), {
-        locations: [...oldLocations.locations, { ...formData, _id: '0' }],
-      })
+  const onSubmit = (formData: FormData) => {
+    initFormData
+      ? editAddress({ formData, addressId: initFormData._id })
+      : addAddress(formData)
 
-      return oldLocations
-    },
-    onError: (_, __, oldLocations) => {
-      queryClient.setQueryData(userKeys.locations(), oldLocations)
-    },
-    onSettled: (newLocation) => {
-      queryClient.setQueryData(userKeys.locations(), (updater: Locations) => ({
-        locations: [...updater.locations.slice(0, -1), newLocation?.location],
-      }))
-    },
-  })
-  const onSubmit = (formData: FormData) => mutate(formData)
+    backToAddresses()
+  }
 
   return (
     <div className='mx-auto max-w-2xl'>
@@ -108,13 +103,19 @@ export const AddressForm = ({ initFormData }: AddressFormProps) => {
         </LinkCustom>
       </form>
 
-      {isError && (
-        <p className='text-[12px] text-red'>{getErrorMessage(error)}</p>
-      )}
+      {isErrorAdd ||
+        (isErrorEdit && (
+          <p className='text-[12px] text-red'>
+            {getErrorMessage(errorAdd || errorEdit)}
+          </p>
+        ))}
 
       {initFormData && (
-        <button className='mt-2 text-[11.5px] uppercase underline'>
-          cancle
+        <button
+          className='mt-2 text-[11.5px] uppercase underline'
+          onClick={backToAddresses}
+        >
+          cancel
         </button>
       )}
 

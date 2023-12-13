@@ -25,9 +25,9 @@ const BottomDrawer = ({
       <div
         className={cn(
           'fixed left-1/2 top-1/2 z-50 h-[100dvh] w-full -translate-x-1/2 translate-y-[calc(50%+2.5dvh)] overflow-y-scroll bg-white px-40 py-16 tracking-[0.4px] text-gray md:h-[95dvh] md:w-[98%]',
+          className,
           isOpen ? '-translate-y-1/2' : 'opacity-0',
           { 'transition-transform duration-300': animate },
-          className,
         )}
         {...props}
       >

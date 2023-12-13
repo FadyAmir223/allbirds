@@ -194,7 +194,6 @@ POST {{url}}/api/user/locations
   "city": "city",
   "country": "country",
   "state": "state",
-  "zipCode": 12345,
   "phone": "1111"
 }
 
@@ -202,11 +201,10 @@ POST {{url}}/api/user/locations
 DELETE {{url}}/api/user/locations/64e74175a9a33f6697e1f38e
 
 ### edit location
-PATCH {{url}}/api/user/locations/64e7417aa9a33f6697e1f391
+PATCH {{url}}/api/user/locations/6579ac2cf3ce1bbce86e9a1a
 
 {
   "state": "ctatfonia",
-  "zipCode": 9876,
   "phone": "5555"
 }
 
