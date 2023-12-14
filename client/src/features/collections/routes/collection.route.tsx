@@ -2,16 +2,14 @@ import { useState } from 'react'
 import {
   Link,
   useLoaderData,
+  useLocation,
   useParams,
   useSearchParams,
 } from 'react-router-dom'
-import { useQueries } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import ProductCard from '../components/product-card.component'
 import SideBar from '../components/side-bar.component'
-import {
-  collectionFiltersQuery,
-  collectionQuery,
-} from '../services/collection.query'
+import { collectionQuery } from '../services/collection.query'
 import { ensureType } from '../utils/ensureType.util'
 import { type FilterKey, type FilterValues, type SelectedFilters } from '..'
 import { loader as collectionLoader } from '../services/collection.loader'
@@ -28,23 +26,23 @@ const Collections = () => {
   const [isFilterOpen, setFilterOpen] = useState(false)
   const [searchParams] = useSearchParams()
 
+  const { pathname } = useLocation()
+  const isSale = pathname.includes('/sale')
+
   const params = useParams()
   const type = params.type as string
   const ensuredType = ensureType(type)
   const hasGender = ensuredType.gender !== undefined
 
-  const [initCollection, initFilters, initSuggestionSlides] =
+  const [initCollection, filters, initSuggestionSlides] =
     useLoaderData() as Awaited<ReturnType<typeof collectionLoader>>
 
-  const [{ data: collection }, { data: _filters }] = useQueries({
-    queries: [
-      { ...collectionQuery(ensuredType), initialData: initCollection },
-      { ...collectionFiltersQuery(ensuredType), initialData: initFilters },
-    ],
+  const { data: collection } = useQuery({
+    ...collectionQuery(ensuredType),
+    initialData: initCollection,
   })
 
-  const { filters } = _filters || {}
-  if (!collection || !filters) return
+  if (!collection) return
 
   if (!hasGender)
     filters.sizes = filters.sizes.map((size) => size.split('.')[0])
@@ -110,7 +108,9 @@ const Collections = () => {
                     ) : (
                       <Link
                         key={gender.label}
-                        to={'/collections/' + otherGender.type}
+                        to={`/collections/${isSale ? 'sale/' : ''}${
+                          otherGender.type
+                        }`}
                         className='px-3.5 py-[3px]'
                       >
                         {otherGender.label}
@@ -120,6 +120,19 @@ const Collections = () => {
                 </span>
               )}
             </div>
+
+            {isSale && (
+              <div className='bg- mx-4 bg-[url(/images/sale-collection.avif)] p-6 text-center'>
+                <h3 className='text-lg font-bold'>
+                  Sale On Sale: For A Limited Time
+                </h3>
+                <p className='text-[12px]'>
+                  Take an extra 30% off with code
+                  <span className='text-base font-bold'> GET30</span>. Final
+                  sale excluded.
+                </p>
+              </div>
+            )}
 
             <article className='grid grid-cols-2 gap-4 bg-silver-2 p-4 md:grid-cols-3 md:bg-transparent'>
               {filteredCollection.map((product) => (

@@ -20,9 +20,7 @@ const ProductImageSlider = ({
 }: ProductImageSliderProps) => {
   const [swiper, setSwiper] = useState<SwiperType | null>(null)
 
-  const handleImageSlide = (index: number) => {
-    swiper?.slideTo(index)
-  }
+  const handleImageSlide = (index: number) => swiper?.slideTo(index)
 
   useEffect(() => {
     if (swiper) swiper.slideTo(0, 0)
@@ -54,10 +52,13 @@ const ProductImageSlider = ({
               pagination={{
                 clickable: true,
                 renderBullet: (_, className) =>
-                  `<span class='${className} !w-1.5 !h-1.5 !bg-blue-light duration-[250ms] transition-transform'></span>`,
+                  `<span class="${className} !w-1.5 !h-1.5 !bg-blue-light duration-[250ms] transition-transform"></span>`,
                 bulletActiveClass: '!bg-blue-dark scale-[2] !opacity-100',
+                enabled: true,
               }}
-              breakpoints={{ [screenSize.lg]: { pagination: false } }}
+              breakpoints={{
+                [screenSize.lg]: { pagination: { enabled: false } },
+              }}
             >
               {images.map((image) => (
                 <SwiperSlide

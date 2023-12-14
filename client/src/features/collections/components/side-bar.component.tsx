@@ -157,13 +157,14 @@ const SideBarFilters = ({
           {filters.sizes.map((size) => (
             <SizeButton
               key={size}
-              size={size}
-              selected={selectedFilters.sizes?.includes(size)}
               className={cn(
                 hasGender ? 'text-[10px]' : 'text-[16px] font-bold uppercase',
               )}
+              selected={selectedFilters.sizes?.includes(size)}
               onClick={() => handleFilterBy('sizes', size)}
-            />
+            >
+              {size}
+            </SizeButton>
           ))}
         </ul>
       </div>

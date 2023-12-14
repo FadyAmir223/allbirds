@@ -1,22 +1,25 @@
 import { LoaderFunctionArgs } from 'react-router-dom'
 import { queryClient } from '@/lib/react-query'
 import {
-  collectionFiltersQuery,
   collectionKeys,
   collectionQuery,
+  collectionSaleQuery,
 } from './collection.query'
 import { ensureType } from '../utils/ensureType.util'
-import { type Collection, type Filters } from '..'
+import { type Collection } from '..'
+import { composeFilters } from './composeFilters'
 import { refactorCollectionsToSlides } from '@/features/misc'
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const type = params.type as string
   const queries = ensureType(type)
   const otherGender = queries.gender && (type === 'mens' ? 'womens' : 'mens')
 
-  const collectionP = queryClient.ensureQueryData(collectionQuery(queries))
-  const filtersP = queryClient.ensureQueryData(collectionFiltersQuery(queries))
-  const promises = [collectionP, filtersP]
+  const isSale = request.url.includes('/sale')
+  const query = isSale ? collectionSaleQuery(queries) : collectionQuery(queries)
+
+  const collectionP = queryClient.ensureQueryData(query)
+  const promises = [collectionP]
 
   let suggestions: Collection | undefined
 
@@ -38,20 +41,17 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     promises.push(suggestionsP)
   }
 
-  const responses = (await Promise.all(promises)) as [
-    Collection,
-    Filters,
-    Collection,
-  ]
+  const responses = (await Promise.all(promises)) as [Collection, Collection]
 
-  const [collection, filters] = responses
-
-  if (responses.length === 3) suggestions = responses[2]
+  const [collection] = responses
+  if (responses.length === 2) [, suggestions] = responses
 
   const suggestionSlides = refactorCollectionsToSlides([
     collection,
     suggestions as Collection,
   ])
+
+  const filters = composeFilters(`${type}-${isSale}`, collection)
 
   return [collection, filters, suggestionSlides] as const
 }

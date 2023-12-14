@@ -1,5 +1,5 @@
 import { ReactNode, useRef, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { FaChevronDown } from 'react-icons/fa'
 import Markdown from 'react-markdown'
@@ -34,6 +34,9 @@ const ProductDetails = ({
   const params = useParams()
   const productName = params.productName as string
 
+  const { pathname } = useLocation()
+  const hasGender = !pathname.includes('sock')
+
   const {
     data: { product },
   } = useQuery({ ...productQuery(productName), initialData: initProduct })
@@ -64,6 +67,7 @@ const ProductDetails = ({
   const lastAddedItem = useRef<PureCartProduct | null>(null)
 
   const selectedProduct = product.editions[nav.edition].products[nav.product]
+
   const isSelectedSizeSoldOut = selectedProduct.sizesSoldOut.includes(
     product.sizes[nav.size || 0],
   )
@@ -282,17 +286,37 @@ const ProductDetails = ({
               select size
             </p>
 
-            <div className='mb-3 grid grid-cols-7 gap-1.5'>
-              {product.sizes.map((size, sizeIdx) => (
-                <SizeButton
-                  key={size}
-                  size={size}
-                  product={selectedProduct}
-                  selected={nav.size === sizeIdx}
-                  enabledOnSoldOut
-                  onClick={() => handleSizeChange(sizeIdx)}
-                />
-              ))}
+            <div
+              className={cn('mb-3 grid grid-cols-7 gap-1.5', {
+                'grid-cols-2': !hasGender,
+              })}
+            >
+              {product.sizes.map((size, sizeIdx) => {
+                let k, v
+                if (!hasGender) [k, v] = size.split('.')
+
+                return (
+                  <SizeButton
+                    key={size}
+                    selected={nav.size === sizeIdx}
+                    isSoldOut={selectedProduct.sizesSoldOut.includes(size)}
+                    enabledOnSoldOut
+                    className={cn({
+                      'aspect-auto p-1.5 uppercase': !hasGender,
+                    })}
+                    onClick={() => handleSizeChange(sizeIdx)}
+                  >
+                    {hasGender ? (
+                      size
+                    ) : (
+                      <div>
+                        <p className='text-[13px] font-bold'>{k}</p>
+                        <p className='text-[11px] text-[#cfcbc4]'>({v})</p>
+                      </div>
+                    )}
+                  </SizeButton>
+                )
+              })}
             </div>
 
             <p className='mb-5'>

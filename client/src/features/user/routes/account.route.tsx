@@ -67,7 +67,7 @@ const Account = () => {
 
       <div className='flex flex-col justify-between gap-y-6 px-10 lg:flex-row lg:gap-y-0'>
         {orders.length === 0 ? (
-          <section className=''>You haven't placed any orders yet.</section>
+          <section>You haven't placed any orders yet.</section>
         ) : (
           <section className='w-full bg-white p-10 lg:w-2/5'></section>
         )}
@@ -79,7 +79,7 @@ const Account = () => {
           </p>
 
           {locations.length === 0 ? (
-            <p className=''>you haven't added an address yet</p>
+            <p>you haven't added an address yet</p>
           ) : (
             <div className='leading-6'>
               <p>

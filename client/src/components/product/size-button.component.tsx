@@ -1,26 +1,20 @@
 import { type ComponentPropsWithoutRef } from 'react'
-
 import { cn } from '@/utils/cn.util'
-import { type CollectionEdition } from '@/features/collections'
-import { type ProductEdition } from '@/features/products'
 
 type SizeButtonProps = ComponentPropsWithoutRef<'button'> & {
-  size: string
-  product?: CollectionEdition | ProductEdition
   selected?: boolean
+  isSoldOut?: boolean
   enabledOnSoldOut?: boolean
 }
 
 const SizeButton = ({
-  size,
-  product,
+  children,
   className,
   selected = false,
+  isSoldOut = false,
   enabledOnSoldOut = false,
   ...props
 }: SizeButtonProps) => {
-  const isSoldOut = product?.sizesSoldOut.includes(size)
-
   return (
     <button
       className={cn(
@@ -37,7 +31,7 @@ const SizeButton = ({
       )}
       {...props}
     >
-      {size}
+      {children}
     </button>
   )
 }

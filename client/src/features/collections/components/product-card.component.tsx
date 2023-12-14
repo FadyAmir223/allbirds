@@ -2,7 +2,7 @@ import { Fragment, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 import ColorButton from '@/components/product/color-button.component'
-import SideButton from '@/components/product/size-button.component'
+import SizeButton from '@/components/product/size-button.component'
 import { cn } from '@/utils/cn.util'
 import screenSize from '@/data/screen-size.json'
 import { type CollectionProduct, type SelectedFilters } from '..'
@@ -214,12 +214,13 @@ const ProductCard = ({
           )}
         >
           {product.sizes.map((size) => (
-            <SideButton
+            <SizeButton
               key={size}
-              size={size}
-              product={currProduct}
+              isSoldOut={currProduct.sizesSoldOut.includes(size)}
               onClick={() => AddCartItem(size)}
-            />
+            >
+              {size}
+            </SizeButton>
           ))}
         </div>
       </div>
@@ -258,15 +259,16 @@ const ProductCard = ({
               )}
             >
               {product.sizes.map((size) => (
-                <SideButton
+                <SizeButton
                   key={size}
-                  size={size}
-                  product={currProduct}
+                  isSoldOut={currProduct.sizesSoldOut.includes(size)}
                   onClick={() => AddCartItem(size)}
                   className={cn(
                     hasGender ? 'text-[9.8px]' : 'text-sm uppercase',
                   )}
-                />
+                >
+                  {size}
+                </SizeButton>
               ))}
             </div>
           </div>

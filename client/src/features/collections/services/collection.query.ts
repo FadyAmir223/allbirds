@@ -1,7 +1,6 @@
 import { UseQueryOptions } from '@tanstack/react-query'
-
 import { composeUri } from '@/utils/compose-uri.util'
-import { Collection, CollectionGender, Filters } from '..'
+import { Collection, CollectionGender } from '..'
 import { collectionKeys } from './collection.key'
 import { axios } from '@/lib/axios'
 
@@ -22,13 +21,6 @@ const collectionQuery = (
   queryFn: ({ queryKey }) => axios.get(composeUri(queryKey)),
 })
 
-const collectionFiltersQuery = (
-  query: CollectionMainQuery,
-): UseQueryOptions<Filters> => ({
-  queryKey: collectionKeys.filters(query),
-  queryFn: ({ queryKey }) => axios.get(composeUri(queryKey)),
-})
-
 const collectionSaleQuery = (
   query: CollectionQuery,
 ): UseQueryOptions<Collection> => ({
@@ -36,9 +28,4 @@ const collectionSaleQuery = (
   queryFn: ({ queryKey }) => axios.get(composeUri(queryKey)),
 })
 
-export {
-  collectionKeys,
-  collectionQuery,
-  collectionFiltersQuery,
-  collectionSaleQuery,
-}
+export { collectionKeys, collectionQuery, collectionSaleQuery }

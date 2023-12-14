@@ -68,7 +68,7 @@ export const AddressForm = ({
       <form noValidate onSubmit={handleSubmit(onSubmit)}>
         <div className='grid gap-x-5 gap-y-3 md:grid-cols-2'>
           {input.map((field) => (
-            <div key={field.label} className=''>
+            <div key={field.label}>
               <label
                 htmlFor={field.label}
                 className='mb-1 block text-[12px] font-bold uppercase tracking-[1px]'

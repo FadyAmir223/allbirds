@@ -18,7 +18,7 @@
           { "text": "slippers", "url": "/products/mens-dwellers" },
           { "text": "hiking", "url": "/collections/mens-hiking-shoes" },
           { "text": "high tops", "url": "/collections/mens-high-tops" },
-          { "text": "sale", "url": "/collections/sale-mens-shoes" },
+          { "text": "sale", "url": "/collections/sale/mens" },
           { "text": "shop all", "url": "/collections/mens" }
         ]
       },
@@ -63,7 +63,7 @@
           { "text": "insoles", "url": "/collections/mens-insoles" },
           { "text": "lace kits", "url": "/collections/mens-lace-kit" },
           { "text": "gift cards", "url": "/collections/gift-cards" },
-          { "text": "sale", "url": "/collections/sale-mens-apperel" }
+          { "text": "sale", "url": "/collections/sale/mens-apperel" }
         ]
       }
     ],
@@ -108,7 +108,7 @@
           { "text": "slippers", "url": "/products/womens-dwellers" },
           { "text": "hiking", "url": "/collections/womens-hiking-shoes" },
           { "text": "high tops", "url": "/collections/womens-high-tops" },
-          { "text": "sale", "url": "/collections/sale-womens-shoes" },
+          { "text": "sale", "url": "/collections/sale/womens" },
           { "text": "shop all", "url": "/collections/womens" }
         ]
       },
@@ -150,7 +150,7 @@
           { "text": "insoles", "url": "/collections/womens-insoles" },
           { "text": "lace kits", "url": "/collections/womens-lace-kit" },
           { "text": "gift cards", "url": "/collections/gift-cards" },
-          { "text": "sale", "url": "/collections/sale-womens-apperel" }
+          { "text": "sale", "url": "/collections/sale/womens-apperel" }
         ]
       }
     ],
@@ -190,7 +190,7 @@
             "text": "accessories",
             "url": "/products/smallbirds-pom-beanie-little-kids"
           },
-          { "text": "sale", "url": "/collections/sale-little-kids" }
+          { "text": "sale", "url": "/collections/sale/little-kids" }
         ]
       },
       {
@@ -207,7 +207,7 @@
             "text": "slip-ons",
             "url": "/products/smallbirds-wool-loungers-big-kids"
           },
-          { "text": "sale", "url": "/collections/sale-big-kids" }
+          { "text": "sale", "url": "/collections/sale/big-kids" }
         ]
       }
     ],
@@ -232,20 +232,20 @@
       {
         "title": { "text": "men's sale", "url": "" },
         "routes": [
-          { "text": "sale shoes", "url": "/collections/sale-mens-shoes" },
+          { "text": "sale shoes", "url": "/collections/sale/mens" },
           {
             "text": "sale apparel & socks",
-            "url": "/collections/sale-mens-apparel"
+            "url": "/collections/sale/mens-apparel"
           }
         ]
       },
       {
         "title": { "text": "women's sale", "url": "" },
         "routes": [
-          { "text": "sale shoes", "url": "/collections/sale-womens-shoes" },
+          { "text": "sale shoes", "url": "/collections/sale/womens" },
           {
             "text": "sale apparel & socks",
-            "url": "/collections/sale-womens-apparel"
+            "url": "/collections/sale/womens-apparel"
           }
         ]
       },
@@ -254,22 +254,22 @@
         "routes": [
           {
             "text": "sale little kids",
-            "url": "/collections/sale-little-kids"
+            "url": "/collections/sale/little-kids"
           },
-          { "text": "sale big kids", "url": "/collections/sale-big-kids" }
+          { "text": "sale big kids", "url": "/collections/sale/big-kids" }
         ]
       }
     ],
     "featured": [
       {
         "text": "men's sale",
-        "url": "/collections/sale-mens-shoes",
+        "url": "/collections/sale/mens",
         "imageUrl": "/images/main-page/header-nav/Nav-Tile-M_Desktop_1125__324.webp",
         "imageUrlMobile": "/images/main-page/header-nav/23Q4-Holiday_Ch2-Site-Nav_Tile_Mobile-Men-1125x1542.webp"
       },
       {
         "text": "women's sale",
-        "url": "/collections/sale-womens-shoes",
+        "url": "/collections/sale/womens",
         "imageUrl": "/images/main-page/header-nav/Nav-Tile-W_Desktop_1125__324.webp",
         "imageUrlMobile": "/images/main-page/header-nav/23Q4-Holiday_Ch2-Site-Nav_Tile_Mobile-Women-1125x1542.webp"
       }
