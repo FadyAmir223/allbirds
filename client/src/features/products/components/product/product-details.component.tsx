@@ -48,9 +48,19 @@ const ProductDetails = ({
   const prevSizeVal = searchParams.get('size') || ''
   const prevSizeIdx = product.sizes.indexOf(prevSizeVal)
 
+  const initId = +(searchParams.get('id') || 0)
+
+  let initProductIdx = 0
+  const initEditionIdx = product.editions.findIndex((edition) => {
+    initProductIdx = edition.products.findIndex(
+      (product) => product.id === initId,
+    )
+    return initProductIdx !== -1
+  })
+
   const [nav, setNav] = useState({
-    edition: 0,
-    product: 0,
+    edition: initEditionIdx === -1 ? 0 : initEditionIdx,
+    product: initProductIdx === -1 ? 0 : initProductIdx,
     size: prevSizeIdx !== -1 ? prevSizeIdx : null,
     dropdown: -1,
   })
@@ -98,14 +108,28 @@ const ProductDetails = ({
   const handleProductChange = (editionIndex: number, productIndex: number) => {
     setNav({ ...nav, edition: editionIndex, product: productIndex })
     imageIndex.current = 0
+
+    setSearchParams(
+      (prevSerachParams) => {
+        prevSerachParams.set(
+          'id',
+          String(product.editions[editionIndex].products[productIndex].id),
+        )
+        return prevSerachParams
+      },
+      { replace: true },
+    )
   }
 
   const handleSizeChange = (sizeIndex: number) => {
     setNav({ ...nav, size: sizeIndex })
-    setSearchParams((prevSearchParams) => {
-      prevSearchParams.set('size', product.sizes[sizeIndex])
-      return prevSearchParams
-    })
+    setSearchParams(
+      (prevSearchParams) => {
+        prevSearchParams.set('size', product.sizes[sizeIndex])
+        return prevSearchParams
+      },
+      { replace: true },
+    )
   }
 
   const addToCart = () => {

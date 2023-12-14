@@ -134,8 +134,10 @@ const ProductCard = ({
         />
       </div>
 
-      {/* TODO: to={'/products/' + currProduct.handle} */}
-      <Link to={'/products/' + product.handle} className='relative z-10'>
+      <Link
+        to={`/products/${product.handle}?id=${currProduct.id}`}
+        className='relative z-10'
+      >
         <p className='relative z-10 mt-2 px-3 text-[11px] font-[500] uppercase md:px-0'>
           {product.name}
         </p>
