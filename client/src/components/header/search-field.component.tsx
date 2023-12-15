@@ -5,19 +5,19 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom'
+import SearchIcon from '@/assets/svg/search.svg?react'
 import { LiaAngleLeftSolid } from 'react-icons/lia'
-
 import LinkCustom from '@/components/link-custom.component'
 import Modal from '@/components/modal.component'
 import Overlay from '@/components/overlay.component'
+import { SearchInput } from '@/components/search-input.component'
 import { cn } from '@/utils/cn.util'
-import SearchIcon from '@/assets/svg/search.svg?react'
 
 type SearchFieldProps = {
   isOpen: boolean
 }
 
-const queryName = 'query'
+export const queryName = 'q'
 
 const SearchField = ({ isOpen }: SearchFieldProps) => {
   const [search, setSearch] = useState({
@@ -133,20 +133,13 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
                 <LiaAngleLeftSolid />
               </button>
 
-              <div className='w-full rounded-lg bg-silver'>
-                <form onSubmit={handleSubmit}>
-                  <input
-                    ref={elInput}
-                    autoComplete='off'
-                    type='text'
-                    name={queryName}
-                    placeholder='Enter Search Term'
-                    className='w-full bg-transparent px-5 py-[11px] text-xs  tracking-[0.06em] focus:outline-0'
-                    value={search.query}
-                    onChange={handleQueryChange}
-                  />
-                </form>
-              </div>
+              <SearchInput
+                ref={elInput}
+                name={queryName}
+                value={search.query}
+                onChange={handleQueryChange}
+                handleSubmit={handleSubmit}
+              />
             </div>
 
             {recentQueries && (

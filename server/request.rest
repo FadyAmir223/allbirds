@@ -38,7 +38,7 @@ GET {{url}}/api/collections/sale
   ?type=shoes
   &gender=womens
 
-
+<!--
 ## filters of collection
 ### mens
 GET {{url}}/api/collections/filters
@@ -53,9 +53,16 @@ GET {{url}}/api/collections/filters
 ### socks
 GET {{url}}/api/collections/filters
   ?type=socks
+-->
 
 
 # products
+### search
+GET {{url}}/api/products/search
+  ?q=mens-tree
+  &page=1
+  &limit=10
+
 ### product
 GET {{url}}/api/products/{{product-name}}
 
@@ -66,7 +73,6 @@ GET {{url}}/api/products/{{product-name}}/reviews
 
 ### add review
 POST {{url}}/api/products/{{product-name}}/reviews
-
 
 {
   "score": 1,
@@ -84,6 +90,7 @@ POST {{url}}/api/products/{{product-name}}/reviews
 ### remove review
 DELETE {{url}}/api/products/{{product-name}}/reviews/64e8d7a67425bfaeab10edf2
 
+<!--
 # cart
 ### cart
 GET {{url}}/api/cart
@@ -112,7 +119,7 @@ DELETE {{url}}/api/cart/delete
   "editionId": 6660112482384,
   "size": "8"
 }
-
+-->
 
 # auth
 ### logout

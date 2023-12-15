@@ -1,21 +1,23 @@
-import express from 'express';
+import express from 'express'
 
 import {
+  httpsSearchProducts,
   httpsGetProduct,
   httpsGetReviews,
   httpsAddReview,
   httpsRemoveReview,
-} from './product.controller.js';
-import needAuth from '../../middlewares/needAuth.js';
+} from './product.controller.js'
+import needAuth from '../../middlewares/needAuth.js'
 
-const productRoute = express.Router();
+const productRoute = express.Router()
 
-productRoute.get('/:handle', httpsGetProduct);
-productRoute.get('/:handle/reviews', httpsGetReviews);
+productRoute.get('/search', httpsSearchProducts)
+productRoute.get('/:handle', httpsGetProduct)
+productRoute.get('/:handle/reviews', httpsGetReviews)
 
-productRoute.use(needAuth);
+productRoute.use(needAuth)
 
-productRoute.post('/:handle/reviews', httpsAddReview);
-productRoute.delete('/:handle/reviews/:reviewId', httpsRemoveReview);
+productRoute.post('/:handle/reviews', httpsAddReview)
+productRoute.delete('/:handle/reviews/:reviewId', httpsRemoveReview)
 
-export default productRoute;
+export default productRoute
