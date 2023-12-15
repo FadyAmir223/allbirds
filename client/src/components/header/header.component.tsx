@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { BiHelpCircle, BiSearch } from 'react-icons/bi'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 import { HiOutlineUser } from 'react-icons/hi'
@@ -58,6 +58,7 @@ const Header = () => {
   })
 
   const divEl = useRef<HTMLDivElement | null>(null)
+  const { pathname } = useLocation()
 
   const handleAdHide = () => setAdHidden(scrollY > 100)
 
@@ -483,7 +484,11 @@ const Header = () => {
           </div>
         </div>
       </header>
-      <div className='pb-[calc(32px+82px)] md:pb-[calc(32px+50px)]' />
+      <div
+        className={cn('pb-[calc(32px+50px)] md:pb-[calc(32px+50px)]', {
+          'pb-[calc(32px+82px)]': pathname === '/',
+        })}
+      />
     </>
   )
 }

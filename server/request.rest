@@ -59,7 +59,7 @@ GET {{url}}/api/collections/filters
 # products
 ### search
 GET {{url}}/api/products/search
-  ?q=mens-tree
+  ?q=men+run
   &page=1
   &limit=10
 

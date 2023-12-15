@@ -8,21 +8,36 @@ import { getSerachQuery } from '../services/serach.query'
 import { cn } from '@/utils/cn.util'
 
 const Search = () => {
+  const elPage = useRef<HTMLDivElement | null>(null)
   const elInput = useRef<HTMLInputElement | null>(null)
+
   const [searchParams, setSearchParams] = useSearchParams()
 
   const defaultQuery = searchParams.get('q') || ''
   const [query, setQuery] = useState(defaultQuery)
+  const [delayquery, setDelayQuery] = useState(
+    defaultQuery.replace(/[^a-zA-Z]/g, ''),
+  )
+
+  const { data, isFetching, hasNextPage, fetchNextPage } = useInfiniteQuery(
+    getSerachQuery({ q: delayquery }),
+  )
 
   useEffect(() => {
     elInput.current?.focus()
+  }, [])
 
-    addEventListener('scroll', handleScroll)
-    return () => removeEventListener('scroll', handleScroll)
-  }, []) // eslint-disable-line
+  useEffect(() => {
+    if (hasNextPage) {
+      addEventListener('scroll', handleScroll)
+      return () => removeEventListener('scroll', handleScroll)
+    }
+  }, [hasNextPage, isFetching]) // eslint-disable-line
 
   useEffect(() => {
     const timeout = setTimeout(() => {
+      setDelayQuery(query.replace(/[^a-zA-Z]/g, ''))
+
       setSearchParams((prevSearchParams) => {
         query
           ? prevSearchParams.set(queryName, query)
@@ -35,20 +50,15 @@ const Search = () => {
     return () => clearTimeout(timeout)
   }, [query]) // eslint-disable-line
 
-  const {
-    data: products,
-    isFetching,
-    fetchNextPage,
-  } = useInfiniteQuery(getSerachQuery({ q: query }))
-
   const handleQueryChange = (e: ChangeEvent<HTMLInputElement>) =>
     setQuery(e.target.value)
 
   const handleScroll = () => {
-    if (scrollY + innerHeight >= (elPage.current?.scrollHeight || 0)) {
-      console.log('fetch')
+    if (
+      !isFetching &&
+      scrollY + innerHeight >= (elPage.current?.scrollHeight || 0)
+    )
       fetchNextPage()
-    }
   }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -56,13 +66,14 @@ const Search = () => {
     fetchNextPage()
   }
 
-  const elPage = useRef<HTMLDivElement | null>(null)
-
   return (
-    <main className='mx-auto px-4 py-16 md:container' ref={elPage}>
+    <main
+      ref={elPage}
+      className='mx-auto min-h-[calc(100dvh-32px+50px-80px)] px-4 py-10 md:container'
+    >
       <h1 className='mb-4 text-2xl font-bold'>Search Results</h1>
 
-      <div className='mb-8 flex items-center gap-x-3'>
+      <div className='mb-2 flex items-center gap-x-3'>
         <SearchInput
           ref={elInput}
           name={queryName}
@@ -76,9 +87,15 @@ const Search = () => {
         </Link>
       </div>
 
+      {data?.products.length !== 0 && (
+        <p className='mb-8 text-[13px]'>
+          Showing {data?.pagination.total} results for mens tree
+        </p>
+      )}
+
       <div className=''>
         <div className='grid grid-cols-2 gap-4 bg-white md:grid-cols-3'>
-          {products?.map((product) => (
+          {data?.products.map((product) => (
             <div key={product.id} className='group relative'>
               <div className='absolute -left-4 -top-4 z-10 hidden h-[calc(100%+32px)] w-[calc(100%+32px)] group-hover:shadow-2xl group-hover:shadow-gray md:block' />
 

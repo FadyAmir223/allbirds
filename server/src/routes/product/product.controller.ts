@@ -11,7 +11,7 @@ import { getPagination } from '../../utils/query.js'
 
 async function httpsSearchProducts(req, res): Promise<Response> {
   const { q } = req.query
-  if (!q) return res.status(200).json({ products: [] })
+  if (!q) return res.status(200).json({ products: [], pagination: {} })
 
   if (!req.query?.limit) req.query.limit = 10
 

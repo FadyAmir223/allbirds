@@ -5,6 +5,7 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import SearchIcon from '@/assets/svg/search.svg?react'
 import { LiaAngleLeftSolid } from 'react-icons/lia'
 import LinkCustom from '@/components/link-custom.component'
@@ -12,6 +13,10 @@ import Modal from '@/components/modal.component'
 import Overlay from '@/components/overlay.component'
 import { SearchInput } from '@/components/search-input.component'
 import { cn } from '@/utils/cn.util'
+import { composeUri } from '@/utils/compose-uri.util'
+import { type SearchRes } from '@/features/pages'
+import { productKeys } from '@/features/products'
+import { axios } from '@/lib/axios'
 
 type SearchFieldProps = {
   isOpen: boolean
@@ -20,16 +25,22 @@ type SearchFieldProps = {
 export const queryName = 'q'
 
 const SearchField = ({ isOpen }: SearchFieldProps) => {
+  const navigate = useNavigate()
+  const [, setSearchParams] = useSearchParams()
+  const { pathname } = useLocation()
+  const elInput = useRef<HTMLInputElement | null>(null)
+
   const [search, setSearch] = useState({
     isOpen: false,
     isMoving: false,
     query: '',
+    delayQuery: '',
   })
 
-  const navigate = useNavigate()
-  const [, setSearchParams] = useSearchParams()
-  const location = useLocation()
-  const elInput = useRef<HTMLInputElement | null>(null)
+  const { data: searchResult } = useQuery<SearchRes>({
+    queryKey: productKeys.search(search.delayQuery, 4),
+    queryFn: ({ queryKey }) => axios.get(composeUri(queryKey)),
+  })
 
   const recentQueries = JSON.parse(
     localStorage.getItem(queryName) || '[]',
@@ -40,8 +51,6 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
   }, [search.isOpen])
 
   useEffect(() => {
-    // TODO: POST /api/search  { query }
-
     const timeout = setTimeout(() => {
       if (search.query) {
         const newQueries = [
@@ -51,6 +60,11 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
 
         localStorage.setItem(queryName, JSON.stringify(newQueries))
       }
+
+      setSearch({
+        ...search,
+        delayQuery: search.query.replace(/[^a-zA-Z]/g, ''),
+      })
 
       setSearchParams(
         (prevSearchParams) => {
@@ -71,7 +85,7 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
     if (!search.isMoving) return
 
     const timeout = setTimeout(() => {
-      const query = location.pathname === '/pages/search' ? search.query : ''
+      const query = pathname === '/pages/search' ? search.query : ''
       setSearch({ ...search, isMoving: false, query })
     }, 250)
 
@@ -95,93 +109,151 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
 
   return (
     <>
-      <button
-        className={cn(
-          'mt-3 flex max-h-[26px] w-full items-center rounded-lg bg-silver text-xs focus:outline-0 md:hidden',
-          { invisible: isOpen },
-        )}
-        onClick={handleSearchToggle}
-      >
-        <span className='scale-[80%] px-2 py-[6px]'>
-          <SearchIcon />
-        </span>
-        <span className='capitalize text-silver-dark'>enter search term</span>
-      </button>
+      <Overlay isOpen={search.isOpen} className='left-0 top-0 z-40 md:hidden' />
 
-      <Modal>
-        <Overlay
-          isOpen={search.isOpen}
-          className='left-0 top-0 z-40 md:hidden'
-        />
-
-        <div
-          className={cn(
-            'fixed left-0 top-0 z-50 flex h-[100dvh] w-screen animate-[fade_250ms_linear] flex-col justify-between bg-white px-[20px] py-[10px] transition-transform duration-[250ms] md:hidden',
-            {
-              'translate-y-full opacity-0': !search.isOpen && !search.isMoving,
-              'translate-y-0': search.isOpen && search.isMoving,
-              '-translate-x-full': !search.isOpen && search.isMoving,
-            },
-          )}
-        >
-          <div>
-            <div className='mb-6 flex items-center gap-[14px]'>
-              <button
-                className='scale-[120%] cursor-pointer duration-[400ms] hover:-translate-x-1'
-                onClick={handleSearchToggle}
-              >
-                <LiaAngleLeftSolid />
-              </button>
-
-              <SearchInput
-                ref={elInput}
-                name={queryName}
-                value={search.query}
-                onChange={handleQueryChange}
-                handleSubmit={handleSubmit}
-              />
-            </div>
-
-            {recentQueries && (
-              <div>
-                <p className='pb-[6px] text-[9.6px] uppercase tracking-[0.8px] text-gray-dark'>
-                  recent searches
-                </p>
-
-                <ul>
-                  {recentQueries.map((recentQuery) => (
-                    <li
-                      key={recentQuery}
-                      className='pb-[6px] text-[13px] leading-[18px]'
-                    >
-                      <Link
-                        to={`/pages/search${
-                          recentQuery
-                            ? `?${queryName}=${recentQuery.replace(' ', '+')}`
-                            : ''
-                        }`}
-                        onClick={handleSearchToggle}
-                      >
-                        {recentQuery}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+      {pathname === '/' && (
+        <>
+          <button
+            className={cn(
+              'mt-3 flex max-h-[26px] w-full items-center rounded-lg bg-silver text-xs focus:outline-0 md:hidden',
+              { invisible: isOpen },
             )}
-          </div>
-
-          <LinkCustom
-            to={`/pages/search${
-              search.query ? `?query=${search.query.replace(' ', '+')}` : ''
-            }`}
-            className='mx-auto'
             onClick={handleSearchToggle}
           >
-            see more
-          </LinkCustom>
-        </div>
-      </Modal>
+            <span className='scale-[80%] px-2 py-[6px]'>
+              <SearchIcon />
+            </span>
+            <span className='capitalize text-silver-dark'>
+              enter search term
+            </span>
+          </button>
+
+          <Modal>
+            <div
+              className={cn(
+                'fixed left-0 top-0 z-50 flex h-[100dvh] w-screen animate-[fade_250ms_linear] flex-col justify-between overflow-y-auto bg-silver-2 px-[20px] py-[10px] transition-transform duration-[250ms] md:hidden',
+                {
+                  'translate-y-full opacity-0':
+                    !search.isOpen && !search.isMoving,
+                  'translate-y-0': search.isOpen && search.isMoving,
+                  '-translate-x-full': !search.isOpen && search.isMoving,
+                },
+              )}
+            >
+              <div>
+                <div className='mb-10 flex items-center gap-[14px]'>
+                  <button
+                    className='scale-[120%] cursor-pointer duration-[400ms] hover:-translate-x-1'
+                    onClick={handleSearchToggle}
+                  >
+                    <LiaAngleLeftSolid />
+                  </button>
+
+                  <SearchInput
+                    ref={elInput}
+                    value={search.query}
+                    onChange={handleQueryChange}
+                    handleSubmit={handleSubmit}
+                  />
+                </div>
+
+                {recentQueries && (
+                  <div>
+                    <p className='pb-[6px] text-[9.6px] font-[500] uppercase tracking-[0.8px] text-gray-dark'>
+                      recent searches
+                    </p>
+
+                    <ul>
+                      {recentQueries.map((recentQuery) => (
+                        <li
+                          key={recentQuery}
+                          className='pb-[6px] text-[13px] leading-[18px]'
+                        >
+                          <Link
+                            to={`/pages/search${
+                              recentQuery
+                                ? `?${queryName}=${recentQuery.replace(
+                                    ' ',
+                                    '+',
+                                  )}`
+                                : ''
+                            }`}
+                            onClick={handleSearchToggle}
+                          >
+                            {recentQuery}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {searchResult?.products.length !== 0 && (
+                  <div className='mt-5'>
+                    <p className='pb-[6px] text-[9.6px] font-[500] uppercase tracking-[0.8px] text-gray-dark'>
+                      results
+                    </p>
+
+                    <div className='mb-8 grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3'>
+                      {searchResult?.products.map((product) => (
+                        <Link
+                          key={product.id}
+                          to={`/products/${product.handle}?id=${product.id}`}
+                          className='relative z-20'
+                        >
+                          <div className='relative pb-[100%]'>
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className='absolute left-0 top-0 h-full w-full bg-silver object-cover'
+                            />
+                          </div>
+
+                          <div className='bg-white px-3 py-1'>
+                            <h4 className='relative mb-1 mt-2 text-sm font-[500]'>
+                              {product.name}
+                            </h4>
+                            <p className='mb-1 text-[12px]'>
+                              {product.colorName}
+                            </p>
+                            <div className='relative mb-1 text-[11.2px] md:px-0'>
+                              {product.salePrice && (
+                                <span className='mr-1 text-red'>
+                                  ${product?.salePrice}
+                                </span>
+                              )}
+                              <span
+                                className={cn({
+                                  'text-gray-medium line-through':
+                                    product?.salePrice,
+                                })}
+                              >
+                                ${product.price}
+                              </span>
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <LinkCustom
+                to={`/pages/search${
+                  search.query
+                    ? `?${queryName}=${search.query.replace(' ', '+')}`
+                    : ''
+                }`}
+                className='mx-auto'
+                onClick={handleSearchToggle}
+              >
+                see more
+              </LinkCustom>
+            </div>
+          </Modal>
+        </>
+      )}
     </>
   )
 }

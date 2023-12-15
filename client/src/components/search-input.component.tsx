@@ -16,9 +16,10 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           <input
             ref={ref}
             className='w-full bg-transparent py-[11px] text-xs tracking-[0.06em] focus:outline-0'
-            autoComplete='off'
             type='text'
+            name='query'
             placeholder='Enter Search Term'
+            autoComplete='off'
             {...props}
           />
         </div>

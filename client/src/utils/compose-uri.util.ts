@@ -1,10 +1,10 @@
 import { QueryKey } from '@tanstack/react-query'
 
-export const composeUri = (queryKey: QueryKey): string => {
+export const composeUri = (queryKey: QueryKey, extraQueries = {}): string => {
   return queryKey
     .map((key) =>
       typeof key === 'object'
-        ? '?' + composeQueryies(key as object)
+        ? '?' + composeQueryies({ ...key, ...extraQueries })
         : '/' + key,
     )
     .join('')

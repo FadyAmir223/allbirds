@@ -6,6 +6,7 @@ import Product from './product.mongo.js'
 import User from '../user/user.mongo.js'
 import { __dirname } from '../../config/env.js'
 import { getSideImage } from '../../utils/getSideImage.js'
+import { getSearchQueryRegex } from '../../utils/getSearchQueryRegex.js'
 
 async function saveProducts() {
   try {
@@ -613,15 +614,25 @@ async function getNewRating(handle, score?) {
 }
 
 async function searchProducts({ q, skip, limit }) {
+  console.log(getSearchQueryRegex(q))
   try {
     const [{ products, total }] = await Product.aggregate([
       { $unwind: '$editions' },
       { $unwind: '$editions.products' },
       {
         $match: {
-          'editions.products.handle': {
-            $regex: new RegExp(q, 'i'),
-          },
+          $or: [
+            {
+              'editions.products.handle': {
+                $regex: getSearchQueryRegex(q),
+              },
+            },
+            {
+              'editions.products.colorName': {
+                $regex: getSearchQueryRegex(q),
+              },
+            },
+          ],
         },
       },
       {
