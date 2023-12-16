@@ -9,6 +9,7 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import ProductCard from '../components/product-card.component'
 import SideBar from '../components/side-bar.component'
+import Head from '@/components/head.component'
 import { collectionQuery } from '../services/collection.query'
 import { ensureType } from '../utils/ensureType.util'
 import { type FilterKey, type FilterValues, type SelectedFilters } from '..'
@@ -44,9 +45,6 @@ const Collections = () => {
 
   if (!collection) return
 
-  if (!hasGender)
-    filters.sizes = filters.sizes.map((size) => size.split('.')[0])
-
   const selectedFilters: SelectedFilters = {} as Record<FilterKey, FilterValues>
 
   for (const key in filters)
@@ -71,6 +69,11 @@ const Collections = () => {
 
   return (
     <main className='py-10'>
+      <Head
+        title={`${type} collection`}
+        description='sustainable shoes & clothing'
+      />
+
       <div className='mb-16 flex items-center'>
         <SideBar
           filters={filters}

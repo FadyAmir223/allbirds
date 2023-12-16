@@ -2,6 +2,7 @@ import { Link, Navigate, useSearchParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { DevTool } from '@hookform/devtools'
+import Head from '@/components/head.component'
 import LinkCustom from '@/components/link-custom.component'
 import { cn } from '@/utils/cn.util'
 import { getErrorMessage } from '@/utils/getErrorMessage.util'
@@ -94,6 +95,8 @@ const Register = () => {
     <Navigate to={searchParams.get('redirectTo') || '/account'} replace />
   ) : (
     <main className='min-h-[calc(100dvh-82px)] bg-dark-form'>
+      <Head title={'register'} description='sustainable shoes & clothing' />
+
       <div className='mx-auto max-w-xl px-6 py-20'>
         <h1 className='mb-5 text-2xl font-bold uppercase'>create an account</h1>
         <p className='mb-3 text-sm'>We never save credit card information.</p>

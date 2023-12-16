@@ -4,6 +4,7 @@ import MaterialFeatures from '../components/product/material-features.component'
 import ProductDetails from '../components/product/product-details.component'
 import GeneralReview from '../components/reviews/general-review.component'
 import Reviews from '../components/reviews/reviews.component'
+import Head from '@/components/head.component'
 import { productQuery, productReviewsQuery } from '../services/product.query'
 import { loader as productLoader } from '../services/product.loader'
 
@@ -30,6 +31,8 @@ const Product = () => {
 
   return (
     <main>
+      <Head title={product.name} description='sustainable shoes & clothing' />
+
       <ProductDetails
         initProduct={initProduct}
         reviews={{

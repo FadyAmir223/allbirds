@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useNavigation, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { DevTool } from '@hookform/devtools'
+import Head from '@/components/head.component'
 import LinkCustom from '@/components/link-custom.component'
 import { cn } from '@/utils/cn.util'
 import { getErrorMessage } from '@/utils/getErrorMessage.util'
@@ -63,6 +64,11 @@ const ResetPassword = () => {
 
   return (
     <main className='min-h-[calc(100dvh-82px)] bg-dark-form'>
+      <Head
+        title={'reset password'}
+        description='sustainable shoes & clothing'
+      />
+
       <div className='mx-auto max-w-lg px-6 py-20'>
         <h1 className='mb-5 text-center text-xl font-bold uppercase'>
           reset account password

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useLoaderData, useNavigate } from 'react-router-dom'
 import { useQueries } from '@tanstack/react-query'
+import Head from '@/components/head.component'
 import {
   locationsQuery,
   ordersHistoryQuery,
@@ -52,6 +53,8 @@ const Account = () => {
 
   return (
     <main className='min-h-[calc(100dvh-82px)] bg-dark-form py-20'>
+      <Head title={'my account'} description='sustainable shoes & clothing' />
+
       <div className='mb-16 text-center'>
         <h1 className='pb-1  text-xl font-bold uppercase tracking-[1px]'>
           my account

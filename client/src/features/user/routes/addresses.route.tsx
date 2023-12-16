@@ -3,6 +3,7 @@ import { Link, useLoaderData } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { AddressForm } from '../components/address-form.component'
 import BottomDrawer from '@/components/bottom-drawer.component'
+import Head from '@/components/head.component'
 import { locationsQuery } from '../services/user.query'
 import { cn } from '@/utils/cn.util'
 import { createAction } from '@/utils/createAction.util'
@@ -96,6 +97,8 @@ const Addresses = () => {
 
   return (
     <main className='min-h-[calc(100dvh-82px)] bg-dark-form px-3 py-16 sm:px-6'>
+      <Head title={'my addresses'} description='sustainable shoes & clothing' />
+
       <div className='mb-16 text-center'>
         <h1 className='mb-3 pb-1 text-xl font-bold uppercase tracking-[1px]'>
           my addresses

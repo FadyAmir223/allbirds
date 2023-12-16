@@ -5,6 +5,7 @@ import EmailServiceForm from '../components/email-service-form.component'
 import Hero from '../components/hero.component'
 import SaleAd from '../components/sale-ad.component'
 import { SectionDesktop, Slider } from '../components/slider.component'
+import Head from '@/components/head.component'
 import { Spinner } from '@/components/spinner.component'
 import gifts from '../data/gifts.json'
 import shopCollections from '../data/shop-collections.json'
@@ -36,6 +37,8 @@ export const Home = () => {
 
   return (
     <main className='lg:pt-7'>
+      <Head title='home' description='sustainable shoes & clothing' />
+
       <Hero />
 
       <Slider

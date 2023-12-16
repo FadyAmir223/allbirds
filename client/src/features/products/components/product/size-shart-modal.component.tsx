@@ -30,7 +30,7 @@ const SizeChartModal = (props: ModalProps) => {
               {gender} shoes
             </h5>
 
-            <table className='border-separate border-spacing-[3px]'>
+            <table className='hidden border-separate border-spacing-[3px] md:block'>
               <tbody>
                 {fields.map((field) => (
                   <tr key={field.region}>
@@ -47,6 +47,37 @@ const SizeChartModal = (props: ModalProps) => {
                     ))}
                   </tr>
                 ))}
+              </tbody>
+            </table>
+
+            <table className='block border-separate border-spacing-[3px] md:hidden'>
+              <thead>
+                <tr>
+                  {fields.map(({ region }) => (
+                    <th
+                      key={region}
+                      className='min-w-[75px] bg-gray p-4 text-center text-white'
+                    >
+                      {region}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: fields[0].sizes.length }).map(
+                  (_, sizeIdx) => (
+                    <tr
+                      key={sizeIdx}
+                      className='min-w-[75px] text-center text-black odd:bg-tBodyEven even:bg-tBodyOdd'
+                    >
+                      {fields.map((field) => (
+                        <td key={field.region} className='p-4'>
+                          {field.sizes[sizeIdx]}
+                        </td>
+                      ))}
+                    </tr>
+                  ),
+                )}
               </tbody>
             </table>
           </li>

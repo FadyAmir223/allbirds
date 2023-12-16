@@ -5,7 +5,8 @@ import { Checkbox } from './checkbox.component'
 import Drawer from '@/components/drawer.component'
 import SizeButton from '@/components/product/size-button.component'
 import { cn } from '@/utils/cn.util'
-import { type FilterKey, type Filters } from '..'
+import type { FilterKey, Filters } from '..'
+import { getSockSize } from '..'
 
 type SideBarProps = {
   filters: Filters['filters']
@@ -69,9 +70,6 @@ const SideBarFilters = ({
   const hasFilters = !Object.values(selectedFilters).every(
     (value) => value === undefined,
   )
-
-  if (!hasGender)
-    filters.sizes = filters.sizes.map((size) => size.split('.')[0])
 
   const handleFilterBy = (key: string, value: string) => {
     setSearchParams(
@@ -148,25 +146,43 @@ const SideBarFilters = ({
           Most of our shoes only come in full sizes. If you’re a half size,
           select your nearest whole size too.
         </p>
-        <ul
+
+        <div
           className={cn(
             'grid gap-2',
             hasGender ? 'grid-cols-6' : 'grid-cols-2',
           )}
         >
-          {filters.sizes.map((size) => (
-            <SizeButton
-              key={size}
-              className={cn(
-                hasGender ? 'text-[10px]' : 'text-[16px] font-bold uppercase',
-              )}
-              selected={selectedFilters.sizes?.includes(size)}
-              onClick={() => handleFilterBy('sizes', size)}
-            >
-              {size}
-            </SizeButton>
-          ))}
-        </ul>
+          {filters.sizes.map((size) => {
+            let letter, sockSize
+            if (!hasGender) {
+              // eslint-disable-next-line no-extra-semi
+              ;[letter, ...sockSize] = size.split('.')
+              sockSize = getSockSize(sockSize || [])
+            }
+
+            return (
+              <SizeButton
+                key={size}
+                selected={selectedFilters.sizes?.includes(size)}
+                enabledOnSoldOut
+                className={cn({
+                  'aspect-auto p-1.5 uppercase': !hasGender,
+                })}
+                onClick={() => handleFilterBy('sizes', size)}
+              >
+                {hasGender ? (
+                  size
+                ) : (
+                  <div>
+                    <p className='text-[13px] font-bold'>{letter}</p>
+                    <p className='text-[11px] text-[#cfcbc4]'>({sockSize})</p>
+                  </div>
+                )}
+              </SizeButton>
+            )
+          })}
+        </div>
       </div>
 
       {checkboxFilters.map(({ label, filterType }) => (

@@ -10,6 +10,7 @@ import {
 import GoogleSvg from '@/assets/svg/google.svg?react'
 import { FaFacebook } from 'react-icons/fa'
 import { ForgetPasswordForm } from '../components/forget-password-form.component'
+import Head from '@/components/head.component'
 import LinkCustom from '@/components/link-custom.component'
 import { cn } from '@/utils/cn.util'
 import { useAppSelector } from '@/store/hooks'
@@ -29,6 +30,8 @@ const Login = () => {
     <Navigate to={searchParams.get('redirectTo') || '/account'} replace />
   ) : (
     <main className='min-h-[calc(100dvh-82px)] bg-dark-form'>
+      <Head title={'login'} description='sustainable shoes & clothing' />
+
       <div className='mx-auto max-w-xl px-6 py-20'>
         {forgetPassword ? (
           <ForgetPasswordForm toggleForgetPassword={toggleForgetPassword} />

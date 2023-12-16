@@ -17,6 +17,7 @@ import { cn } from '@/utils/cn.util'
 import type { ProductDetailed, ReviewsHeadline } from '../..'
 import type { PureCartProduct } from '@/features/cart'
 import { addCartItem } from '@/features/cart'
+import { getSockSize } from '@/features/collections'
 import { SlideCard } from '@/features/misc'
 import { useAppDispatch } from '@/store/hooks'
 
@@ -316,8 +317,12 @@ const ProductDetails = ({
               })}
             >
               {product.sizes.map((size, sizeIdx) => {
-                let k, v
-                if (!hasGender) [k, v] = size.split('.')
+                let letter, sockSize
+                if (!hasGender) {
+                  // eslint-disable-next-line no-extra-semi
+                  ;[letter, ...sockSize] = size.split('.')
+                  sockSize = getSockSize(sockSize || [])
+                }
 
                 return (
                   <SizeButton
@@ -334,8 +339,10 @@ const ProductDetails = ({
                       size
                     ) : (
                       <div>
-                        <p className='text-[13px] font-bold'>{k}</p>
-                        <p className='text-[11px] text-[#cfcbc4]'>({v})</p>
+                        <p className='text-[13px] font-bold'>{letter}</p>
+                        <p className='text-[11px] text-[#cfcbc4]'>
+                          ({sockSize})
+                        </p>
                       </div>
                     )}
                   </SizeButton>

@@ -16,6 +16,7 @@ import { cn } from '@/utils/cn.util'
 import { composeUri } from '@/utils/compose-uri.util'
 import { type SearchRes } from '@/features/pages'
 import { productKeys } from '@/features/products'
+import { useDebounce } from '@/hooks/useDebounce'
 import { axios } from '@/lib/axios'
 
 type SearchFieldProps = {
@@ -23,6 +24,7 @@ type SearchFieldProps = {
 }
 
 export const queryName = 'q'
+export const typingDelay = 400
 
 const SearchField = ({ isOpen }: SearchFieldProps) => {
   const navigate = useNavigate()
@@ -34,11 +36,12 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
     isOpen: false,
     isMoving: false,
     query: '',
-    delayQuery: '',
   })
 
+  const debounceQuery = useDebounce(search.query, typingDelay)
+
   const { data: searchResult } = useQuery<SearchRes>({
-    queryKey: productKeys.search(search.delayQuery, 4),
+    queryKey: productKeys.search(debounceQuery, 4),
     queryFn: ({ queryKey }) => axios.get(composeUri(queryKey)),
   })
 
@@ -61,11 +64,6 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
         localStorage.setItem(queryName, JSON.stringify(newQueries))
       }
 
-      setSearch({
-        ...search,
-        delayQuery: search.query.replace(/[^a-zA-Z]/g, ''),
-      })
-
       setSearchParams(
         (prevSearchParams) => {
           search.query
@@ -76,7 +74,7 @@ const SearchField = ({ isOpen }: SearchFieldProps) => {
         },
         { replace: true },
       )
-    }, 600)
+    }, typingDelay)
 
     return () => clearTimeout(timeout)
   }, [search.query]) // eslint-disable-line

@@ -1,11 +1,16 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { queryName } from '@/components/header/search-field.component'
+import Head from '@/components/head.component'
+import {
+  queryName,
+  typingDelay,
+} from '@/components/header/search-field.component'
 import { SearchInput } from '@/components/search-input.component'
 import { Spinner } from '@/components/spinner.component'
 import { getSerachQuery } from '../services/serach.query'
 import { cn } from '@/utils/cn.util'
+import { useDebounce } from '@/hooks/useDebounce'
 
 const Search = () => {
   const elPage = useRef<HTMLDivElement | null>(null)
@@ -15,12 +20,10 @@ const Search = () => {
 
   const defaultQuery = searchParams.get('q') || ''
   const [query, setQuery] = useState(defaultQuery)
-  const [delayquery, setDelayQuery] = useState(
-    defaultQuery.replace(/[^a-zA-Z]/g, ''),
-  )
+  const debounceQuery = useDebounce(defaultQuery, typingDelay)
 
   const { data, isFetching, hasNextPage, fetchNextPage } = useInfiniteQuery(
-    getSerachQuery({ q: delayquery }),
+    getSerachQuery({ q: debounceQuery }),
   )
 
   useEffect(() => {
@@ -36,8 +39,6 @@ const Search = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setDelayQuery(query.replace(/[^a-zA-Z]/g, ''))
-
       setSearchParams((prevSearchParams) => {
         query
           ? prevSearchParams.set(queryName, query)
@@ -71,6 +72,8 @@ const Search = () => {
       ref={elPage}
       className='mx-auto min-h-[calc(100dvh-32px+50px-80px)] px-4 py-10 md:container'
     >
+      <Head title={'search'} description='sustainable shoes & clothing' />
+
       <h1 className='mb-4 text-2xl font-bold'>Search Results</h1>
 
       <div className='mb-2 flex items-center gap-x-3'>
@@ -93,7 +96,7 @@ const Search = () => {
         </p>
       )}
 
-      <div className=''>
+      <div>
         <div className='grid grid-cols-2 gap-4 bg-white md:grid-cols-3'>
           {data?.products.map((product) => (
             <div key={product.id} className='group relative'>
@@ -132,7 +135,7 @@ const Search = () => {
           ))}
         </div>
 
-        {isFetching && <Spinner />}
+        {debounceQuery && isFetching && <Spinner />}
       </div>
     </main>
   )

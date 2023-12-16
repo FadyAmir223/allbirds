@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import Head from '@/components/head.component'
 import LinkCustom from '@/components/link-custom.component'
 import Loading from '@/components/loading.component'
 import { axios } from '@/lib/axios'
@@ -30,6 +31,8 @@ const Verify = () => {
     <Loading />
   ) : (
     <main className='min-h-[calc(100dvh-82px)] bg-dark-form'>
+      <Head title={'verify email'} description='sustainable shoes & clothing' />
+
       <div className='py-16 text-center'>
         <h1 className='mb-8 text-xl capitalize'>
           your email has been successfully verified!
