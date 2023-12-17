@@ -17,14 +17,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <ErrorBoundary fallback={<ErrorFallback />}>
     <Suspense fallback={<Loading />}>
       <HelmetProvider>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Provider store={store}>
             <QueryClientProvider client={queryClient}>
               <App />
               <ReactQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>
-          </PersistGate>
-        </Provider>
+          </Provider>
+        </PersistGate>
       </HelmetProvider>
     </Suspense>
   </ErrorBoundary>,

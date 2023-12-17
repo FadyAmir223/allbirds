@@ -217,8 +217,28 @@ PATCH {{url}}/api/user/locations/6579ac2cf3ce1bbce86e9a1a
 
 
 ## orders
-### make order - bug: fix POST -> GET
+### get orders
 GET {{url}}/api/user/orders
+
+### make order
+POST {{url}}/api/user/orders
+
+{
+  "items": [
+    {
+      "handle": "mens-tree-runners",
+      "editionId": "6854288736336",
+      "size": "8",
+      "amount": "2"
+    }
+    // ,{
+    //   "handle": "mens-tree-runners",
+    //   "editionId": "6645902311504",
+    //   "size": "14",
+    //   "amount": "1"
+    // }
+  ]
+}
 
 ### order history
 GET {{url}}/api/user/orders/history

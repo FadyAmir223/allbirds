@@ -462,6 +462,118 @@ async function removeReview(handle, reviewId, userId) {
   }
 }
 
+async function getNewRating(handle, score?) {
+  const [{ _id: scores }] = await Product.aggregate([
+    { $match: { handle } },
+    { $project: { _id: '$reviews.reviews.score' } },
+  ])
+
+  if (score) scores.push(score)
+
+  const totalScores = scores.reduce((acc, i) => acc + i, 0)
+  const newRating = Number(totalScores / scores.length).toFixed(1)
+  return newRating
+}
+
+async function searchProducts({ q, skip, limit }) {
+  console.log(getSearchQueryRegex(q))
+  try {
+    const [{ products, total }] = await Product.aggregate([
+      { $unwind: '$editions' },
+      { $unwind: '$editions.products' },
+      {
+        $match: {
+          $or: [
+            {
+              'editions.products.handle': {
+                $regex: getSearchQueryRegex(q),
+              },
+            },
+            {
+              'editions.products.colorName': {
+                $regex: getSearchQueryRegex(q),
+              },
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$editions.products.id',
+          handle: '$handle',
+          name: '$name',
+          colorName: '$editions.products.colorName',
+          price: '$price',
+          salePrice: '$editions.products.salePrice',
+          image: getSideImage('$editions.products.images'),
+        },
+      },
+      {
+        $facet: {
+          products: [{ $skip: skip }, { $limit: limit }],
+          total: [{ $count: 'count' }],
+        },
+      },
+      {
+        $project: {
+          products: 1,
+          total: { $arrayElemAt: ['$total.count', 0] },
+        },
+      },
+    ])
+
+    return { status: 200, products, total: total || 0 }
+  } catch {
+    return { status: 500, message: 'internal server error' }
+  }
+}
+
+async function getSoldOut(items) {
+  try {
+    if (!items || items.length === 0) return { message: 'your cart is empty' }
+
+    const soldOuts = (
+      await Promise.all(
+        items.map(({ handle, editionId }) => {
+          return Product.aggregate([
+            { $match: { handle } },
+            { $unwind: '$editions' },
+            { $unwind: '$editions.products' },
+            { $match: { 'editions.products.id': +editionId } },
+            {
+              $project: {
+                _id: 0,
+                name: '$name',
+                colorName: '$editions.products.colorName',
+                sizesSoldOut: '$editions.products.sizesSoldOut',
+              },
+            },
+          ])
+        }),
+      )
+    ).flat()
+
+    const soldOutItems = []
+
+    for (let i = 0; i <= items.length; i++)
+      if (soldOuts[i]?.sizesSoldOut.includes(items[i].size))
+        soldOutItems.push(
+          `${soldOuts[i].name} - ${soldOuts[i].colorName} - size: ${items[i].size}`,
+        )
+
+    const message =
+      soldOutItems.length !== 0
+        ? 'some products in cart are sold out'
+        : undefined
+
+    return { soldOutItems, message }
+  } catch {
+    return { message: 'error during getting the soldOuts' }
+  }
+}
+
+// all below is not used
 async function getCart(items) {
   try {
     if (!items || items.length === 0)
@@ -600,73 +712,6 @@ async function removeCartItem(items, { editionId, size }, _delete = false) {
   }
 }
 
-async function getNewRating(handle, score?) {
-  const [{ _id: scores }] = await Product.aggregate([
-    { $match: { handle } },
-    { $project: { _id: '$reviews.reviews.score' } },
-  ])
-
-  if (score) scores.push(score)
-
-  const totalScores = scores.reduce((acc, i) => acc + i, 0)
-  const newRating = Number(totalScores / scores.length).toFixed(1)
-  return newRating
-}
-
-async function searchProducts({ q, skip, limit }) {
-  console.log(getSearchQueryRegex(q))
-  try {
-    const [{ products, total }] = await Product.aggregate([
-      { $unwind: '$editions' },
-      { $unwind: '$editions.products' },
-      {
-        $match: {
-          $or: [
-            {
-              'editions.products.handle': {
-                $regex: getSearchQueryRegex(q),
-              },
-            },
-            {
-              'editions.products.colorName': {
-                $regex: getSearchQueryRegex(q),
-              },
-            },
-          ],
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          id: '$editions.products.id',
-          handle: '$handle',
-          name: '$name',
-          colorName: '$editions.products.colorName',
-          price: '$price',
-          salePrice: '$editions.products.salePrice',
-          image: getSideImage('$editions.products.images'),
-        },
-      },
-      {
-        $facet: {
-          products: [{ $skip: skip }, { $limit: limit }],
-          total: [{ $count: 'count' }],
-        },
-      },
-      {
-        $project: {
-          products: 1,
-          total: { $arrayElemAt: ['$total.count', 0] },
-        },
-      },
-    ])
-
-    return { status: 200, products, total: total || 0 }
-  } catch {
-    return { status: 500, message: 'internal server error' }
-  }
-}
-
 export {
   saveProducts,
   getCollection,
@@ -674,10 +719,11 @@ export {
   getCollectionFilters,
   searchProducts,
   getProduct,
-  getCart,
-  addCartItem,
-  removeCartItem,
   getReviews,
   addReview,
   removeReview,
+  getSoldOut,
+  getCart,
+  addCartItem,
+  removeCartItem,
 }

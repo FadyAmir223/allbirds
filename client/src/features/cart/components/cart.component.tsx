@@ -22,8 +22,8 @@ const shopItems = [
   { title: "shop men's", url: '/collections/mens' },
   { title: "shop women's", url: '/collections/womens' },
   { title: 'shop socks', url: '/collections/socks' },
-  { title: "shop men's sale", url: '/collections/sale-mens-shoes' },
-  { title: "shop women's sale", url: '/collections/sale-womens-shoes' },
+  { title: "shop men's sale", url: '/collections/sale/shoes' },
+  { title: "shop women's sale", url: '/collections/sale/womens' },
 ]
 
 export const Cart = ({ handleNavClose }: CartProps) => {
@@ -175,7 +175,7 @@ export const Cart = ({ handleNavClose }: CartProps) => {
             </div>
 
             <LinkCustom
-              to='/checkouts'
+              to='/checkout'
               className='block w-full text-sm'
               onClick={handleCartClose}
             >

@@ -46,7 +46,7 @@ const Search = () => {
 
         return prevSearchParams
       })
-    }, 600)
+    }, typingDelay)
 
     return () => clearTimeout(timeout)
   }, [query]) // eslint-disable-line

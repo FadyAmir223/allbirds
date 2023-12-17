@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import bcrypt from 'bcryptjs'
 
 import User from './user.mongo.js'
-import { getCart } from '../product/product.model.js'
+import { getCart, getSoldOut } from '../product/product.model.js'
 import { mailResetPassword, mailVerifyAccount } from '../../services/mail.js'
 import { CLIENT_DOMAIN } from '../../config/env.js'
 
@@ -201,68 +201,6 @@ async function updateLocation(userId, locationId, fields) {
   }
 }
 
-async function orderCart(userId, items) {
-  try {
-    const { cart } = await getCart(items)
-
-    const soldOutItems = cart
-      .filter(({ soldOut }) => soldOut)
-      .map(({ name, colorName }) => `${name} - ${colorName}`)
-
-    if (soldOutItems.length !== 0)
-      return {
-        status: 404,
-        message: 'some products in cart are sold out',
-        soldOutItems,
-      }
-
-    const user = await User.findById(userId, 'orders')
-
-    if (!user) return { status: 404, message: 'user not found' }
-
-    for (const item of items) {
-      const { handle, editionId, size, amount } = item
-
-      const existingOrder = user.orders.find(
-        (order) =>
-          String(order.handle) === handle &&
-          order.editionId === editionId &&
-          order.size === size,
-      )
-
-      if (existingOrder) existingOrder.amount += amount
-      else
-        user.orders.push({
-          handle,
-          editionId,
-          size,
-          amount,
-          delivered: false,
-          reviewed: false,
-        })
-    }
-
-    await user.save()
-
-    // TODO: payment
-
-    /*
-      1- total = items.price * items.count
-      2- gateway: Stripe, PayPal, Skrill, Payoneer
-      3- create payment request { total, paymentMethod, customerInfo  }
-      4- handle response
-    */
-
-    return {
-      status: 201,
-      orders: user.orders,
-      message: 'purchased successfully',
-    }
-  } catch {
-    return { status: 500, message: 'error happened during purchase' }
-  }
-}
-
 async function getOrders(userId, history = false) {
   try {
     const filter = history
@@ -434,6 +372,56 @@ async function getUserTrustedDevices(email) {
   }
 }
 
+async function orderCart(userId, items) {
+  try {
+    const { soldOutItems, message } = await getSoldOut(items)
+    if (message) return { status: 400, soldOutItems, message }
+
+    const user = await User.findById(userId, 'orders')
+    if (!user) return { status: 404, message: 'user not found' }
+
+    for (const item of items) {
+      const { handle, editionId, size, amount } = item
+
+      const existingOrder = user.orders.find(
+        (order) =>
+          order.handle === handle &&
+          order.editionId === +editionId &&
+          order.size === size,
+      )
+
+      if (existingOrder) existingOrder.amount += +amount
+      else
+        user.orders.push({
+          handle,
+          editionId,
+          size,
+          amount,
+          delivered: false,
+          reviewed: false,
+        })
+    }
+
+    await user.save()
+
+    /*
+      TODO: payment
+      1- total = items.price * items.count
+      2- gateway?: Fawry easyPay, Stripe, PayPal, Skrill, Payoneer
+      3- create payment request { total, paymentMethod, customerInfo  }
+      4- handle response
+    */
+
+    return {
+      status: 201,
+      orders: user.orders,
+      message: 'purchased successfully',
+    }
+  } catch {
+    return { status: 500, message: 'error happened during purchase' }
+  }
+}
+
 export {
   getUserById,
   getUserByEmail,
@@ -447,11 +435,11 @@ export {
   addLocation,
   removeLocation,
   updateLocation,
-  orderCart,
   getOrders,
   verifyUser,
   requestResetPassword,
   verifyResetToken,
   resetPassword,
   getUserTrustedDevices,
+  orderCart,
 }

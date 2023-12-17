@@ -16,17 +16,17 @@ app.use(
   }),
 )
 
-// app.use(
-//   helmet({
-//     contentSecurityPolicy: {
-//       directives: {
-//         'default-src': ["'self'"],
-//         // blob: upload & *: other sites
-//         'img-src': ["'self'", 'blob:'],
-//       },
-//     },
-//   })
-// );
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        'default-src': ["'self'"],
+        // blob: upload & *: other sites
+        'img-src': ["'self'", 'blob:'],
+      },
+    },
+  }),
+)
 
 app.use(express.json())
 

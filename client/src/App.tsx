@@ -4,10 +4,10 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom'
-import ErrorFallback from '@/components/error-fallback.component'
 import Layout from '@/components/layout.component'
 import { lazyImport } from '@/utils/lazy-import.util'
 import { AuthRoute } from '@/features/auth'
+import { CheckoutRoute } from '@/features/checkout'
 import { CollectionRoute } from '@/features/collections'
 import { PagesRoute } from '@/features/pages'
 import { ProductRoute } from '@/features/products'
@@ -22,15 +22,18 @@ const App = () => {
     <RouterProvider
       router={createBrowserRouter(
         createRoutesFromElements(
-          <Route path='/' element={<Layout />} errorElement={<ErrorFallback />}>
-            <Route path='*' element={<NotFound />} />
-            <Route index element={<Home />} />
-            {CollectionRoute()}
-            {ProductRoute()}
-            {AuthRoute()}
-            {UserRoute()}
-            {PagesRoute()}
-          </Route>,
+          <>
+            <Route path='/' element={<Layout />}>
+              <Route path='*' element={<NotFound />} />
+              <Route index element={<Home />} />
+              {CollectionRoute()}
+              {ProductRoute()}
+              {AuthRoute()}
+              {UserRoute()}
+              {PagesRoute()}
+            </Route>
+            ,{CheckoutRoute()}
+          </>,
         ),
       )}
     />

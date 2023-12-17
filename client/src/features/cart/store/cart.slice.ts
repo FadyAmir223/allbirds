@@ -1,10 +1,10 @@
-import { RootState } from '@/store/store'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type {
   CartProduct,
   ProductSignature,
   PureCartProduct,
 } from '../types/cart.type'
+import { RootState } from '@/store/store'
 
 type CartInitialState = {
   isOpen: boolean
@@ -101,6 +101,11 @@ const cartSlice = createSlice({
 
       updateTotalPrice(state)
     },
+
+    clearCart: (state) => {
+      state.items = []
+      updateTotalPrice(state)
+    },
   },
 })
 
@@ -118,7 +123,12 @@ function updateTotalPrice(state: Omit<RootState['cart'], '_persist'>) {
   state.totalPrice = totalPrice
 }
 
-export const { toggleCart, addCartItem, removeCartItem, deleteCartItem } =
-  cartSlice.actions
+export const {
+  toggleCart,
+  addCartItem,
+  removeCartItem,
+  deleteCartItem,
+  clearCart,
+} = cartSlice.actions
 export const cartReducer = cartSlice.reducer
 export type { CartInitialState }

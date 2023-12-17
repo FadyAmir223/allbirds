@@ -7,8 +7,9 @@ import {
   removeLocation,
   updateLocation,
   getOrders,
+  orderCart,
 } from '../../models/user/user.model.js'
-import { SERVER_URL } from '../../config/env.js'
+import { NODE_ENV, SERVER_URL } from '../../config/env.js'
 
 async function httpsGetUser(req: Request, res: Response) {
   const { status, user } = await getUserInfo(req.user._id)
@@ -75,8 +76,18 @@ async function httpsUpdateLocation(
   res.status(status).json({ locations, message })
 }
 
-function httpsOrderCart(req: Request, res: Response) {
-  res.redirect(`${SERVER_URL}/api/cart/orders?userId=${req.user._id}`)
+async function httpsOrderCart(req: Request, res: Response): Promise<Response> {
+  const userId = req.user._id
+  const { items } = req.body
+
+  if (items?.length === 0)
+    return res.status(400).json({ message: 'there is no items to purchase' })
+
+  const { status, orders, soldOutItems, message } = await orderCart(
+    userId,
+    items,
+  )
+  res.status(status).json({ orders, soldOutItems, message })
 }
 
 async function httpsGetOrders(req: Request, res: Response) {
