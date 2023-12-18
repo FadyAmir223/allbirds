@@ -84,18 +84,14 @@ async function httpsRemoveReview(
   req: Request,
   res: Response,
 ): Promise<Response> {
-  const { handle, reviewId } = req.params
-
-  if (reviewId.length !== 24)
-    return res.status(400).json({ message: 'invalid review id' })
+  const { handle } = req.params
 
   const { status, pagination, rating, reviews, message } = await removeReview(
     handle,
-    reviewId,
     req.user._id,
   )
 
-  res.status(status).json({ pagination, rating, reviews, message })
+  return res.status(status).json({ pagination, rating, reviews, message })
 }
 
 export {

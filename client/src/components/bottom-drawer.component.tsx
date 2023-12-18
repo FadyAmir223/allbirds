@@ -35,7 +35,9 @@ const BottomDrawer = ({
           className='right-6 top-6 scale-[1.8]'
           onClick={handleClose}
         />
-        <div className='container mx-auto'>{children}</div>
+        <div className={cn('h-full', { 'container mx-auto': !className })}>
+          {children}
+        </div>
       </div>
     </Modal>
   )

@@ -356,10 +356,10 @@ async function addReview(handle, review, user) {
         message: "you didn't order this size of the product",
       }
 
-    const [{ /* delivered, */ reviewed }] = _user.orders
+    const [{ delivered, reviewed }] = _user.orders
 
-    // if (IS_PRODUCTION && !delivered)
-    //   return { status: 400, message: "your order hasn't been delivered yet" };
+    if (!delivered)
+      return { status: 400, message: "your order hasn't been delivered yet" }
 
     if (reviewed)
       return { status: 400, message: 'you already have reviewed this product' }
@@ -428,50 +428,62 @@ async function addReview(handle, review, user) {
   }
 }
 
-async function removeReview(handle, reviewId, userId) {
+async function removeReview(handle, userId) {
   try {
-    // TODO: calculate new rating after removing review
+    const x = await Product.findOne(
+      { 'reviews.reviews.userId': userId },
+      { 'reviews.reviews.$': 1 },
+    ).lean()
 
-    const newRating = await getNewRating(handle)
+    const { score } = x.reviews.reviews[0]
+
+    const newRating = await getNewRating(handle, score, 'delete')
 
     const { acknowledged, modifiedCount } = await Product.updateOne(
       {
         handle,
-        'reviews.reviews._id': reviewId,
         'reviews.reviews.userId': userId,
       },
       {
-        $pull: { 'reviews.reviews': { _id: reviewId } },
+        $pull: { 'reviews.reviews': { userId } },
         $inc: { 'reviews.count': -1 },
         $set: { 'reviews.rating': newRating },
       },
     )
 
     if (!acknowledged) throw new Error()
+    if (modifiedCount === 0) throw { message: "you didn't review this product" }
 
-    if (modifiedCount === 0)
-      return { status: 400, message: 'invalid review id' }
+    const userToUpdate = await User.findById(userId, 'orders')
+
+    // may check the size as well
+    for (const order of userToUpdate.orders)
+      if (order.handle === handle && order.reviewed) order.reviewed = false
+
+    userToUpdate.save()
 
     const { status, pagination, rating, reviews, message } = await getReviews(
       handle,
     )
 
     return { status, pagination, rating, reviews, message }
-  } catch {
-    return { status: 500, message: 'unable to remove reivew' }
+  } catch (error) {
+    return { status: 500, message: error.message || 'unable to remove reivew' }
   }
 }
 
-async function getNewRating(handle, score?) {
+async function getNewRating(handle, score, method: 'post' | 'delete' = 'post') {
   const [{ _id: scores }] = await Product.aggregate([
     { $match: { handle } },
     { $project: { _id: '$reviews.reviews.score' } },
   ])
 
-  if (score) scores.push(score)
+  scores.push(method === 'post' ? +score : -score)
 
-  const totalScores = scores.reduce((acc, i) => acc + i, 0)
-  const newRating = Number(totalScores / scores.length).toFixed(1)
+  const totalScores = scores.reduce((acc, i) => +acc + +i, 0)
+  const length = method === 'post' ? scores.length : scores.length - 2
+  const newRating = Number(totalScores / length).toFixed(1)
+
   return newRating
 }
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLoaderData, useNavigate } from 'react-router-dom'
-import { useQueries } from '@tanstack/react-query'
+import { useQueries, useQueryClient } from '@tanstack/react-query'
 import Head from '@/components/head.component'
 import {
   locationsQuery,
@@ -12,12 +12,15 @@ import { getErrorMessage } from '@/utils/getErrorMessage.util'
 import { loader } from '../services/account.loader'
 import { logUserState } from '@/features/auth'
 import { axios } from '@/lib/axios'
-import { useAppDispatch } from '@/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 
 const Account = () => {
   const [message, setMessage] = useState('')
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  // test
+  const queryClient = useQueryClient()
+  const isLoggedIn = useAppSelector((x) => x.user.isLoggedIn)
 
   const [initUser, initLocations, initOrders] = useLoaderData() as Exclude<
     Awaited<ReturnType<typeof loader>>,
@@ -27,9 +30,21 @@ const Account = () => {
   const [{ data: _user }, { data: _locations }, { data: _orders }] = useQueries(
     {
       queries: [
-        { ...userQuery, initialData: initUser },
-        { ...locationsQuery, initialData: initLocations },
-        { ...ordersHistoryQuery, initialData: initOrders },
+        {
+          ...userQuery,
+          initialData: initUser,
+          gcTime: isLoggedIn ? undefined : 0,
+        },
+        {
+          ...locationsQuery,
+          initialData: initLocations,
+          gcTime: isLoggedIn ? undefined : 0,
+        },
+        {
+          ...ordersHistoryQuery,
+          initialData: initOrders,
+          gcTime: isLoggedIn ? undefined : 0,
+        },
       ],
     },
   )
@@ -43,6 +58,7 @@ const Account = () => {
 
   const handleLogout = async () => {
     try {
+      queryClient.removeQueries({ queryKey: ['user'] })
       await axios.post('auth/logout')
       dispatch(logUserState(false))
       navigate('/', { replace: true })
@@ -72,7 +88,7 @@ const Account = () => {
         {orders.length === 0 ? (
           <section>You haven't placed any orders yet.</section>
         ) : (
-          <section className='w-full bg-white p-10 lg:w-2/5'></section>
+          <section className='lg:w-2/5'></section>
         )}
 
         <section className='w-full bg-white p-10 lg:w-2/5'>

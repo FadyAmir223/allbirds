@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import BottomDrawer from '@/components/bottom-drawer.component'
 import LinkCustom from '@/components/link-custom.component'
@@ -32,7 +32,9 @@ const Checkout = () => {
     navigate('/', { replace: true })
   }
 
-  return (
+  return elItems.current.length === 0 ? (
+    <Navigate to='/' />
+  ) : (
     <main className='container mx-auto px-6 py-16'>
       <ul className='mb-6 w-fit border-b border-b-silver-dark pb-3'>
         {elItems.current.map((item) => (
@@ -94,7 +96,10 @@ const Checkout = () => {
         handleClose={closeDrawer}
         className='grid place-items-center text-center text-xl md:h-2/5 md:w-1/2'
       >
-        <p className=''>{data?.message}</p>
+        <p className='mb-8'>{data?.message}</p>
+        <Link to='/' className='w-24 rounded-md bg-dark-form px-3 py-1.5'>
+          back to home
+        </Link>
       </BottomDrawer>
     </main>
   )

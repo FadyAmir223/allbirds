@@ -3,14 +3,10 @@ import { ProductReviewsQuery } from './product.query'
 export const productKeys = {
   main: ['products'],
   details: (name: string) => [...productKeys.main, name],
+  review: (name: string) => [...productKeys.details(name), 'reviews'],
   reviews: ({ name, page = 1, limit = 3 }: ProductReviewsQuery) => [
-    ...productKeys.addReview(name),
+    ...productKeys.review(name),
     { page, limit },
-  ],
-  addReview: (name: string) => [...productKeys.details(name), 'reviews'],
-  deleteReview: (name: string, id: string) => [
-    ...productKeys.addReview(name),
-    id,
   ],
   search: (q: string, limit: number) => [
     ...productKeys.main,

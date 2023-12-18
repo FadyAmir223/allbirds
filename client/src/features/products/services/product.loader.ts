@@ -1,7 +1,6 @@
 import { LoaderFunctionArgs } from 'react-router-dom'
-
-import { productQuery, productReviewsQuery } from './product.query'
 import { queryClient } from '@/lib/react-query'
+import { productQuery, productReviewsQuery } from './product.query'
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const productName = params.productName as string

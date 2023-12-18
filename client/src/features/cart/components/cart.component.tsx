@@ -149,7 +149,7 @@ export const Cart = ({ handleNavClose }: CartProps) => {
                         </button>
                       </div>
 
-                      <div>
+                      <div className='text-sm'>
                         {item.salePrice && (
                           <span className='mr-1 text-red'>
                             ${item.salePrice}
@@ -169,7 +169,7 @@ export const Cart = ({ handleNavClose }: CartProps) => {
               ))}
             </ul>
 
-            <div className='mb-6 mt-3 flex items-center justify-between'>
+            <div className='mb-6 mt-3 flex items-center justify-between text-sm'>
               <span>subtotal</span>
               <span>${cart.totalPrice}</span>
             </div>

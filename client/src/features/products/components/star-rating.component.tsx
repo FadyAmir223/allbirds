@@ -1,12 +1,11 @@
 import { Fragment } from 'react'
 import { MdStar, MdStarBorder, MdStarHalf } from 'react-icons/md'
-
 import { cn } from '@/utils/cn.util'
 
 const scales = {
-  sm: 'scale-100',
-  md: 'scale-125',
-  lg: 'scale-150',
+  sm: 'scale-110',
+  md: 'scale-[1.37]',
+  lg: 'scale-[1.65]',
 }
 
 type StarRatingProps = {
@@ -20,15 +19,15 @@ const StarRating = ({ rating, scale }: StarRatingProps) => {
       {Array.from({ length: 5 }).map((_, idx) => (
         <Fragment key={idx}>
           {idx + 1 <= rating ? (
-            <span className='scale-110 text-gray'>
+            <span className=' text-gray'>
               <MdStar />
             </span>
           ) : idx + 1 > rating && idx < rating ? (
-            <span className='scale-110 text-gray'>
+            <span className=' text-gray'>
               <MdStarHalf />
             </span>
           ) : (
-            <span className='scale-110'>
+            <span className=''>
               <MdStarBorder />
             </span>
           )}

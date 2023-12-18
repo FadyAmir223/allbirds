@@ -1,14 +1,23 @@
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import {
+  keepPreviousData,
+  useMutation,
+  useQueries,
+} from '@tanstack/react-query'
+import { queryClient } from '@/lib/react-query'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 import StarRating from '../star-rating.component'
-import { productReviewsQuery } from '../../services/product.query'
+import { AddReview } from './add-review.component'
+import LinkCustom from '@/components/link-custom.component'
+import { productKeys, productReviewsQuery } from '../../services/product.query'
 import { cn } from '@/utils/cn.util'
+import { composeUri } from '@/utils/compose-uri.util'
 import screenSize from '@/data/screen-size.json'
+import type { Order, Orders } from '@/features/user'
 import { type Reviews } from '../..'
-
-// TODO: add/remove review - after login, purchase
+import { ordersHistoryQuery, userKeys } from '@/features/user'
+import { axios } from '@/lib/axios'
 
 type ReviewsProps = {
   initReviews: Reviews
@@ -38,18 +47,48 @@ const getPageRange = (currPage: number, total: number) => {
 
 const Reviews = ({ initReviews, children }: ReviewsProps) => {
   const [currPage, setcurrPage] = useState(1)
+  const [isAddingReview, setAddingReview] = useState(false)
+
   const elDiv = useRef<HTMLDivElement | null>(null)
   const didMount = useRef(false)
 
   const params = useParams()
   const productName = params.productName as string
 
-  const { data: reviews, isFetching } = useQuery({
-    ...productReviewsQuery({ name: productName, page: currPage }),
-    initialData: currPage === 1 ? initReviews : undefined,
-    placeholderData: keepPreviousData,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
+  const [{ data: reviews, isFetching }, { data: ordersHistory }] = useQueries({
+    queries: [
+      {
+        ...productReviewsQuery({ name: productName, page: currPage }),
+        initialData: currPage === 1 ? initReviews : undefined,
+        placeholderData: keepPreviousData,
+        staleTime: Infinity,
+      },
+      { ...ordersHistoryQuery },
+    ],
+  })
+
+  const { mutate: removeReview } = useMutation({
+    mutationFn: () => axios.delete(composeUri(productKeys.review(productName))),
+    onSettled: (newReviews, error) => {
+      if (error) return
+
+      queryClient.setQueryData(
+        productKeys.reviews({ name: productName }),
+        newReviews,
+      )
+
+      queryClient.setQueryData(
+        userKeys.ordersHistory(),
+        ({ orders }: Orders) => ({
+          orders: orders.map(
+            (order): Order =>
+              order.handle === productName && order.delivered && order.reviewed
+                ? { ...order, reviewed: false }
+                : order,
+          ),
+        }),
+      )
+    },
   })
 
   useEffect(() => {
@@ -60,7 +99,21 @@ const Reviews = ({ initReviews, children }: ReviewsProps) => {
 
   if (!reviews) return
 
-  const totalPages = getTotalPages(reviews?.pagination.total)
+  const totalPages = getTotalPages(reviews.pagination.total)
+
+  const hasReview = !!ordersHistory?.orders?.find(
+    ({ handle, delivered, reviewed }) =>
+      handle === productName && delivered && reviewed,
+  )
+
+  const orderedProduct =
+    !hasReview &&
+    ordersHistory?.orders?.find(
+      ({ handle, delivered, reviewed }) =>
+        handle === productName && delivered && !reviewed,
+    )
+
+  const canReview = !!orderedProduct
 
   const handlePageChange = (value: number | 'prev' | 'next') => {
     setcurrPage((prevCurrPage) => {
@@ -70,15 +123,29 @@ const Reviews = ({ initReviews, children }: ReviewsProps) => {
     })
   }
 
+  const handleReview = () => {
+    if (canReview) setAddingReview(!isAddingReview)
+    else if (hasReview) removeReview()
+  }
+
   return (
     <main>
       {children}
 
       <div ref={elDiv} />
       <section className='px-6 py-12 md:px-24'>
-        <h4 className='mb-6 text-xl font-bold'>
-          {reviews.pagination.total} Reviews
-        </h4>
+        <div className='mb-6 flex items-center justify-between'>
+          <h4 className='text-xl font-bold'>
+            {reviews.pagination.total} Reviews
+          </h4>
+
+          {(canReview || hasReview) && (
+            <LinkCustom element='button' onClick={handleReview}>
+              {canReview ? 'add' : hasReview ? 'remove' : ''} review
+            </LinkCustom>
+          )}
+        </div>
+
         <ul className={cn({ 'opacity-50': isFetching })}>
           {reviews.reviews.map((review) => {
             const isExpanded = review.content.length > REVIEW_THRESHOLD
@@ -146,7 +213,6 @@ const Reviews = ({ initReviews, children }: ReviewsProps) => {
             )
           })}
         </ul>
-
         <div className='mx-auto flex max-w-xs items-center justify-between gap-x-5 py-10 text-grayish-brown'>
           {reviews.pagination.page !== 1 && (
             <button
@@ -178,6 +244,14 @@ const Reviews = ({ initReviews, children }: ReviewsProps) => {
             </button>
           )}
         </div>
+
+        {canReview && (
+          <AddReview
+            isOpen={isAddingReview}
+            handleClose={handleReview}
+            orderedProduct={orderedProduct}
+          />
+        )}
       </section>
     </main>
   )

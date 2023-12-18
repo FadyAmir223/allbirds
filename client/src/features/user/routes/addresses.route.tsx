@@ -25,7 +25,7 @@ type Action =
   | { type: 'EDIT'; payload: State['addressToEdit'] }
   | { type: 'CONFIRM_DELETE'; payload: State['addressToDelete'] }
   | { type: 'DELETE' }
-  | { type: 'CANCLE_DELETE' }
+  | { type: 'CANCEL_DELETE' }
   | { type: 'BACK' }
 
 const initData: State = {
@@ -48,7 +48,7 @@ const reducer = (state = initData, action: Action): State => {
       return { ...state, isDelete: true, addressToDelete: action.payload }
     case 'DELETE':
       return { ...state, isDelete: false }
-    case 'CANCLE_DELETE':
+    case 'CANCEL_DELETE':
       return { ...state, isDelete: false, addressToDelete: '' }
     case 'BACK':
       return {
@@ -93,7 +93,7 @@ const Addresses = () => {
     dispatch(createAction('DELETE'))
   }
 
-  const cancleDelete = () => dispatch(createAction('CANCLE_DELETE'))
+  const cancelDelete = () => dispatch(createAction('CANCEL_DELETE'))
 
   return (
     <main className='min-h-[calc(100dvh-82px)] bg-dark-form px-3 py-16 sm:px-6'>
@@ -179,7 +179,7 @@ const Addresses = () => {
       <BottomDrawer
         className='translate-y-[calc(50%+30dvh)] px-8 py-12 opacity-100 md:h-[40dvh] md:w-2/4'
         isOpen={state.isDelete}
-        handleClose={cancleDelete}
+        handleClose={cancelDelete}
       >
         <h3 className='mb-2 text-xl font-bold'>Confirm Delete</h3>
         <p className='mb-10 capitalize'>
@@ -193,8 +193,8 @@ const Addresses = () => {
             delete
           </button>
           <button
-            className='w-24 rounded-md bg-silver px-3 py-1.5'
-            onClick={cancleDelete}
+            className='w-24 rounded-md bg-dark-form px-3 py-1.5'
+            onClick={cancelDelete}
           >
             cancel
           </button>

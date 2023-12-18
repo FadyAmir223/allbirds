@@ -28,6 +28,7 @@ const ordersHistoryQuery: UseQueryOptions<Orders> = {
   queryKey: userKeys.ordersHistory(),
   queryFn: ({ queryKey }) => axios.get(composeUri(queryKey)),
   staleTime: Infinity,
+  retry: false,
 }
 
 export { userQuery, locationsQuery, ordersQuery, ordersHistoryQuery }

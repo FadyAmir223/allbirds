@@ -1,5 +1,10 @@
+import { useRouteError } from 'react-router-dom'
+import { getErrorMessage } from '@/utils/getErrorMessage.util'
+
 const ErrorFallback = () => {
-  return <div>something went wrong</div>
+  const error = useRouteError()
+
+  return <div>{getErrorMessage(error)}</div>
 }
 
 export default ErrorFallback

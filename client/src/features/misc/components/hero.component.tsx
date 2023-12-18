@@ -40,7 +40,7 @@ const Hero = () => {
           className='block h-64 w-full object-cover md:hidden'
         />
 
-        <div className='absolute left-0 top-1/2 hidden -translate-y-1/2 bg-white py-14 pr-14 lg:block'>
+        <div className='absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 bg-white py-14 pr-14 lg:block'>
           <h4 className={cn('allbirds-font mb-4 font-[500] text-gray')}>
             featured
           </h4>
@@ -53,7 +53,7 @@ const Hero = () => {
           </ul>
         </div>
 
-        <div className='absolute left-0 top-1/3 h-2/5 w-full max-w-7xl '>
+        <div className='absolute left-0 top-1/3 h-2/5 w-full max-w-7xl'>
           <div>
             <div className='text-center font-bold capitalize text-white'>
               <h1 className='mb-3 sm:text-2xl md:text-3xl lg:text-4xl'>

@@ -1,5 +1,4 @@
 import { FormEvent, useRef, useState } from 'react'
-
 import BottomDrawer from '@/components/bottom-drawer.component'
 import LinkCustom from '@/components/link-custom.component'
 import { cn } from '@/utils/cn.util'
@@ -13,10 +12,10 @@ const GetNotifiedModal = (props: ModalProps) => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const form = elForm.current
-    const email = form?.elements.namedItem('email') as HTMLInputElement | null
+    const formData = new FormData(elForm.current!)
+    const email = formData.get('email') as string
 
-    if (!email?.value) return setErrorMessage(true)
+    if (!email) return setErrorMessage(true)
     setEmailSent(true)
 
     // ...
@@ -25,8 +24,8 @@ const GetNotifiedModal = (props: ModalProps) => {
 
   return (
     <BottomDrawer
+      className='grid translate-y-[calc(65%+2.5dvh)] place-items-center p-4 md:h-3/4 md:w-3/4'
       {...props}
-      className='grid h-3/4 w-3/4 place-items-center p-4'
     >
       {isEmailSent ? (
         <div className='max-w-xl text-center'>

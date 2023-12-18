@@ -1,5 +1,4 @@
 import { ComponentPropsWithoutRef, useEffect } from 'react'
-
 import { cn } from '@/utils/cn.util'
 
 type OverlayProps = ComponentPropsWithoutRef<'button'> & {
@@ -13,6 +12,8 @@ const Overlay = ({ isOpen, className, ...props }: OverlayProps) => {
         document.body.classList.add('overflow-y-hidden')
       }, 150)
     else document.body.classList.remove('overflow-y-hidden')
+
+    return () => document.body.classList.remove('overflow-y-hidden')
   }, [isOpen])
 
   return (

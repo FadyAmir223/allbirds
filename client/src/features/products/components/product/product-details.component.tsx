@@ -85,12 +85,12 @@ const ProductDetails = ({
 
   const getCartButtonText = () => {
     if (isSelectedSizeSoldOut) return 'get notified'
-    else if (!nav.size) return 'select size'
+    else if (nav.size === null) return 'select size'
     else
       return (
         <>
           add to cart -{' '}
-          {nav.size && (
+          {nav.size !== null && (
             <span
               className={cn('text-sm', {
                 'line-through': selectedProduct.salePrice,
@@ -367,7 +367,7 @@ const ProductDetails = ({
               className='w-full text-[15.5px]'
               element='button'
               onClick={handleModalPopup}
-              disabled={!nav.size}
+              disabled={nav.size === null}
             >
               {getCartButtonText()}
             </LinkCustom>

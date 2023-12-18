@@ -26,8 +26,11 @@ export const useAddAddress = () =>
       queryClient.setQueryData(userKeys.locations(), oldLocations)
     },
     onSettled: (newLocation) => {
-      queryClient.setQueryData(userKeys.locations(), (updater: Locations) => ({
-        locations: [...updater.locations.slice(0, -1), newLocation?.location],
-      }))
+      queryClient.setQueryData(
+        userKeys.locations(),
+        ({ locations }: Locations) => ({
+          locations: [...locations.slice(0, -1), newLocation?.location],
+        }),
+      )
     },
   })

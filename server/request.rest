@@ -79,17 +79,19 @@ POST {{url}}/api/products/{{product-name}}/reviews
   "title": "very amazing",
   "content": "the best in this world",
   "customFields": [
-    { "title": "Typical Size", "value": "10" },
+    { "title": "Typical Size", "value": "11" },
     { "title": "Typical Width", "value": "Average" },
-    { "title": "Size Purchased", "value": "10" },
+    { "title": "Size Purchased", "value": "11" },
     { "title": "Overall Fit", "value": "Just Right" },
     { "title": "Activity Level", "value": "Walking, Traveling" }
   ]
 }
 
 ### remove review
-DELETE {{url}}/api/products/{{product-name}}/reviews/64e8d7a67425bfaeab10edf2
+DELETE {{url}}/api/products/{{product-name}}/reviews
 
+
+###
 <!--
 # cart
 ### cart
@@ -228,7 +230,7 @@ POST {{url}}/api/user/orders
     {
       "handle": "mens-tree-runners",
       "editionId": "6854288736336",
-      "size": "8",
+      "size": "10",
       "amount": "2"
     }
     // ,{

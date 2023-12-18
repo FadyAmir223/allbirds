@@ -1,6 +1,5 @@
 import { FormEvent, MouseEvent, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-
 import LinkCustom from '@/components/link-custom.component'
 import { cn } from '@/utils/cn.util'
 
@@ -11,10 +10,10 @@ const EmailServiceForm = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const form = elForm.current
-    const email = form?.elements.namedItem('email') as HTMLInputElement | null
+    const formData = new FormData(elForm.current!)
+    const email = formData.get('email') as string
 
-    if (!email?.value) return setErrorMessage(true)
+    if (!email) return setErrorMessage(true)
 
     // ...
     // add to email service collection

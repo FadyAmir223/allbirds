@@ -22,7 +22,7 @@ const AddToCartModal = ({ item, isOpen, handleClose }: AddToCartModalProps) => {
   return (
     item && (
       <BottomDrawer
-        className='w-3/5 p-4'
+        className='p-4 md:w-3/5'
         isOpen={isOpen}
         handleClose={handleClose}
       >

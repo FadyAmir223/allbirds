@@ -383,11 +383,14 @@ async function orderCart(userId, items) {
     for (const item of items) {
       const { handle, editionId, size, amount } = item
 
+      // when order is delivered sum them up
+      // delivered changed by hand because there is no shipping api
       const existingOrder = user.orders.find(
         (order) =>
           order.handle === handle &&
           order.editionId === +editionId &&
-          order.size === size,
+          order.size === size &&
+          !order.delivered,
       )
 
       if (existingOrder) existingOrder.amount += +amount
@@ -397,7 +400,7 @@ async function orderCart(userId, items) {
           editionId,
           size,
           amount,
-          delivered: false,
+          delivered: true, // false (true for mocking)
           reviewed: false,
         })
     }
