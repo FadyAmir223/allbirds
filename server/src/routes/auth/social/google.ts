@@ -1,45 +1,43 @@
 // https://console.cloud.google.com/apis/credentials
 
-import express from 'express';
-import passport from 'passport';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import express from 'express'
+import passport from 'passport'
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 
 import {
   CLIENT_DOMAIN,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
-  SERVER_URL,
-} from '../../../config/env.js';
-import { verifyCallback, socialCallback } from './_verifyCallback.js';
+} from '../../../config/env.js'
+import { verifyCallback, socialCallback } from './_verifyCallback.js'
 
 const AUTH_OPTIONS = {
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: SERVER_URL + '/api/auth/google/callback',
-};
+  callbackURL: CLIENT_DOMAIN + '/api/auth/google/callback',
+}
 
-const googleStrategy = new GoogleStrategy(AUTH_OPTIONS, verifyCallback);
+const googleStrategy = new GoogleStrategy(AUTH_OPTIONS, verifyCallback)
 
-passport.use(googleStrategy);
+passport.use(googleStrategy)
 
-const googleRoute = express.Router();
+const googleRoute = express.Router()
 
 googleRoute.get(
   '/',
   passport.authenticate('google', {
     scope: ['email', 'profile'],
     accessType: 'offline',
-  })
-);
+  }),
+)
 
 googleRoute.get(
   '/callback',
   passport.authenticate('google', {
-    // successRedirect: CLIENT_DOMAIN,
     failureRedirect: CLIENT_DOMAIN + '/login',
     session: true,
   }),
-  socialCallback
-);
+  socialCallback,
+)
 
-export default googleRoute;
+export default googleRoute

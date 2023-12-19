@@ -111,10 +111,7 @@ const SideBarFilters = ({
         <div className='mb-3 flex items-center pb-2'>
           <p className='text-[15px] font-bold'>Filter By:</p>
           {drawer && hasFilters && (
-            <button
-              className='mx-14 text-[#e8e6e3] underline'
-              onClick={clearFilterBy}
-            >
+            <button className='mx-14 underline' onClick={clearFilterBy}>
               clear All
             </button>
           )}
@@ -176,7 +173,7 @@ const SideBarFilters = ({
                 ) : (
                   <div>
                     <p className='text-[13px] font-bold'>{letter}</p>
-                    <p className='text-[11px] text-[#cfcbc4]'>({sockSize})</p>
+                    <p className='text-[11px]'>({sockSize})</p>
                   </div>
                 )}
               </SizeButton>

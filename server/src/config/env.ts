@@ -7,7 +7,8 @@ const { NODE_ENV } = process.env
 const IS_PRODUCTION = NODE_ENV === 'production'
 
 dotenv.config({ path: `./.env.${IS_PRODUCTION ? NODE_ENV : 'development'}` })
-dotenv.config({ path: `./.env.mongo` })
+dotenv.config({ path: './.env.local' })
+dotenv.config({ path: './.env.mongo' })
 
 export const {
   SERVER_DOMAIN,

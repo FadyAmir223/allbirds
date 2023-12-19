@@ -7,7 +7,10 @@ export const loader = async (
   { request }: LoaderFunctionArgs,
   isLoggedIn: boolean,
 ) => {
-  if (!isLoggedIn) return authRedirect(request)
+  const { searchParams } = new URL(request.url)
+  const isSocial = searchParams.has('social')
+
+  if (!isLoggedIn && !isSocial) return authRedirect(request)
 
   const userP = queryClient.ensureQueryData(userQuery)
   const locationsP = queryClient.ensureQueryData(locationsQuery)

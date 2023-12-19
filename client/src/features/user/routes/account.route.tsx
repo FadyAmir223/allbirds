@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useLoaderData, useNavigate } from 'react-router-dom'
 import { useQueries, useQueryClient } from '@tanstack/react-query'
 import Head from '@/components/head.component'
@@ -16,11 +16,15 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks'
 
 const Account = () => {
   const [message, setMessage] = useState('')
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  // test
   const queryClient = useQueryClient()
-  const isLoggedIn = useAppSelector((x) => x.user.isLoggedIn)
+
+  const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (!isLoggedIn) dispatch(logUserState(true))
+  }, []) // eslint-disable-line
 
   const [initUser, initLocations, initOrders] = useLoaderData() as Exclude<
     Awaited<ReturnType<typeof loader>>,
@@ -58,9 +62,9 @@ const Account = () => {
 
   const handleLogout = async () => {
     try {
-      queryClient.removeQueries({ queryKey: ['user'] })
       await axios.post('auth/logout')
       dispatch(logUserState(false))
+      queryClient.removeQueries({ queryKey: ['user'] })
       navigate('/', { replace: true })
     } catch (error) {
       setMessage(getErrorMessage(error))
