@@ -55,7 +55,7 @@ const Login = () => {
                   autoComplete='off'
                 />
                 <p className='mt-1 h-2 text-[11.5px] text-red'>
-                  {ErrorMessage}
+                  {ErrorMessage && 'wrong email or password'}
                 </p>
               </div>
 

@@ -12,20 +12,21 @@ npm run dev
 npm run dev:down
 ```
 
-## production test
-```bash
-npm run compose:prod -- up -d
-npm run compose:prod down
-```
 
 ## production
 ```bash
 npm run prod
 ```
 
-## rebuild
+### production test
 ```bash
-npm run compose:prod -- --build [service]
+npm run compose:prod -- up -d
+npm run compose:prod down
+```
+
+### rebuild
+```bash
+npm run compose:prod -- build [service]
 npm run compose:prod -- --force-recreate [service]
 ```
 

@@ -33,10 +33,6 @@ const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 const CLIENT_DOMAINS = process.env.CLIENT_DOMAIN.split(',')
 const CLIENT_DOMAIN = CLIENT_DOMAINS[0]
 
-const SERVER_URL = `${SERVER_DOMAIN}${
-  IS_PRODUCTION ? '' : ':' + SERVER_PORT
-}/api`
-
 export {
   NODE_ENV,
   IS_PRODUCTION,
@@ -44,6 +40,5 @@ export {
   DB_NAME,
   CLIENT_DOMAINS,
   CLIENT_DOMAIN,
-  SERVER_URL,
   __dirname,
 }

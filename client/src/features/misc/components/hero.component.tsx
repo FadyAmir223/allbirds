@@ -14,7 +14,7 @@ const featuredLinks = [
 const Hero = () => {
   return (
     <section className='overflow mb-24 h-[calc(80dvh-50px-32px)] lg:px-6'>
-      <ul className='flex whitespace-nowrap bg-silver text-silver-dark lg:hidden'>
+      <ul className='hidden whitespace-nowrap bg-silver text-silver-dark md:flex lg:hidden'>
         {featuredLinks.map((featuredLink) => (
           <li key={featuredLink.text}>
             <Link

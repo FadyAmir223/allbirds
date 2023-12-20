@@ -11,6 +11,7 @@ services:
     env_file:
       - ./server/.env
       - ./server/.env.mongo
+      - ./server/.env.local
     depends_on:
       - database
 

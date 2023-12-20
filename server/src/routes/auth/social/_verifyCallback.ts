@@ -25,7 +25,6 @@ async function verifyCallback(accessToken, refreshToken, profile, done) {
 
 async function socialCallback(req: Request, res: Response) {
   const userAgent = req.headers['user-agent']
-  console.log(req.headers)
 
   let { deviceId } = req.cookies
   if (!deviceId) {

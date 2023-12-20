@@ -8,6 +8,8 @@ import api from './routes/api.js'
 
 const app = express()
 
+app.set('trust proxy', 1)
+
 app.use(
   cors({
     origin: CLIENT_DOMAINS,
@@ -16,17 +18,16 @@ app.use(
   }),
 )
 
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        'default-src': ["'self'"],
-        // blob: upload & *: other sites
-        'img-src': ["'self'", 'blob:'],
-      },
-    },
-  }),
-)
+app.use(helmet())
+// {
+//   contentSecurityPolicy: {
+//     directives: {
+//       'default-src': ["'self'"],
+//       // blob: upload & *: other sites
+//       'img-src': ["'self'", 'blob:'],
+//     },
+//   },
+// }
 
 app.use(express.json())
 

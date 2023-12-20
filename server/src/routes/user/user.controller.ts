@@ -9,7 +9,6 @@ import {
   getOrders,
   orderCart,
 } from '../../models/user/user.model.js'
-import { NODE_ENV, SERVER_URL } from '../../config/env.js'
 
 async function httpsGetUser(req: Request, res: Response) {
   const { status, user } = await getUserInfo(req.user._id)

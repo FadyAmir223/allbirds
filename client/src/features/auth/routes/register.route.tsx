@@ -65,7 +65,7 @@ const Register = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RegisterFormData>({
     defaultValues: {
       firstName: '',
@@ -81,7 +81,7 @@ const Register = () => {
   const { isLoggedIn } = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
 
-  const { mutate, error, isError } = useMutation({
+  const { mutate, error, isError, isPending } = useMutation({
     mutationFn: (formData: RegisterFormData) =>
       axios.post('auth/local/register', formData),
     onSuccess: () => {
@@ -170,9 +170,9 @@ const Register = () => {
             styleType='black'
             className={cn(
               'w-full p-4 text-sm font-normal uppercase duration-300',
-              { 'pointer-events-none opacity-60': isSubmitting },
+              { 'pointer-events-none opacity-60': isPending },
             )}
-            disabled={isSubmitting}
+            disabled={isPending}
           >
             register
           </LinkCustom>
