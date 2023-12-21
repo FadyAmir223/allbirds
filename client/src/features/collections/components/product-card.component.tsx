@@ -76,7 +76,7 @@ const ProductCard = ({
 
   const MaxSections = getMaxSections(editions.length - 1)
 
-  const isFiltered = !editions.find((edition) => edition.id === nav.id)
+  const selectedIdx = editions.findIndex((edition) => edition.id === nav.id)
 
   const section = {
     first: nav.section === 0,
@@ -91,7 +91,7 @@ const ProductCard = ({
       : itemsPerSlide - 2
 
   useEffect(() => {
-    if (isFiltered) setNav(initNav)
+    if (selectedIdx === -1) setNav(initNav)
     /*
       if (!isFiltered): calculate new { section, index }
       if products after the selected are added/removed
@@ -101,7 +101,7 @@ const ProductCard = ({
 
   if (editions.length === 0) return <></>
 
-  const editionIdx = isFiltered ? 0 : nav.index
+  const editionIdx = selectedIdx === -1 ? 0 : nav.index
 
   const currProduct = editions[editionIdx]
 

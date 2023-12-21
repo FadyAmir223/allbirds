@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useNavigation, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { DevTool } from '@hookform/devtools'
 import Head from '@/components/head.component'
@@ -26,12 +26,10 @@ const ResetPassword = () => {
   } = useForm<ResetFormData>({ mode: 'onChange' })
 
   const [errorMessage, setErrorMessage] = useState('')
+  const [isSubmitting, setSubmitting] = useState(false)
   const [searchParams] = useSearchParams()
-  const navigation = useNavigation()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-
-  const isSubmitting = navigation.state === 'submitting'
 
   useEffect(() => {
     const timeout = setTimeout(() => setErrorMessage(''), 5000)
@@ -49,6 +47,7 @@ const ResetPassword = () => {
         token,
       })
 
+      setSubmitting(true)
       await axios.post('auth/local/login', {
         username: res.email,
         password: formData.password,
@@ -59,6 +58,8 @@ const ResetPassword = () => {
     } catch (error) {
       const message = getErrorMessage(error)
       setErrorMessage(message)
+    } finally {
+      setSubmitting(false)
     }
   }
 

@@ -33,7 +33,7 @@ async function socialCallback(req: Request, res: Response) {
   }
   await addUserSecurity(req.user.id, userAgent, deviceId)
 
-  if (req.headers['referer']?.includes(CLIENT_DOMAIN))
+  if (req.headers['sec-fetch-site'] === 'same-origin')
     return res.status(200).json({ login: true })
 
   res.status(302).redirect(CLIENT_DOMAIN + '/account?social')
