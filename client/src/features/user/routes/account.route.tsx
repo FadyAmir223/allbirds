@@ -96,7 +96,12 @@ const Account = () => {
         )}
 
         <section className='w-full bg-white p-10 lg:w-2/5'>
-          <p className='mb-4 text-lg font-[500] capitalize'>{user.username}</p>
+          <div className='mb-4 flex items-center'>
+            <p className='text-lg font-[500] capitalize'>{user.username}</p>
+            <p className={cn('ml-5 text-sm', { 'text-red': !user.verified })}>
+              {!user.verified ? 'not' : ''} verified
+            </p>
+          </div>
           <p className={cn({ 'mb-10': locations.length === 0 })}>
             {user.email}
           </p>

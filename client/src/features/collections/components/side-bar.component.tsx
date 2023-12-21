@@ -150,35 +150,37 @@ const SideBarFilters = ({
             hasGender ? 'grid-cols-6' : 'grid-cols-2',
           )}
         >
-          {filters.sizes.map((size) => {
-            let letter, sockSize
-            if (!hasGender) {
-              // eslint-disable-next-line no-extra-semi
-              ;[letter, ...sockSize] = size.split('.')
-              sockSize = getSockSize(sockSize || [])
-            }
+          {filters.sizes
+            .sort((a, b) => +a - +b)
+            .map((size) => {
+              let letter, sockSize
+              if (!hasGender) {
+                // eslint-disable-next-line no-extra-semi
+                ;[letter, ...sockSize] = size.split('.')
+                sockSize = getSockSize(sockSize || [])
+              }
 
-            return (
-              <SizeButton
-                key={size}
-                selected={selectedFilters.sizes?.includes(size)}
-                enabledOnSoldOut
-                className={cn({
-                  'aspect-auto p-1.5 uppercase': !hasGender,
-                })}
-                onClick={() => handleFilterBy('sizes', size)}
-              >
-                {hasGender ? (
-                  size
-                ) : (
-                  <div>
-                    <p className='text-[13px] font-bold'>{letter}</p>
-                    <p className='text-[11px]'>({sockSize})</p>
-                  </div>
-                )}
-              </SizeButton>
-            )
-          })}
+              return (
+                <SizeButton
+                  key={size}
+                  selected={selectedFilters.sizes?.includes(size)}
+                  enabledOnSoldOut
+                  className={cn({
+                    'aspect-auto p-1.5 uppercase': !hasGender,
+                  })}
+                  onClick={() => handleFilterBy('sizes', size)}
+                >
+                  {hasGender ? (
+                    size
+                  ) : (
+                    <div>
+                      <p className='text-[13px] font-bold'>{letter}</p>
+                      <p className='text-[11px]'>({sockSize})</p>
+                    </div>
+                  )}
+                </SizeButton>
+              )
+            })}
         </div>
       </div>
 

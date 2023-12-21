@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 import ColorButton from '@/components/product/color-button.component'
@@ -49,14 +49,6 @@ const ProductCard = ({
   hasGender,
   selectedFilters,
 }: ProductCardProps) => {
-  const [nav, setNav] = useState({ index: 0, section: 0 })
-  const [isQuickAddOpen, setQuickAddOpen] = useState(false)
-  const divEl = useRef<HTMLDivElement | null>(null)
-  const dispatch = useAppDispatch()
-
-  if (!hasGender)
-    product.sizes = product.sizes.map((size) => size.split('.')[0])
-
   const editions = product.editions
     .flatMap((edition) => edition.products)
     .filter((product) => {
@@ -71,10 +63,20 @@ const ProductCard = ({
       return bySize && byHue
     })
 
-  if (editions.length === 0) return <></>
+  const firstID = editions?.[0]?.id
+  const initNav = { id: firstID, index: 0, section: 0 }
 
-  const currProduct = editions[nav.index]
+  const [nav, setNav] = useState(initNav)
+  const [isQuickAddOpen, setQuickAddOpen] = useState(false)
+  const divEl = useRef<HTMLDivElement | null>(null)
+  const dispatch = useAppDispatch()
+
+  if (!hasGender)
+    product.sizes = product.sizes.map((size) => size.split('.')[0])
+
   const MaxSections = getMaxSections(editions.length - 1)
+
+  const isFiltered = !editions.find((edition) => edition.id === nav.id)
 
   const section = {
     first: nav.section === 0,
@@ -88,19 +90,35 @@ const ProductCard = ({
       ? itemsPerSlide - 1
       : itemsPerSlide - 2
 
+  useEffect(() => {
+    if (isFiltered) setNav(initNav)
+    /*
+      if (!isFiltered): calculate new { section, index }
+      if products after the selected are added/removed
+      but the computation is complex and not worth it
+    */
+  }, [editions.length]) // eslint-disable-line
+
+  if (editions.length === 0) return <></>
+
+  const editionIdx = isFiltered ? 0 : nav.index
+
+  const currProduct = editions[editionIdx]
+
   const slice = {
     min: nav.section * imagesPerSlide,
     max: (nav.section + 1) * imagesPerSlide,
   }
 
-  const handleIndexChange = (index: number) =>
+  const handleIndexChange = (index: number, id: number) =>
     setNav({
+      id,
       index: index + nav.section * imagesPerSlide,
       section: nav.section,
     })
 
   const handleSectionChange = (direction: 1 | -1) =>
-    setNav({ index: nav.index, section: nav.section + direction })
+    setNav({ ...nav, index: nav.index, section: nav.section + direction })
 
   const handleToggleQuickAdd = () => setQuickAddOpen(!isQuickAddOpen)
 
@@ -173,7 +191,7 @@ const ProductCard = ({
           <Fragment key={edition.id}>
             <button
               className='z-10 hidden bg-silver md:block'
-              onClick={() => handleIndexChange(idx)}
+              onClick={() => handleIndexChange(idx, edition.id)}
               style={style}
             >
               <div className='relative pb-[100%]'>
@@ -189,7 +207,7 @@ const ProductCard = ({
               hues={edition.colors}
               className='z-10 block md:hidden'
               style={style}
-              onClick={() => handleIndexChange(idx)}
+              onClick={() => handleIndexChange(idx, edition.id)}
             />
           </Fragment>
         ))}

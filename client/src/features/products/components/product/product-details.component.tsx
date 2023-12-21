@@ -340,9 +340,7 @@ const ProductDetails = ({
                     ) : (
                       <div>
                         <p className='text-[13px] font-bold'>{letter}</p>
-                        <p className='text-[11px] text-[#cfcbc4]'>
-                          ({sockSize})
-                        </p>
+                        <p className='text-[11px]'>({sockSize})</p>
                       </div>
                     )}
                   </SizeButton>

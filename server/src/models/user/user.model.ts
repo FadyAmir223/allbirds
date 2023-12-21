@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 import User from './user.mongo.js'
 import { getCart, getSoldOut } from '../product/product.model.js'
 import { mailResetPassword, mailVerifyAccount } from '../../services/mail.js'
-import { CLIENT_DOMAIN } from '../../config/env.js'
+import { CLIENT_DOMAIN, IS_PRODUCTION } from '../../config/env.js'
 
 async function getUserById(id) {
   try {
@@ -57,10 +57,12 @@ async function createLocalUser(username, email, password, userAgent, deviceId) {
   try {
     let role, verified
 
-    if (email === 'fadyamir223@gmail.com') {
+    /*
+    if ('fadyamir223@gmail.com') {
       role = 'admin'
       verified = true
     }
+    */
 
     const verifyToken = !verified
       ? await sendVerifyEmail({ username, email })

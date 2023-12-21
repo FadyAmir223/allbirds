@@ -47,3 +47,10 @@ npm run test --prefix=server
 
 ## using husky for lint-staged
 git config core.hooksPath client/.husky
+
+## remove production database
+  - docker exec -it 3-allbirds-database-1 sh
+  - mongosh -u <user> -p <password>
+  - show dbs
+  - use <db>
+  - db.dropDatabase('<db>')
