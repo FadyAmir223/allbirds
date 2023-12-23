@@ -13,7 +13,7 @@ export const CollectionRoute = () => {
       <Route path=':type' element={<Collections />} loader={collectionAction} />
       <Route
         path='sale/:type'
-        element={<Collections />}
+        element={<Collections isSale={true} />}
         loader={collectionAction}
       />
     </Route>

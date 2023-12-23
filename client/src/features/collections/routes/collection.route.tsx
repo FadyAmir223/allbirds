@@ -2,7 +2,6 @@ import { useState } from 'react'
 import {
   Link,
   useLoaderData,
-  useLocation,
   useParams,
   useSearchParams,
 } from 'react-router-dom'
@@ -10,7 +9,10 @@ import { useQuery } from '@tanstack/react-query'
 import ProductCard from '../components/product-card.component'
 import SideBar from '../components/side-bar.component'
 import Head from '@/components/head.component'
-import { collectionQuery } from '../services/collection.query'
+import {
+  collectionQuery,
+  collectionSaleQuery,
+} from '../services/collection.query'
 import { ensureType } from '../utils/ensureType.util'
 import { type FilterKey, type FilterValues, type SelectedFilters } from '..'
 import { loader as collectionLoader } from '../services/collection.loader'
@@ -23,12 +25,9 @@ const genders = [
   { label: 'men', type: 'mens' },
 ]
 
-const Collections = () => {
+const Collections = ({ isSale = false }) => {
   const [isFilterOpen, setFilterOpen] = useState(false)
   const [searchParams] = useSearchParams()
-
-  const { pathname } = useLocation()
-  const isSale = pathname.includes('/sale')
 
   const params = useParams()
   const type = params.type as string
@@ -39,11 +38,11 @@ const Collections = () => {
     useLoaderData() as Awaited<ReturnType<typeof collectionLoader>>
 
   const { data: collection } = useQuery({
-    ...collectionQuery(ensuredType),
+    ...(isSale
+      ? collectionSaleQuery(ensuredType)
+      : collectionQuery(ensuredType)),
     initialData: initCollection,
   })
-
-  if (!collection) return
 
   const selectedFilters: SelectedFilters = {} as Record<FilterKey, FilterValues>
 
@@ -140,7 +139,7 @@ const Collections = () => {
             <article className='grid grid-cols-2 gap-4 bg-silver-2 p-4 md:grid-cols-3 md:bg-transparent'>
               {filteredCollection.map((product) => (
                 <ProductCard
-                  key={product._id}
+                  key={product._id + isSale}
                   product={product}
                   hasGender={hasGender}
                   selectedFilters={selectedFilters}

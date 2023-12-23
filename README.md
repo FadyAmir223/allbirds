@@ -1,6 +1,6 @@
 ## clone of `allbirds.com` but better
 
-https://youtu.be/WzoeQ23yMCM
+https://youtu.be/7fV40V3115o
 
 
 the current version uses nginx & docker

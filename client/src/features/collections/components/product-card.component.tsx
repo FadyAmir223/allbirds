@@ -26,7 +26,6 @@ const style = {
   width: `calc((100% - ${(itemsPerSlide - 1) * gap}px) / ${itemsPerSlide})`,
 }
 
-// workaround until generic equaion is found
 const getMaxSections = (productsLength: number) => {
   let sections = 0
   if (productsLength <= itemsPerSlide) return sections
@@ -42,6 +41,56 @@ const getMaxSections = (productsLength: number) => {
   }
 
   return sections
+}
+
+const getImagesPerSlide = (currSection: number, MaxSections: number) => {
+  const section = {
+    first: currSection === 0,
+    last: currSection === MaxSections,
+  }
+
+  const imagesPerSlide =
+    MaxSections === 0
+      ? itemsPerSlide
+      : section.first || section.last
+      ? itemsPerSlide - 1
+      : itemsPerSlide - 2
+
+  return { section, imagesPerSlide }
+}
+
+const getSliceImages = (currSection: number, MaxSections: number) => {
+  let end = 0
+  let value = 0
+
+  for (let i = 0; i <= currSection; i++) {
+    value = getImagesPerSlide(i, MaxSections).imagesPerSlide
+    end += value
+  }
+
+  return { start: end - value, end }
+}
+
+const getNewIndex = <T,>(
+  prevNav: T,
+  initNav: T,
+  selectedIdx: number,
+  MaxSections: number,
+) => {
+  if (selectedIdx === -1) return initNav
+  else {
+    let index = selectedIdx
+
+    for (let i = 0; i <= MaxSections; i++) {
+      const { imagesPerSlide } = getImagesPerSlide(i, MaxSections)
+
+      if (index - imagesPerSlide <= 0)
+        return { ...prevNav, section: i, index: selectedIdx }
+
+      index -= imagesPerSlide
+    }
+  }
+  return prevNav
 }
 
 const ProductCard = ({
@@ -78,44 +127,20 @@ const ProductCard = ({
 
   const selectedIdx = editions.findIndex((edition) => edition.id === nav.id)
 
-  const section = {
-    first: nav.section === 0,
-    last: nav.section === MaxSections,
-  }
-
-  const imagesPerSlide =
-    MaxSections === 0
-      ? itemsPerSlide
-      : section.first || section.last
-      ? itemsPerSlide - 1
-      : itemsPerSlide - 2
-
   useEffect(() => {
-    if (selectedIdx === -1) setNav(initNav)
-    /*
-      if (!isFiltered): calculate new { section, index }
-      if products after the selected are added/removed
-      but the computation is complex and not worth it
-    */
+    setNav((prevNav) => getNewIndex(prevNav, initNav, selectedIdx, MaxSections))
   }, [editions.length]) // eslint-disable-line
 
   if (editions.length === 0) return <></>
 
-  const editionIdx = selectedIdx === -1 ? 0 : nav.index
-
+  const editionIdx = getNewIndex(nav, initNav, selectedIdx, MaxSections).index
   const currProduct = editions[editionIdx]
 
-  const slice = {
-    min: nav.section * imagesPerSlide,
-    max: (nav.section + 1) * imagesPerSlide,
-  }
+  const { section } = getImagesPerSlide(nav.section, MaxSections)
+  const { start, end } = getSliceImages(nav.section, MaxSections)
 
   const handleIndexChange = (index: number, id: number) =>
-    setNav({
-      id,
-      index: index + nav.section * imagesPerSlide,
-      section: nav.section,
-    })
+    setNav({ id, index: index + start, section: nav.section })
 
   const handleSectionChange = (direction: 1 | -1) =>
     setNav({ ...nav, index: nav.index, section: nav.section + direction })
@@ -187,7 +212,7 @@ const ProductCard = ({
           </button>
         )}
 
-        {editions.slice(slice.min, slice.max).map((edition, idx) => (
+        {editions.slice(start, end).map((edition, idx) => (
           <Fragment key={edition.id}>
             <button
               className='z-10 hidden bg-silver md:block'
