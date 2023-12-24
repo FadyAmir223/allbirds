@@ -9,6 +9,18 @@
     "preview": "vite preview",
     "prepare": "cd .. && husky install client/.husky"
   },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
     "@tanstack/react-query": "^5.7.2",
