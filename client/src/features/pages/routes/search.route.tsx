@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import Head from '@/components/head.component'
@@ -10,6 +10,7 @@ import { SearchInput } from '@/components/search-input.component'
 import { Spinner } from '@/components/spinner.component'
 import { getSerachQuery } from '../services/serach.query'
 import { cn } from '@/utils/cn.util'
+import type { ChangeEvent, FormEvent } from 'react'
 import { useDebounce } from '@/hooks/useDebounce'
 
 const Search = () => {

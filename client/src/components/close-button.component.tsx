@@ -1,6 +1,5 @@
-import { ComponentPropsWithoutRef } from 'react'
+import { type ComponentPropsWithoutRef } from 'react'
 import { TfiClose } from 'react-icons/tfi'
-
 import { cn } from '@/utils/cn.util'
 
 type CloseButtonProps = ComponentPropsWithoutRef<'button'> & {

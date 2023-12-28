@@ -1,5 +1,4 @@
-import { ReactNode } from 'react'
-
+import { type ReactNode } from 'react'
 import Modal from '@/components/modal.component'
 import Overlay from '@/components/overlay.component'
 import { cn } from '@/utils/cn.util'

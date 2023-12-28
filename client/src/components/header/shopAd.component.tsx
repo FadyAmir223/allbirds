@@ -1,8 +1,8 @@
-import { MouseEvent, useState } from 'react'
+import { useState } from 'react'
 import { FaAngleRight } from 'react-icons/fa'
 import Markdown from 'react-markdown'
-
 import MarkdownLink from '@/components/markdown-link.component'
+import type { MouseEvent } from 'react'
 
 type ShopAdProps = {
   onClick?: (event: MouseEvent<HTMLAnchorElement>) => void

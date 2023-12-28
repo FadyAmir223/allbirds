@@ -1,7 +1,8 @@
-import { FormEvent, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import BottomDrawer from '@/components/bottom-drawer.component'
 import LinkCustom from '@/components/link-custom.component'
 import { cn } from '@/utils/cn.util'
+import type { FormEvent } from 'react'
 import type { ModalProps } from '../../types/modal.type'
 
 const GetNotifiedModal = (props: ModalProps) => {

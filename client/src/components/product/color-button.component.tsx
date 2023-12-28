@@ -1,6 +1,6 @@
-import { ComponentPropsWithoutRef, useCallback } from 'react'
-
+import { useCallback } from 'react'
 import { cn } from '@/utils/cn.util'
+import type { ComponentPropsWithoutRef } from 'react'
 
 type ColorButtonProps = ComponentPropsWithoutRef<'button'> & {
   hues: string[]

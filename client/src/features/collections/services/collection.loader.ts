@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from 'react-router-dom'
+import { type LoaderFunctionArgs } from 'react-router-dom'
 import { queryClient } from '@/lib/react-query'
 import {
   collectionKeys,

@@ -1,5 +1,6 @@
-import { ComponentPropsWithoutRef, useEffect } from 'react'
+import { useEffect } from 'react'
 import { cn } from '@/utils/cn.util'
+import type { ComponentPropsWithoutRef } from 'react'
 
 type OverlayProps = ComponentPropsWithoutRef<'button'> & {
   isOpen: boolean

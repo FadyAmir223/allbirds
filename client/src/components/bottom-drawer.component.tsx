@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef } from 'react'
+import { type ComponentPropsWithoutRef } from 'react'
 import CloseButton from './close-button.component'
 import Modal from '@/components/modal.component'
 import Overlay from '@/components/overlay.component'

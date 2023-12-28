@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef } from 'react'
+import { type ComponentPropsWithoutRef } from 'react'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 import { cn } from '@/utils/cn.util'
 

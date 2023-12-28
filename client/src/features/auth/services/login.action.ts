@@ -1,5 +1,5 @@
-import { ActionFunctionArgs } from 'react-router-dom'
-import { AnyAction, Dispatch } from '@reduxjs/toolkit'
+import { type ActionFunctionArgs } from 'react-router-dom'
+import { type AnyAction, type Dispatch } from '@reduxjs/toolkit'
 import { getErrorMessage } from '@/utils/getErrorMessage.util'
 import { logUserState } from '..'
 import { axios } from '@/lib/axios'

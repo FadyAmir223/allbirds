@@ -1,5 +1,6 @@
-import { ComponentPropsWithRef, FormEvent, forwardRef } from 'react'
+import { forwardRef } from 'react'
 import SearchIcon from '@/assets/svg/search.svg?react'
+import type { ComponentPropsWithRef, FormEvent } from 'react'
 
 type SearchInputProps = ComponentPropsWithRef<'input'> & {
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void

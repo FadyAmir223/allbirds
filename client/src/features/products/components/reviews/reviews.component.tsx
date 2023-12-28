@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   keepPreviousData,
@@ -14,6 +14,7 @@ import { productKeys, productReviewsQuery } from '../../services/product.query'
 import { cn } from '@/utils/cn.util'
 import { composeUri } from '@/utils/compose-uri.util'
 import screenSize from '@/data/screen-size.json'
+import type { ReactNode } from 'react'
 import type { Order, Orders } from '@/features/user'
 import { type Reviews } from '../..'
 import { ordersHistoryQuery, userKeys } from '@/features/user'

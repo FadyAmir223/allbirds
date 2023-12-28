@@ -1,7 +1,8 @@
-import { FormEvent, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import BottomDrawer from '@/components/bottom-drawer.component'
 import { cn } from '@/utils/cn.util'
 import { getErrorMessage } from '@/utils/getErrorMessage.util'
+import type { FormEvent } from 'react'
 import { axios } from '@/lib/axios'
 
 type ForgetPasswordFormProps = {

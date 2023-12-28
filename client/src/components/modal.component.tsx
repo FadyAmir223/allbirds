@@ -1,5 +1,6 @@
-import { ReactNode, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
+import type { ReactNode } from 'react'
 
 interface ModalProps {
   children: ReactNode

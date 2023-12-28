@@ -1,4 +1,5 @@
-import { LoaderFunctionArgs, redirect } from 'react-router-dom'
+import { redirect } from 'react-router-dom'
+import type { LoaderFunctionArgs } from 'react-router-dom'
 import { axios } from '@/lib/axios'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

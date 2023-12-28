@@ -1,6 +1,5 @@
-import { ComponentPropsWithoutRef } from 'react'
+import { type ComponentPropsWithoutRef } from 'react'
 import { Link } from 'react-router-dom'
-
 import { cn } from '@/utils/cn.util'
 
 type MarkdownLinkProps = ComponentPropsWithoutRef<'a'> & {

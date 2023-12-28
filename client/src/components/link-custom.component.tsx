@@ -1,6 +1,7 @@
-import { ComponentPropsWithoutRef } from 'react'
-import { Link, LinkProps } from 'react-router-dom'
+import { type ComponentPropsWithoutRef } from 'react'
+import { Link } from 'react-router-dom'
 import { cn } from '@/utils/cn.util'
+import type { LinkProps } from 'react-router-dom'
 
 const styleTypes = {
   normal: 'hover:bg-white hover:text-gray',
