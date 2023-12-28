@@ -2,9 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Swiper as SwiperType } from 'swiper/types'
-
 import 'swiper/css'
-
 import { SlideCard } from './slide-card.component'
 import SlideNavButtons from './slide-nav-buttons.component'
 import { cn } from '@/utils/cn.util'
@@ -125,7 +123,7 @@ export const Slider = ({
             slidesPerView={imagesPerSlide}
             onSlideChange={handleSlideChange}
             onSwiper={setSwiper}
-            className='overflow-visible'
+            className='!overflow-visible'
           >
             <div className='whitespace-nowrap'>
               {slidesFlat.map((slide) => (

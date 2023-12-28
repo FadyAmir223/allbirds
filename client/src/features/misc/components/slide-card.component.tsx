@@ -1,5 +1,4 @@
 import { ComponentPropsWithoutRef } from 'react'
-
 import { Card } from './slider.component'
 import LinkCustom from '@/components/link-custom.component'
 import { cn } from '@/utils/cn.util'
@@ -30,7 +29,7 @@ export const SlideCard = ({
         <img
           src={imgUrl}
           alt=''
-          className='absolute inset-0 bg-silver object-cover transition-transform duration-500 group-hover:scale-[105%]'
+          className='absolute inset-0 w-full bg-silver object-cover transition-transform duration-500 group-hover:scale-[105%]'
           loading='lazy'
         />
         {appendix && (

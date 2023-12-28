@@ -3,9 +3,9 @@ import { v4 as uuidv4 } from 'uuid'
 import bcrypt from 'bcryptjs'
 
 import User from './user.mongo.js'
-import { getCart, getSoldOut } from '../product/product.model.js'
+import { getSoldOut } from '../product/product.model.js'
 import { mailResetPassword, mailVerifyAccount } from '../../services/mail.js'
-import { CLIENT_DOMAIN, IS_PRODUCTION } from '../../config/env.js'
+import { CLIENT_DOMAIN } from '../../config/env.js'
 
 async function getUserById(id) {
   try {

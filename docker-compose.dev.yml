@@ -9,8 +9,8 @@ services:
     container_name: frontend-dev
     env_file:
       - ./client/.env.development
-    ports:
-      - 5173:5173
+    # ports:
+    #   - 5173:5173
     volumes:
       - ./client:/app
       # - /app/node_modules
@@ -27,8 +27,8 @@ services:
       - ./server/.env.development
     environment:
       - NODE_ENV=development
-    ports:
-      - 3000:3000
+    # ports:
+    #   - 3000:3000
     volumes:
       - ./server:/app
       # - /app/node_modules

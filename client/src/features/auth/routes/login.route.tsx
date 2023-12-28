@@ -13,6 +13,7 @@ import { ForgetPasswordForm } from '../components/forget-password-form.component
 import Head from '@/components/head.component'
 import LinkCustom from '@/components/link-custom.component'
 import { cn } from '@/utils/cn.util'
+import { API_URL } from '@/config/env'
 import { useAppSelector } from '@/store/hooks'
 
 const Login = () => {
@@ -108,7 +109,7 @@ const Login = () => {
 
             <div>
               <a
-                href='/api/auth/google'
+                href={`${API_URL}/auth/google`}
                 className='mb-3 flex w-full items-center justify-center rounded-full bg-white p-2 duration-150 hover:opacity-90'
               >
                 <span className='mr-2 h-5 w-5'>
@@ -118,7 +119,7 @@ const Login = () => {
               </a>
 
               <a
-                href='/api/auth/facebook'
+                href={`${API_URL}/auth/facebook`}
                 className='flex w-full items-center justify-center rounded-full bg-[#1877f2] p-2 text-white duration-150 hover:opacity-90'
               >
                 <span className='mr-2 scale-[1.35]'>

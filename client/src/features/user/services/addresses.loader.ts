@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs } from 'react-router-dom'
 import { queryClient } from '@/lib/react-query'
-import { locationsQuery } from '../services/user.query'
+import { locationsQuery } from './user.query'
 import { authRedirect } from './authRedirect'
 
 export const loader = async (

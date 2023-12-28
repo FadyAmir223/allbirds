@@ -1,17 +1,8 @@
 ## clone of `allbirds.com` but better
 
-https://youtu.be/sx6gAqcOGP8
+demo: https://allbirds-beta.vercel.app
 
-the current version uses nginx & docker
-
-in another branch a working version may be provided in the future
-
-using
-  - frontend: github-pages or netlify
-  - backend: vercel
-  - database: atlas
-
-but the current version is the realistic one
+video: https://youtu.be/sx6gAqcOGP8
 
 
 # requirements:

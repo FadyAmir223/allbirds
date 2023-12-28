@@ -139,8 +139,8 @@ POST {{url}}/api/auth/local/register
   "confirmPassword": "P@ssw0rd"
 }
 
-### signin
-POST {{url}}/api/auth/local/signin
+### login
+POST {{url}}/api/auth/local/login
 
 {
   "username": "fadymir223@gmail.com",

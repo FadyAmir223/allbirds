@@ -14,6 +14,7 @@ import {
   collectionSaleQuery,
 } from '../services/collection.query'
 import { ensureType } from '../utils/ensureType.util'
+import screenSize from '@/data/screen-size.json'
 import { type FilterKey, type FilterValues, type SelectedFilters } from '..'
 import { loader as collectionLoader } from '../services/collection.loader'
 import { Slider } from '@/features/misc'
@@ -156,7 +157,7 @@ const Collections = ({ isSale = false }) => {
 
       <Slider
         title='best of allbirds'
-        imagesPerSlide={4}
+        imagesPerSlide={innerWidth > screenSize.md ? 4 : 2}
         slides={initSuggestionSlides}
       />
     </main>
