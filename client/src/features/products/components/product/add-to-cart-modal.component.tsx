@@ -36,8 +36,8 @@ const AddToCartModal = ({ item, isOpen, handleClose }: AddToCartModalProps) => {
           <p className='text-sm'>Congrats! You get free standard shipping.</p>
         </div>
 
-        <div className='flex justify-between'>
-          <div className='flex gap-x-3'>
+        <div className='mx-auto flex w-fit flex-col justify-between lg:mx-0 lg:flex-row'>
+          <div className='mb-6 flex gap-x-3 lg:mb-0'>
             <Link to={'/products/' + item.handle}>
               <img
                 src={item.image}
@@ -53,7 +53,7 @@ const AddToCartModal = ({ item, isOpen, handleClose }: AddToCartModalProps) => {
             </div>
           </div>
 
-          <div className='w-2/5'>
+          <div className='w-full lg:w-2/5'>
             <div className='mb-3 flex items-center justify-between font-[500]'>
               <span className='text-sm'>Subtotal</span>
               <span className='text-sm'>${totalPrice}</span>
