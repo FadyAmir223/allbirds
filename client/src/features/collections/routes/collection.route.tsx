@@ -84,59 +84,59 @@ const Collections = ({ isSale = false }) => {
           handleFilterMobileToggle={handleFilterMobileToggle}
         />
 
-        {filteredCollection.length !== 0 ? (
-          <section className='flex-grow self-start'>
-            <div className='mb-4 flex justify-between px-4'>
-              <button
-                className='flex items-center rounded-full border border-gray-light px-3.5 py-[3px] text-[9.5px] uppercase tracking-[0.7px] duration-[250ms] hover:border-silver-dark lg:hidden'
-                onClick={handleFilterMobileToggle}
-              >
-                <span>filters</span>
-                <span className='flex flex-col items-center gap-1 pl-2'>
-                  <span className='relative h-[1px] w-5 bg-gray before:absolute before:left-1/4 before:top-[-1px] before:h-[3px] before:w-[3px] before:rounded-full before:border before:border-gray' />
-                  <span className='relative h-[1px] w-5 bg-gray before:absolute before:right-1/4 before:top-[-1px] before:h-[3px] before:w-[3px] before:rounded-full before:border before:border-gray' />
-                </span>
-              </button>
+        <section className='flex-grow self-start'>
+          <div className='mb-4 flex justify-between px-4'>
+            <button
+              className='flex items-center rounded-full border border-gray-light px-3.5 py-[3px] text-[9.5px] uppercase tracking-[0.7px] duration-[250ms] hover:border-silver-dark lg:hidden'
+              onClick={handleFilterMobileToggle}
+            >
+              <span>filters</span>
+              <span className='flex flex-col items-center gap-1 pl-2'>
+                <span className='relative h-[1px] w-5 bg-gray before:absolute before:left-1/4 before:top-[-1px] before:h-[3px] before:w-[3px] before:rounded-full before:border before:border-gray' />
+                <span className='relative h-[1px] w-5 bg-gray before:absolute before:right-1/4 before:top-[-1px] before:h-[3px] before:w-[3px] before:rounded-full before:border before:border-gray' />
+              </span>
+            </button>
 
-              {otherGender && (
-                <span className='flex items-center rounded-full border border-gray text-[9.5px] uppercase tracking-[0.7px] lg:ml-auto'>
-                  {genders.map((gender) =>
-                    type === gender.type ? (
-                      <span
-                        key={gender.label}
-                        className='rounded-full border-2 border-gray-light bg-gray px-3.5 py-[3px] font-[500] text-white'
-                      >
-                        {gender.label}
-                      </span>
-                    ) : (
-                      <Link
-                        key={gender.label}
-                        to={`/collections/${isSale ? 'sale/' : ''}${
-                          otherGender.type
-                        }`}
-                        className='px-3.5 py-[3px]'
-                      >
-                        {otherGender.label}
-                      </Link>
-                    ),
-                  )}
-                </span>
-              )}
-            </div>
-
-            {isSale && (
-              <div className='bg- mx-4 bg-[url(/images/sale-collection.avif)] p-6 text-center'>
-                <h3 className='text-lg font-bold'>
-                  Sale On Sale: For A Limited Time
-                </h3>
-                <p className='text-[12px]'>
-                  Take an extra 30% off with code
-                  <span className='text-base font-bold'> GET30</span>. Final
-                  sale excluded.
-                </p>
-              </div>
+            {otherGender && (
+              <span className='flex items-center rounded-full border border-gray text-[9.5px] uppercase tracking-[0.7px] lg:ml-auto'>
+                {genders.map((gender) =>
+                  type === gender.type ? (
+                    <span
+                      key={gender.label}
+                      className='rounded-full border-2 border-gray-light bg-gray px-3.5 py-[3px] font-[500] text-white'
+                    >
+                      {gender.label}
+                    </span>
+                  ) : (
+                    <Link
+                      key={gender.label}
+                      to={`/collections/${isSale ? 'sale/' : ''}${
+                        otherGender.type
+                      }`}
+                      className='px-3.5 py-[3px]'
+                    >
+                      {otherGender.label}
+                    </Link>
+                  ),
+                )}
+              </span>
             )}
+          </div>
 
+          {isSale && (
+            <div className='mx-4 bg-[url(/images/sale-collection.avif)] p-6 text-center text-white'>
+              <h3 className='text-lg font-bold'>
+                Sale On Sale: For A Limited Time
+              </h3>
+              <p className='text-[12px]'>
+                Take an extra 30% off with code
+                <span className='text-base font-bold'> GET30</span>. Final sale
+                excluded.
+              </p>
+            </div>
+          )}
+
+          {filteredCollection.length !== 0 ? (
             <article className='grid grid-cols-2 gap-4 bg-silver-2 p-4 md:grid-cols-3 md:bg-transparent'>
               {filteredCollection.map((product) => (
                 <ProductCard
@@ -147,12 +147,12 @@ const Collections = ({ isSale = false }) => {
                 />
               ))}
             </article>
-          </section>
-        ) : (
-          <p className='flex-grow self-start p-6 text-center text-[13px]'>
-            Sorry, there are no results
-          </p>
-        )}
+          ) : (
+            <p className='flex-grow self-start p-6 text-center text-[13px]'>
+              Sorry, there are no results
+            </p>
+          )}
+        </section>
       </div>
 
       <Slider
