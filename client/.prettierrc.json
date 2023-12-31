@@ -20,12 +20,13 @@
     "redux",
     "react",
     "devtools",
+    "<THIRD_PARTY_MODULES>",
+    "hook",
     ".component$",
     ".query$",
     ".util$",
     ".json$",
     "<TYPES>",
-    "<TYPES>^[@.]",
-    "<THIRD_PARTY_MODULES>"
+    "<TYPES>^[@.]"
   ]
 }

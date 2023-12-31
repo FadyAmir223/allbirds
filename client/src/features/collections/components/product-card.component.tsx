@@ -1,13 +1,13 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
+import { type CollectionProduct, type SelectedFilters } from '..'
+import { addCartItem, toggleCart } from '@/features/cart'
+import { useAppDispatch } from '@/store/hooks'
 import ColorButton from '@/components/product/color-button.component'
 import SizeButton from '@/components/product/size-button.component'
 import { cn } from '@/utils/cn.util'
 import screenSize from '@/data/screen-size.json'
-import { type CollectionProduct, type SelectedFilters } from '..'
-import { addCartItem, toggleCart } from '@/features/cart'
-import { useAppDispatch } from '@/store/hooks'
 
 type ProductCardProps = {
   product: CollectionProduct
@@ -263,6 +263,7 @@ const ProductCard = ({
               key={size}
               isSoldOut={currProduct.sizesSoldOut.includes(size)}
               onClick={() => AddCartItem(size)}
+              className='uppercase'
             >
               {size}
             </SizeButton>
